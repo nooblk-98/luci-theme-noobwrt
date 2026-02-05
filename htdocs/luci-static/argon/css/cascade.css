@@ -1694,9 +1694,10 @@ footer > a {
   min-width: inherit;
   padding: 0;
   border: 0;
-  border-radius: 0.25rem;
+  border-radius: 0.6rem;
   background-color: #fff;
-  box-shadow: 0 0 1rem 0 rgba(136, 152, 170, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12), 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 .cbi-section:last-child,
 .cbi-section-error:last-child,
@@ -2781,10 +2782,9 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
   left: 0;
   bottom: 0;
   right: 0;
-  background-image: radial-gradient(circle at 10% 50%, rgba(255, 255, 255, 0.25) 0 3px, transparent 4px), radial-gradient(circle at 40% 50%, rgba(255, 255, 255, 0.2) 0 2px, transparent 3px), radial-gradient(circle at 70% 50%, rgba(255, 255, 255, 0.18) 0 2.5px, transparent 3.5px), radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 0.22) 0 3px, transparent 4px);
-  background-size: 120px 100%;
-  background-repeat: repeat-x;
-  animation: bubbleMove 2s linear infinite;
+  background-image: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0) 0px, rgba(255, 255, 255, 0) 10px, rgba(255, 255, 255, 0.2) 10px, rgba(255, 255, 255, 0.2) 20px);
+  background-size: 30px 30px;
+  animation: liveStripe 1.5s linear infinite;
 }
 .cbi-progressbar::after {
   content: attr(title);
@@ -2797,13 +2797,13 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
   line-height: 1rem;
   z-index: 2;
 }
-/* Small bubble moving animation */
-@keyframes bubbleMove {
+/* Simple live moving stripe animation - seamless loop */
+@keyframes liveStripe {
   0% {
     background-position: 0 0;
   }
   100% {
-    background-position: 120px 0;
+    background-position: 30px 30px;
   }
 }
 #modal_overlay {
