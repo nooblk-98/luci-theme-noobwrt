@@ -4,8 +4,8 @@
 	luci-theme-noobwrt
 	Copyright 2020 Jerrykuku <jerrykuku@qq.com>
 
-	Have a bug? Please create an issue here on GitHub!
-	https://github.com/jerrykuku/luci-theme-noobwrt/issues
+	
+	# removed
 
 	luci-theme-material:
 	Copyright 2015 Lutty Yang <lutty@wcan.in>
@@ -21,7 +21,7 @@
 <footer style="text-wrap: auto">
 	<div>
 		<a class="luci-link" href="https://github.com/openwrt/luci" target="_blank">Powered by {{ version.luciname }} ({{ version.luciversion }})</a>
-		<a href="https://github.com/jerrykuku/luci-theme-noobwrt" target="_blank">ArgonTheme {# vPKG_VERSION #}</a>
+		<a href="#" target="_blank">NoobWRT Theme {# vPKG_VERSION #}</a>
 		<a class="luci-link" href="{{ version.disturl }}" target="_blank">{{ version.distname }} {{ version.distversion }}-{{ version.distrevision }}</a>
 	</div>
 </footer>
