@@ -178,12 +178,12 @@ body.dark-theme .theme-toggle svg {
 		</a>
 
 		<!-- Status -->
-		<a href="/cgi-bin/luci/admin/status/overview" class="toolbar-item" title="Status">
+		<a href="/cgi-bin/luci/admin/modem/modemdata" class="toolbar-item" title="Status">
 			<img src="/luci-static/argon/navbar/signal.png" alt="Status" loading="lazy">
 		</a>
 
 		<!-- Network -->
-		<a href="/cgi-bin/luci/admin/network/interfaces" class="toolbar-item" title="Network">
+		<a href="/cgi-bin/luci/admin/tools/vnstat" class="toolbar-item" title="Network">
 			<img src="/luci-static/argon/navbar/network.png" alt="Network" loading="lazy">
 		</a>
 
@@ -193,7 +193,7 @@ body.dark-theme .theme-toggle svg {
 		</a>
 
 		<!-- Firewall -->
-		<a href="/cgi-bin/luci/admin/system/firewall" class="toolbar-item" title="Firewall">
+		<a href="/cgi-bin/luci/admin/network/firewall" class="toolbar-item" title="Firewall">
 			<img src="/luci-static/argon/navbar/firewall.png" alt="Firewall" loading="lazy">
 		</a>
 
@@ -208,7 +208,7 @@ body.dark-theme .theme-toggle svg {
 		</a>
 
 		<!-- VPN -->
-		<a href="/cgi-bin/luci/admin/vpn" class="toolbar-item" title="VPN">
+		<a href="/cgi-bin/luci/admin/services/passwall" class="toolbar-item" title="VPN">
 			<img src="/luci-static/argon/navbar/vpn.png" alt="VPN" loading="lazy">
 		</a>
 
