@@ -222,14 +222,27 @@ return baseclass.extend({
 		}
 
 		// Attach event listeners for sidebar toggle functionality
-		var sidebarToggle = document.querySelector('a.showSide');
+		var sidebarToggles = document.querySelectorAll('.sidebar-toggle');
 		var darkMask = document.querySelector('.darkMask');
 		
-		if (sidebarToggle) {
-			sidebarToggle.addEventListener('click', ui.createHandlerFn(this, 'handleSidebarToggle'));
+		if (sidebarToggles && sidebarToggles.length) {
+			sidebarToggles.forEach(function (toggle) {
+				if (toggle.dataset.sidebarBound === '1') {
+					return;
+				}
+				toggle.dataset.sidebarBound = '1';
+				toggle.addEventListener('click', ui.createHandlerFn(this, 'handleSidebarToggle'));
+			}, this);
+			window.__argonSidebarHandlerPresent = true;
 		}
 		if (darkMask) {
 			darkMask.addEventListener('click', ui.createHandlerFn(this, 'handleSidebarToggle'));
+		}
+
+		this.initSidebarState();
+		if (!this._sidebarResizeBound) {
+			this._sidebarResizeBound = true;
+			window.addEventListener('resize', L.bind(this.handleSidebarResize, this));
 		}
 	},
 
@@ -432,30 +445,95 @@ return baseclass.extend({
 	 * @param {Event} ev - Click event from sidebar toggle button or dark mask
 	 */
 	handleSidebarToggle: function (ev) {
-		var showSideButton = document.querySelector('a.showSide');
+		var showSideButtons = document.querySelectorAll('.sidebar-toggle');
 		var sidebar = document.querySelector('#mainmenu');
 		var darkMask = document.querySelector('.darkMask');
 		var scrollbarArea = document.querySelector('.main-right');
+		var body = document.body;
 
 		// Check if any required elements are missing
-		if (!showSideButton || !sidebar || !darkMask || !scrollbarArea) {
+		if (!showSideButtons || !showSideButtons.length || !sidebar || !darkMask || !scrollbarArea) {
 			console.warn('Sidebar toggle elements not found');
 			return;
 		}
 
+		if (!this.isMobileViewport()) {
+			var collapsed = body.classList.toggle('sidebar-collapsed');
+			showSideButtons.forEach(function (btn) {
+				btn.classList.toggle('collapsed', collapsed);
+				btn.setAttribute('aria-pressed', collapsed ? 'true' : 'false');
+			});
+			try {
+				localStorage.setItem('argon.sidebar', collapsed ? 'collapsed' : 'expanded');
+			} catch (e) {}
+			return;
+		}
+
 		// Toggle sidebar visibility and related states
-		if (showSideButton.classList.contains('active')) {
+		if (showSideButtons[0].classList.contains('active')) {
 			// Close sidebar
-			showSideButton.classList.remove('active');
+			showSideButtons.forEach(function (btn) {
+				btn.classList.remove('active');
+			});
 			sidebar.classList.remove('active');
 			scrollbarArea.classList.remove('active');
 			darkMask.classList.remove('active');
 		} else {
 			// Open sidebar
-			showSideButton.classList.add('active');
+			showSideButtons.forEach(function (btn) {
+				btn.classList.add('active');
+			});
 			sidebar.classList.add('active');
 			scrollbarArea.classList.add('active');
 			darkMask.classList.add('active');
 		}
+	},
+
+	isMobileViewport: function () {
+		return window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
+	},
+
+	handleSidebarResize: function () {
+		this.initSidebarState(true);
+	},
+
+	initSidebarState: function (isResize) {
+		var showSideButtons = document.querySelectorAll('.sidebar-toggle');
+		var sidebar = document.querySelector('#mainmenu');
+		var darkMask = document.querySelector('.darkMask');
+		var scrollbarArea = document.querySelector('.main-right');
+		var body = document.body;
+
+		if (!showSideButtons || !showSideButtons.length || !body) {
+			return;
+		}
+
+		if (this.isMobileViewport()) {
+			body.classList.remove('sidebar-collapsed');
+			showSideButtons.forEach(function (btn) {
+				btn.classList.remove('collapsed');
+				btn.setAttribute('aria-pressed', 'false');
+			});
+			return;
+		}
+
+		if (sidebar) sidebar.classList.remove('active');
+		if (scrollbarArea) scrollbarArea.classList.remove('active');
+		if (darkMask) darkMask.classList.remove('active');
+		showSideButtons.forEach(function (btn) {
+			btn.classList.remove('active');
+		});
+
+		var state = null;
+		try {
+			state = localStorage.getItem('argon.sidebar');
+		} catch (e) {}
+
+		var collapsed = (state === 'collapsed');
+		body.classList.toggle('sidebar-collapsed', collapsed);
+		showSideButtons.forEach(function (btn) {
+			btn.classList.toggle('collapsed', collapsed);
+			btn.setAttribute('aria-pressed', collapsed ? 'true' : 'false');
+		});
 	}
 });

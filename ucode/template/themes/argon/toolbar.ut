@@ -107,6 +107,38 @@ body.dark-theme .toolbar-item:hover img {
 	z-index: 1000;
 }
 
+/* Toolbar toggle */
+.toolbar-item.toolbar-toggle::before {
+	content: "\e20e";
+	font-family: 'argon' !important;
+	font-style: normal !important;
+	font-weight: normal !important;
+	font-variant: normal !important;
+	text-transform: none !important;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	color: #5e72e4;
+	font-size: 20px;
+}
+
+body.dark-theme .toolbar-item.toolbar-toggle::before {
+	color: #7c8ff5;
+}
+
+body.toolbar-collapsed .toolbar-item.toolbar-toggle {
+	background: rgba(94, 114, 228, 0.15);
+}
+
+.toolbar-container.collapsed .toolbar-menu {
+	display: none;
+}
+
+.toolbar-container.collapsed {
+	padding: 6px;
+	gap: 6px;
+}
+
 /* Theme Toggle Styling */
 .theme-toggle {
 	background: linear-gradient(135deg, rgba(94, 114, 228, 0.2) 0%, rgba(94, 114, 228, 0.1) 100%);
@@ -171,7 +203,10 @@ body.dark-theme .theme-toggle svg {
 			<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
 		</svg>
 	</button>
+	<button class="toolbar-item toolbar-toggle" type="button" role="button" aria-label="Toggle toolbar" title="Toggle toolbar"></button>
+
 	<div class="toolbar-menu active" id="toolbar-menu">
+
 		<!-- Dashboard -->
 		<a href="/cgi-bin/luci/admin/" class="toolbar-item" title="Dashboard">
 			<img src="/luci-static/argon/navbar/settings.png" alt="Dashboard" loading="lazy">
@@ -234,6 +269,9 @@ body.dark-theme .theme-toggle svg {
 	const themeToggle = document.getElementById('theme-toggle');
 	const sunIcon = themeToggle.querySelector('.sun-icon');
 	const moonIcon = themeToggle.querySelector('.moon-icon');
+	const toolbarToggle = document.querySelector('.toolbar-item.toolbar-toggle');
+	const toolbarContainer = document.querySelector('.toolbar-container');
+	const toolbarMenu = document.getElementById('toolbar-menu');
 	
 	// Get or create dark theme style element
 	let darkThemeStyle = document.getElementById('dark-theme-style');
@@ -299,5 +337,36 @@ body.dark-theme .theme-toggle svg {
 			window.location.reload();
 		}, 200);
 	});
+
+	function applyToolbarState(collapsed) {
+		if (!toolbarContainer || !toolbarMenu || !toolbarToggle) {
+			return;
+		}
+		toolbarContainer.classList.toggle('collapsed', collapsed);
+		toolbarMenu.classList.toggle('active', !collapsed);
+		toolbarToggle.setAttribute('aria-pressed', collapsed ? 'true' : 'false');
+		document.body.classList.toggle('toolbar-collapsed', collapsed);
+	}
+
+	function initToolbarState() {
+		let state = null;
+		try {
+			state = localStorage.getItem('argon.toolbar');
+		} catch (e) {}
+		applyToolbarState(state === 'collapsed');
+	}
+
+	if (toolbarToggle) {
+		toolbarToggle.addEventListener('click', function(e) {
+			e.preventDefault();
+			const collapsed = !(toolbarContainer && toolbarContainer.classList.contains('collapsed'));
+			applyToolbarState(collapsed);
+			try {
+				localStorage.setItem('argon.toolbar', collapsed ? 'collapsed' : 'expanded');
+			} catch (e) {}
+		});
+	}
+
+	initToolbarState();
 })();
 //]]></script>

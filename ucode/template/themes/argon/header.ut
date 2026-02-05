@@ -153,11 +153,10 @@
 		<div class="main-right">
 			<header class="bg-primary">
 				<div class="fill">
-					<div class="container">
-						<div class="flex1">
-							<a class="showSide"></a>
-							<a class="brand" href="#">{{ hostname }}</a>
-						</div>
+						<div class="container">
+							<div class="flex1">
+								<a class="brand" href="#">{{ hostname }}</a>
+							</div>
 						<div class="status" id="indicators"></div>
 					</div>
 				</div>
