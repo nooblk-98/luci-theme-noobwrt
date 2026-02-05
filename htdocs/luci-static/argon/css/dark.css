@@ -252,7 +252,7 @@ h4 {
   background: #282a2c;
 }
 .cbi-progressbar div {
-  background-color: var(--dark-primary) !important;
+  background-color: #059669 !important;
 }
 .cbi-section-table .cbi-section-table-titles .cbi-section-table-cell {
   background-color: #1e1e1f;
