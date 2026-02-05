@@ -19,6 +19,12 @@
 	padding: 8px;
 	border-radius: 12px;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+body.dark-theme .toolbar-container {
+	background: rgba(20, 20, 25, 0.98);
+	box-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
 }
 
 .toolbar-fab {
@@ -61,13 +67,25 @@
 	transition: filter 0.2s ease;
 }
 
+body.dark-theme .toolbar-item img {
+	filter: opacity(0.8) invert(1);
+}
+
 .toolbar-item:hover {
 	background: rgba(94, 114, 228, 0.1);
 	border-radius: 8px;
 }
 
+body.dark-theme .toolbar-item:hover {
+	background: rgba(94, 114, 228, 0.3);
+}
+
 .toolbar-item:hover img {
 	filter: opacity(1);
+}
+
+body.dark-theme .toolbar-item:hover img {
+	filter: opacity(1) invert(1);
 }
 
 .toolbar-item:active {
@@ -94,13 +112,22 @@
 	background: linear-gradient(135deg, rgba(94, 114, 228, 0.2) 0%, rgba(94, 114, 228, 0.1) 100%);
 	border-radius: 8px;
 	margin-bottom: 4px;
+	transition: background 0.3s ease;
+}
+
+body.dark-theme .theme-toggle {
+	background: linear-gradient(135deg, rgba(94, 114, 228, 0.4) 0%, rgba(94, 114, 228, 0.3) 100%);
 }
 
 .theme-toggle svg {
 	width: 20px;
 	height: 20px;
 	stroke: #5e72e4;
-	transition: transform 0.3s ease;
+	transition: transform 0.3s ease, stroke 0.3s ease;
+}
+
+body.dark-theme .theme-toggle svg {
+	stroke: #7c8ff5;
 }
 
 .theme-toggle:hover svg {
