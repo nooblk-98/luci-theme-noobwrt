@@ -902,7 +902,7 @@ body:has(.login-container-md) {
 .login-card-md {
   width: 100%;
   max-width: 420px;
-  background: var(--white);
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 12px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.05);
   backdrop-filter: blur(var(--blur-radius));

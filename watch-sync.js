@@ -307,14 +307,33 @@ function watchLessFiles() {
   });
 
   lessWatcher.on('change', (filePath) => {
-    console.log(`📝 LESS file changed: ${path.basename(filePath)}`);
+    const fileName = path.basename(filePath);
+    console.log(`📝 LESS file changed: ${fileName}`);
+    
     try {
       console.log('🔨 Compiling LESS to CSS...');
-      execSync('lessc less/cascade.less htdocs/luci-static/argon/css/cascade.css && lessc less/dark.less htdocs/luci-static/argon/css/dark.css', { 
-        cwd: BASE_DIR,
-        stdio: 'pipe'
-      });
-      console.log('✅ LESS compilation successful\n');
+      
+      if (fileName === 'cascade.less') {
+        execSync('lessc less/cascade.less htdocs/luci-static/argon/css/cascade.css', { 
+          cwd: BASE_DIR,
+          stdio: 'pipe'
+        });
+        console.log('✅ Compiled: cascade.css');
+      } else if (fileName === 'dark.less') {
+        execSync('lessc less/dark.less htdocs/luci-static/argon/css/dark.css', { 
+          cwd: BASE_DIR,
+          stdio: 'pipe'
+        });
+        console.log('✅ Compiled: dark.css');
+      } else {
+        // For other LESS files that are imports, compile all
+        execSync('lessc less/cascade.less htdocs/luci-static/argon/css/cascade.css && lessc less/dark.less htdocs/luci-static/argon/css/dark.css', { 
+          cwd: BASE_DIR,
+          stdio: 'pipe'
+        });
+        console.log('✅ Recompiled all CSS files');
+      }
+      console.log('✨ LESS compilation successful\n');
     } catch (err) {
       console.error('❌ LESS compilation failed:', err.message, '\n');
     }
