@@ -1,0 +1,23 @@
+{
+  "name": "luci-theme-sync",
+  "version": "1.0.0",
+  "description": "Watch and sync LuCI theme changes to router via SFTP",
+  "main": "watch-sync.js",
+  "scripts": {
+    "sync": "node watch-sync.js",
+    "start": "node watch-sync.js"
+  },
+  "keywords": [
+    "luci",
+    "theme",
+    "sync",
+    "sftp",
+    "openwrt"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "chokidar": "^3.6.0",
+    "ssh2-sftp-client": "^10.0.3"
+  }
+}
