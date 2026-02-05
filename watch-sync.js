@@ -21,19 +21,19 @@ const CONFIG = {
 // Path mappings: local -> remote
 const PATH_MAPPINGS = [
   {
-    local: 'ucode\\template\\themes\\argon',
-    remote: '/usr/share/ucode/luci/template/themes/argon',
+    local: 'ucode\\template\\themes\\noobwrt',
+    remote: '/usr/share/ucode/luci/template/themes/noobwrt',
     description: 'uCode templates'
   },
   {
-    local: 'htdocs\\luci-static\\argon',
-    remote: '/www/luci-static/argon',
-    description: 'Argon static files'
+    local: 'htdocs\\luci-static\\noobwrt',
+    remote: '/www/luci-static/noobwrt',
+    description: 'NoobWRT static files'
   },
   {
-    local: 'htdocs\\luci-static\\resources\\menu-argon.js',
-    remote: '/www/luci-static/resources/menu-argon.js',
-    description: 'Menu Argon JS',
+    local: 'htdocs\\luci-static\\resources\\menu-noobwrt.js',
+    remote: '/www/luci-static/resources/menu-noobwrt.js',
+    description: 'Menu NoobWRT JS',
     isFile: true
   }
 ];
@@ -391,20 +391,20 @@ function watchLessFiles() {
       console.log('🔨 Compiling LESS to CSS...');
       
       if (fileName === 'cascade.less') {
-        execSync('npx lessc less/cascade.less htdocs/luci-static/argon/css/cascade.css', { 
+        execSync('npx lessc less/cascade.less htdocs/luci-static/noobwrt/css/cascade.css', { 
           cwd: BASE_DIR,
           stdio: 'pipe'
         });
         console.log('✅ Compiled: cascade.css');
       } else if (fileName === 'dark.less') {
-        execSync('npx lessc less/dark.less htdocs/luci-static/argon/css/dark.css', { 
+        execSync('npx lessc less/dark.less htdocs/luci-static/noobwrt/css/dark.css', { 
           cwd: BASE_DIR,
           stdio: 'pipe'
         });
         console.log('✅ Compiled: dark.css');
       } else {
         // For other LESS files that are imports, compile all
-        execSync('npx lessc less/cascade.less htdocs/luci-static/argon/css/cascade.css && npx lessc less/dark.less htdocs/luci-static/argon/css/dark.css', { 
+        execSync('npx lessc less/cascade.less htdocs/luci-static/noobwrt/css/cascade.css && npx lessc less/dark.less htdocs/luci-static/noobwrt/css/dark.css', { 
           cwd: BASE_DIR,
           stdio: 'pipe'
         });

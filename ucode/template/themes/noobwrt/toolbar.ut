@@ -209,57 +209,57 @@ body.dark-theme .theme-toggle svg {
 
 		<!-- Dashboard -->
 		<a href="/cgi-bin/luci/admin/" class="toolbar-item" title="Dashboard">
-			<img src="/luci-static/argon/navbar/settings.png" alt="Dashboard" loading="lazy">
+			<img src="/luci-static/noobwrt/navbar/settings.png" alt="Dashboard" loading="lazy">
 		</a>
 
 		<!-- Status -->
 		<a href="/cgi-bin/luci/admin/modem/modemdata" class="toolbar-item" title="Status">
-			<img src="/luci-static/argon/navbar/signal.png" alt="Status" loading="lazy">
+			<img src="/luci-static/noobwrt/navbar/signal.png" alt="Status" loading="lazy">
 		</a>
 
 		<!-- Network -->
 		<a href="/cgi-bin/luci/admin/tools/vnstat" class="toolbar-item" title="Network">
-			<img src="/luci-static/argon/navbar/network.png" alt="Network" loading="lazy">
+			<img src="/luci-static/noobwrt/navbar/network.png" alt="Network" loading="lazy">
 		</a>
 
 		<!-- Wireless -->
 		<a href="/cgi-bin/luci/admin/network/wireless" class="toolbar-item" title="Wireless">
-			<img src="/luci-static/argon/navbar/wifi.png" alt="Wireless" loading="lazy">
+			<img src="/luci-static/noobwrt/navbar/wifi.png" alt="Wireless" loading="lazy">
 		</a>
 
 		<!-- Firewall -->
 		<a href="/cgi-bin/luci/admin/network/firewall" class="toolbar-item" title="Firewall">
-			<img src="/luci-static/argon/navbar/firewall.png" alt="Firewall" loading="lazy">
+			<img src="/luci-static/noobwrt/navbar/firewall.png" alt="Firewall" loading="lazy">
 		</a>
 
 		<!-- System -->
 		<a href="/cgi-bin/luci/admin/system/system" class="toolbar-item" title="System">
-			<img src="/luci-static/argon/navbar/settings.png" alt="System" loading="lazy">
+			<img src="/luci-static/noobwrt/navbar/settings.png" alt="System" loading="lazy">
 		</a>
 
 		<!-- Services -->
 		<a href="/cgi-bin/luci/admin/system/startup" class="toolbar-item" title="Services">
-			<img src="/luci-static/argon/navbar/terminal.png" alt="Services" loading="lazy">
+			<img src="/luci-static/noobwrt/navbar/terminal.png" alt="Services" loading="lazy">
 		</a>
 
 		<!-- VPN -->
 		<a href="/cgi-bin/luci/admin/services/passwall" class="toolbar-item" title="VPN">
-			<img src="/luci-static/argon/navbar/vpn.png" alt="VPN" loading="lazy">
+			<img src="/luci-static/noobwrt/navbar/vpn.png" alt="VPN" loading="lazy">
 		</a>
 
 		<!-- Files -->
 		<a href="/cgi-bin/luci/admin/system/files" class="toolbar-item" title="Files">
-			<img src="/luci-static/argon/navbar/files.png" alt="Files" loading="lazy">
+			<img src="/luci-static/noobwrt/navbar/files.png" alt="Files" loading="lazy">
 		</a>
 
 		<!-- Log -->
 		<a href="/cgi-bin/luci/admin/status/logs" class="toolbar-item" title="System Log">
-			<img src="/luci-static/argon/navbar/info.png" alt="System Log" loading="lazy">
+			<img src="/luci-static/noobwrt/navbar/info.png" alt="System Log" loading="lazy">
 		</a>
 
 		<!-- Info -->
 		<a href="javascript:void(0);" class="toolbar-item" id="info-toggle" title="Info">
-			<img src="/luci-static/argon/navbar/cell.png" alt="Info" loading="lazy">
+			<img src="/luci-static/noobwrt/navbar/cell.png" alt="Info" loading="lazy">
 		</a>
 	</div>
 </div>
@@ -282,7 +282,7 @@ body.dark-theme .theme-toggle svg {
 	}
 	
 	// Fetch dark CSS from existing file
-	const darkCssUrl = '/luci-static/argon/css/dark.css';
+	const darkCssUrl = '/luci-static/noobwrt/css/dark.css';
 	
 	// Check saved theme preference
 	const savedTheme = localStorage.getItem('luci-theme') || 'light';
@@ -351,7 +351,7 @@ body.dark-theme .theme-toggle svg {
 	function initToolbarState() {
 		let state = null;
 		try {
-			state = localStorage.getItem('argon.toolbar');
+			state = localStorage.getItem('noobwrt.toolbar');
 		} catch (e) {}
 		applyToolbarState(state === 'collapsed');
 	}
@@ -362,7 +362,7 @@ body.dark-theme .theme-toggle svg {
 			const collapsed = !(toolbarContainer && toolbarContainer.classList.contains('collapsed'));
 			applyToolbarState(collapsed);
 			try {
-				localStorage.setItem('argon.toolbar', collapsed ? 'collapsed' : 'expanded');
+				localStorage.setItem('noobwrt.toolbar', collapsed ? 'collapsed' : 'expanded');
 			} catch (e) {}
 		});
 	}

@@ -233,7 +233,7 @@ return baseclass.extend({
 				toggle.dataset.sidebarBound = '1';
 				toggle.addEventListener('click', ui.createHandlerFn(this, 'handleSidebarToggle'));
 			}, this);
-			window.__argonSidebarHandlerPresent = true;
+			window.__noobwrtSidebarHandlerPresent = true;
 		}
 		if (darkMask) {
 			darkMask.addEventListener('click', ui.createHandlerFn(this, 'handleSidebarToggle'));
@@ -464,7 +464,7 @@ return baseclass.extend({
 				btn.setAttribute('aria-pressed', collapsed ? 'true' : 'false');
 			});
 			try {
-				localStorage.setItem('argon.sidebar', collapsed ? 'collapsed' : 'expanded');
+				localStorage.setItem('noobwrt.sidebar', collapsed ? 'collapsed' : 'expanded');
 			} catch (e) {}
 			return;
 		}
@@ -526,7 +526,7 @@ return baseclass.extend({
 
 		var state = null;
 		try {
-			state = localStorage.getItem('argon.sidebar');
+			state = localStorage.getItem('noobwrt.sidebar');
 		} catch (e) {}
 
 		var collapsed = (state === 'collapsed');

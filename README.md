@@ -9,32 +9,32 @@
 } -->
 
 [license]: /LICENSE
-[license-badge]: https://img.shields.io/github/license/jerrykuku/luci-theme-argon?style=flat-square&a=1
-[prs]: https://github.com/jerrykuku/luci-theme-argon/pulls
+[license-badge]: https://img.shields.io/github/license/jerrykuku/luci-theme-noobwrt?style=flat-square&a=1
+[prs]: https://github.com/jerrykuku/luci-theme-noobwrt/pulls
 [prs-badge]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
-[issues]: https://github.com/jerrykuku/luci-theme-argon/issues/new
+[issues]: https://github.com/jerrykuku/luci-theme-noobwrt/issues/new
 [issues-badge]: https://img.shields.io/badge/Issues-welcome-brightgreen.svg?style=flat-square
-[release]: https://github.com/jerrykuku/luci-theme-argon/releases
-[release-badge]: https://img.shields.io/github/v/release/jerrykuku/luci-theme-argon?style=flat-square
-[download]: https://github.com/jerrykuku/luci-theme-argon/releases
-[download-badge]: https://img.shields.io/github/downloads/jerrykuku/luci-theme-argon/total?style=flat-square
+[release]: https://github.com/jerrykuku/luci-theme-noobwrt/releases
+[release-badge]: https://img.shields.io/github/v/release/jerrykuku/luci-theme-noobwrt?style=flat-square
+[download]: https://github.com/jerrykuku/luci-theme-noobwrt/releases
+[download-badge]: https://img.shields.io/github/downloads/jerrykuku/luci-theme-noobwrt/total?style=flat-square
 [contact]: https://t.me/jerryk6
 [contact-badge]: https://img.shields.io/badge/Contact-telegram-blue?style=flat-square
 [en-us-link]: /README.md
 [zh-cn-link]: /README_ZH.md
 [en-us-release-log]: /RELEASE.md
 [zh-cn-release-log]: /RELEASE_ZH.md
-[config-link]: https://github.com/jerrykuku/luci-app-argon-config/releases
+[config-link]: https://github.com/jerrykuku/luci-app-noobwrt-config/releases
 [lede]: https://github.com/coolsnowwolf/lede
 [official]: https://github.com/openwrt/openwrt
 [immortalwrt]: https://github.com/immortalwrt/immortalwrt
 
 <div align="center">
-<img src="https://raw.githubusercontent.com/jerrykuku/staff/master/argon_title4.svg">
+<img src="https://raw.githubusercontent.com/jerrykuku/staff/master/noobwrt_title4.svg">
 
 # A brand new OpenWrt LuCI theme
 
-Argon is **a clean and tidy OpenWrt LuCI theme** that allows<br/>
+NoobWRT is **a clean and tidy OpenWrt LuCI theme** that allows<br/>
 users to customize their login interface with images or videos.  
 It also supports automatic and manual switching between light and dark modes.
 
@@ -56,7 +56,7 @@ It also supports automatic and manual switching between light and dark modes.
 [Contributors](#contributors) •
 [Credits](#credits)
 
-<img src="https://raw.githubusercontent.com/jerrykuku/staff/master/argon2.gif">
+<img src="https://raw.githubusercontent.com/jerrykuku/staff/master/noobwrt2.gif">
 </div>
 
 ## Key Features
@@ -67,7 +67,7 @@ It also supports automatic and manual switching between light and dark modes.
 - Support for using Bing images as login background.
 - Support for custom uploading of images or videos as login background.
 - Automatically switch between light and dark modes with the system, and can also be set to a fixed mode.
-- Settings plugin with extensions [luci-app-argon-config][config-link]
+- Settings plugin with extensions [luci-app-noobwrt-config][config-link]
 
 > **Upcoming Version **
 >
@@ -93,9 +93,9 @@ The latest version is v2.4.3 [Click here][en-us-release-log] to view the full ve
 
 ```bash
 cd lede/package/lean
-rm -rf luci-theme-argon
-git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git luci-theme-argon
-make menuconfig #choose LUCI->Theme->Luci-theme-argon
+rm -rf luci-theme-noobwrt
+git clone -b 18.06 https://github.com/jerrykuku/luci-theme-noobwrt.git luci-theme-noobwrt
+make menuconfig #choose LUCI->Theme->Luci-theme-noobwrt
 make -j1 V=s
 ```
 
@@ -103,16 +103,16 @@ make -j1 V=s
 
 ```bash
 cd openwrt/package
-git clone https://github.com/jerrykuku/luci-theme-argon.git
-make menuconfig #choose LUCI->Theme->Luci-theme-argon
+git clone https://github.com/jerrykuku/luci-theme-noobwrt.git
+make menuconfig #choose LUCI->Theme->Luci-theme-noobwrt
 make -j1 V=s
 ```
 
 ### Install for LuCI 18.06 ( Lean's LEDE )
 
 ```bash
-wget --no-check-certificate https://github.com/jerrykuku/luci-theme-argon/releases/download/v1.8.2/luci-theme-argon_1.8.2-20230609_all.ipk
-opkg install luci-theme-argon*.ipk
+wget --no-check-certificate https://github.com/jerrykuku/luci-theme-noobwrt/releases/download/v1.8.2/luci-theme-noobwrt_1.8.2-20230609_all.ipk
+opkg install luci-theme-noobwrt*.ipk
 ```
 
 ### Install for OpenWrt official SnapShots and ImmortalWrt
@@ -120,15 +120,15 @@ opkg install luci-theme-argon*.ipk
 ```bash
 opkg install luci-compat
 opkg install luci-lib-ipkg
-wget --no-check-certificate https://github.com/jerrykuku/luci-theme-argon/releases/download/v2.3.2/luci-theme-argon_2.3.2-r20250207_all.ipk
-opkg install luci-theme-argon*.ipk
+wget --no-check-certificate https://github.com/jerrykuku/luci-theme-noobwrt/releases/download/v2.3.2/luci-theme-noobwrt_2.3.2-r20250207_all.ipk
+opkg install luci-theme-noobwrt*.ipk
 ```
 
-### Install luci-app-argon-config
+### Install luci-app-noobwrt-config
 
 ```bash
-wget --no-check-certificate -O luci-app-argon-config_0.9_all.ipk https://github.com/jerrykuku/luci-app-argon-config/releases/download/v0.9/luci-app-argon-config_0.9_all.ipk
-opkg install luci-app-argon-config*.ipk
+wget --no-check-certificate -O luci-app-noobwrt-config_0.9_all.ipk https://github.com/jerrykuku/luci-app-noobwrt-config/releases/download/v0.9/luci-app-noobwrt-config_0.9_all.ipk
+opkg install luci-app-noobwrt-config*.ipk
 ```
 
 ## Notice
@@ -144,15 +144,15 @@ opkg install luci-app-argon-config*.ipk
 
 ## Contributors
 
-<a href="https://github.com/jerrykuku/luci-theme-argon/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=jerrykuku/luci-theme-argon&v=2" />
+<a href="https://github.com/jerrykuku/luci-theme-noobwrt/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=jerrykuku/luci-theme-noobwrt&v=2" />
 </a>
 
 Made with [contrib.rocks](https://contrib.rocks).
 
 ## Related Projects
 
-- [luci-app-argon-config](https://github.com/jerrykuku/luci-app-argon-config): Argon theme config plugin
+- [luci-app-noobwrt-config](https://github.com/jerrykuku/luci-app-noobwrt-config): NoobWRT theme config plugin
 - [openwrt-package](https://github.com/jerrykuku/openwrt-package): My OpenWrt package
 - [CasaOS](https://github.com/IceWhaleTech/CasaOS): A simple, easy-to-use, elegant open-source Personal Cloud system (My current main project)
 

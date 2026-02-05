@@ -4,7 +4,7 @@
   "description": "Watch and sync LuCI theme changes to router via SFTP",
   "main": "watch-sync.js",
   "scripts": {
-    "build": "lessc less/cascade.less htdocs/luci-static/argon/css/cascade.css && lessc less/dark.less htdocs/luci-static/argon/css/dark.css",
+    "build": "lessc less/cascade.less htdocs/luci-static/noobwrt/css/cascade.css && lessc less/dark.less htdocs/luci-static/noobwrt/css/dark.css",
     "watch:less": "nodemon --watch less --ext less --exec \"npm run build\"",
     "sync": "node watch-sync.js",
     "start": "concurrently \"npm run watch:less\" \"npm run sync\"",
