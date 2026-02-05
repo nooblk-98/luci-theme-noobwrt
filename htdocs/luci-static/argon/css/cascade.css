@@ -54,6 +54,13 @@
   --blur-opacity-dark: 0.5;
   --font-family-sans-serif: "Red Hat Display", "Google Sans", "Microsoft Yahei", "WenQuanYi Micro Hei", "sans-serif", "Helvetica Neue", "Helvetica", "Hiragino Sans GB";
   --dropdown-arrow-icon: url("data:image/svg+xml;charset=utf-8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSJjdXJyZW50Q29sb3IiIGQ9Ik01LjI5MyA5LjI5M2ExIDEgMCAwIDEgMS40MTQgMEwxMiAxNC41ODZsNS4yOTMtNS4yOTNhMSAxIDAgMSAxIDEuNDE0IDEuNDE0bC02IDZhMSAxIDAgMCAxLTEuNDE0IDBsLTYtNmExIDEgMCAwIDEgMC0xLjQxNCIvPjwvc3ZnPg==");
+  --radius-sm: 0.35rem;
+  --radius-md: 0.6rem;
+  --radius-lg: 0.85rem;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.18);
+  --focus-ring: 0 0 0 3px rgba(16, 185, 129, 0.25);
 }
 /*
  *  Include base and custom css
@@ -647,13 +654,14 @@ input,
   line-height: 1.5rem;
   height: 2.5rem;
   padding: 0.5rem 0.75rem;
-  color: #8898aa;
-  border: 1px solid #dee2e6;
-  border-radius: 0.25rem;
+  color: #334155;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-sm);
   outline: 0;
+  background-color: #fff;
   background-image: none;
   box-shadow: none;
-  transition: box-shadow 0.15s ease;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
 select {
   padding-right: 1.5rem;
@@ -667,7 +675,7 @@ select:not([multiple="multiple"]):focus,
 input:not(.cbi-button):focus,
 .cbi-dropdown:focus {
   border-color: var(--primary);
-  box-shadow: 0 3px 9px rgba(50, 50, 9, 0), 3px 4px 8px rgba(94, 114, 228, 0.1);
+  box-shadow: var(--focus-ring);
 }
 .cbi-dropdown,
 select[multiple="multiple"] {
@@ -1698,6 +1706,7 @@ footer > a {
   background-color: #fff;
   border: 1px solid rgba(0, 0, 0, 0.08);
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12), 0 8px 20px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
 }
 .cbi-section:last-child,
 .cbi-section-error:last-child,
@@ -1711,6 +1720,19 @@ footer > a {
 [data-page="admin-system-opkg"] #maincontent > .container:last-child {
   margin: 0;
   border: 0;
+}
+.cbi-section:hover,
+.cbi-section-error:hover,
+#iptables:hover,
+.Firewall form:hover,
+#cbi-network > .cbi-section-node:hover,
+#cbi-wireless > .cbi-section-node:hover,
+#cbi-wireless > #wifi_assoclist_table:hover,
+[data-tab-title]:hover,
+[data-page^="admin-system-admin"]:not(.node-main-login) .cbi-map:not(#cbi-dropbear):hover,
+[data-page="admin-system-opkg"] #maincontent > .container:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
 }
 .cbi-modal .cbi-section,
 .cbi-section .cbi-section {
@@ -1802,7 +1824,9 @@ table,
   font-size: 0.75rem;
 }
 .table .table-titles th {
-  background-color: var(--lighter);
+  background-color: #f1f5f9;
+  color: #334155;
+  font-weight: 600;
 }
 table > tbody > tr > td,
 table > tbody > tr > th,
@@ -1836,6 +1860,14 @@ tr > th,
 #cbi-wireless > #wifi_assoclist_table > .tr:nth-child(2) {
   border-top: thin solid #ddd;
   padding: 1.1em 1.25rem;
+}
+table > tbody > tr:nth-of-type(2n),
+.table > .tbody > .tr:nth-of-type(2n) {
+  background-color: #f8fafc;
+}
+table > tbody > tr:hover,
+.table > .tbody > .tr:hover {
+  background-color: rgba(16, 185, 129, 0.08);
 }
 #cbi-wireless .td,
 .table[width="100%"] > .tr:first-child > .td,
@@ -1942,13 +1974,15 @@ td > table > tbody > tr > td,
   vertical-align: middle;
   white-space: nowrap;
   text-decoration: none;
-  border: 0;
-  border-radius: 0.25rem;
-  background-color: #f0f0f0;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: var(--radius-sm);
+  background-color: var(--primary);
+  color: #ffffff;
   background-image: none;
   appearance: none;
   -ms-touch-action: manipulation;
   touch-action: manipulation;
+  box-shadow: var(--shadow-sm);
 }
 .btn:not(button) ul:not(.dropdown) li {
   padding: 0;
@@ -1990,12 +2024,14 @@ td > table > tbody > tr > td,
 .cbi-button:focus,
 .item:hover::after,
 .item:focus::after {
-  box-shadow: 0 3px 9px rgba(50, 50, 9, 0), 3px 4px 8px rgba(94, 114, 228, 0.1);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
 }
 .btn:active,
 .cbi-button:active,
 .item:active::after {
-  box-shadow: 0 3px 9px rgba(50, 50, 9, 0), 3px 4px 8px rgba(94, 114, 228, 0.1);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(0);
 }
 .cbi-button-up:hover,
 .cbi-button-up:focus {
@@ -2906,12 +2942,12 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
   margin-top: 1rem;
 }
 .modal .label {
-  font-size: 0.6rem;
-  font-weight: normal;
-  padding: 0.1rem 0.3rem;
-  padding-bottom: 0;
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
   cursor: default;
-  border-radius: 0;
+  border-radius: 999px;
+  letter-spacing: 0.2px;
 }
 .modal .label.warning {
   background-color: #f0ad4e !important;

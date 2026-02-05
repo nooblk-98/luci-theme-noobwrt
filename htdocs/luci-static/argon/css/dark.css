@@ -161,14 +161,19 @@ header.bg-primary {
   color: #ccc;
 }
 .cbi-section {
-  background: none;
+  background: #1f2327;
   border-radius: 0.6rem;
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25), 0 0 12px rgba(255, 255, 255, 0.12);
+  transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+}
+.cbi-section:hover {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.35), 0 0 18px rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
 }
 .panel-title {
-  color: #ccc;
-  background-color: #333333;
+  color: #e5e7eb;
+  background-color: #2b2f36;
 }
 div > table > tbody > tr:nth-of-type(2n),
 div > .table > .tr:nth-of-type(2n) {
@@ -186,6 +191,12 @@ table > tbody > tr > td,
 table > tfoot > tr > td,
 table > thead > tr > td {
   border-top: 1px solid #252526;
+}
+table > tbody > tr:nth-of-type(2n) {
+  background-color: #24282d;
+}
+table > tbody > tr:hover {
+  background-color: rgba(16, 185, 129, 0.12);
 }
 #swaptotal > div > div,
 #swapfree > div > div,
@@ -261,14 +272,15 @@ h4 {
 }
 .cbi-button {
   color: #ffffff !important;
-  background-color: #483d8b;
+  background-color: #059669;
   background-color: var(--dark-primary);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
 }
 .cbi-section-node {
   background: none;
 }
 abbr {
-  color: #5e72e4;
+  color: #10b981;
 }
 div > table > tbody > tr:nth-of-type(2n),
 div > .table > .tbody > .tr:nth-of-type(2n) {
