@@ -89,6 +89,24 @@
 	z-index: 1000;
 }
 
+/* Theme Toggle Styling */
+.theme-toggle {
+	background: linear-gradient(135deg, rgba(94, 114, 228, 0.2) 0%, rgba(94, 114, 228, 0.1) 100%);
+	border-radius: 8px;
+	margin-bottom: 4px;
+}
+
+.theme-toggle svg {
+	width: 20px;
+	height: 20px;
+	stroke: #5e72e4;
+	transition: transform 0.3s ease;
+}
+
+.theme-toggle:hover svg {
+	transform: rotate(20deg);
+}
+
 @media (max-width: 768px) {
 	.toolbar-container {
 		right: 8px;
@@ -110,6 +128,22 @@
 </style>
 
 <div class="toolbar-container">
+	<button class="toolbar-item theme-toggle" id="theme-toggle" title="Toggle Theme">
+		<svg class="theme-icon sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+			<circle cx="12" cy="12" r="5"></circle>
+			<line x1="12" y1="1" x2="12" y2="3"></line>
+			<line x1="12" y1="21" x2="12" y2="23"></line>
+			<line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+			<line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+			<line x1="1" y1="12" x2="3" y2="12"></line>
+			<line x1="21" y1="12" x2="23" y2="12"></line>
+			<line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+			<line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+		</svg>
+		<svg class="theme-icon moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+			<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+		</svg>
+	</button>
 	<div class="toolbar-menu active" id="toolbar-menu">
 		<!-- Dashboard -->
 		<a href="/cgi-bin/luci/admin/" class="toolbar-item" title="Dashboard">
@@ -169,5 +203,71 @@
 </div>
 
 <script type="text/javascript">//<![CDATA[
-// Toolbar is always visible, no toggle needed
+(function() {
+	const themeToggle = document.getElementById('theme-toggle');
+	const sunIcon = themeToggle.querySelector('.sun-icon');
+	const moonIcon = themeToggle.querySelector('.moon-icon');
+	
+	// Get or create dark theme style element
+	let darkThemeStyle = document.getElementById('dark-theme-style');
+	if (!darkThemeStyle) {
+		darkThemeStyle = document.createElement('style');
+		darkThemeStyle.id = 'dark-theme-style';
+		document.head.appendChild(darkThemeStyle);
+	}
+	
+	// Fetch dark CSS from existing file
+	const darkCssUrl = '/luci-static/argon/css/dark.css';
+	
+	// Check saved theme preference
+	const savedTheme = localStorage.getItem('luci-theme') || 'light';
+	
+	function loadDarkCSS() {
+		fetch(darkCssUrl)
+			.then(response => response.text())
+			.then(css => {
+				darkThemeStyle.textContent = css;
+				document.body.classList.add('dark-theme');
+				sunIcon.style.display = 'none';
+				moonIcon.style.display = 'block';
+				localStorage.setItem('luci-theme', 'dark');
+			})
+			.catch(err => {
+				console.error('Failed to load dark theme:', err);
+				// Fallback: apply dark theme inline
+				enableDarkThemeFallback();
+			});
+	}
+	
+	function removeDarkCSS() {
+		darkThemeStyle.textContent = '';
+		document.body.classList.remove('dark-theme');
+		sunIcon.style.display = 'block';
+		moonIcon.style.display = 'none';
+		localStorage.setItem('luci-theme', 'light');
+	}
+	
+	function enableDarkThemeFallback() {
+		document.body.classList.add('dark-theme');
+		sunIcon.style.display = 'none';
+		moonIcon.style.display = 'block';
+		localStorage.setItem('luci-theme', 'dark');
+	}
+	
+	// Apply saved theme on load
+	if (savedTheme === 'dark') {
+		loadDarkCSS();
+	}
+	
+	// Toggle theme on click
+	themeToggle.addEventListener('click', function(e) {
+		e.preventDefault();
+		const isDark = document.body.classList.contains('dark-theme');
+		if (isDark) {
+			removeDarkCSS();
+		} else {
+			loadDarkCSS();
+		}
+	});
+})();
 //]]></script>
