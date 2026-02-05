@@ -22,35 +22,7 @@
 }
 
 .toolbar-fab {
-	width: 40px;
-	height: 40px;
-	border-radius: 50%;
-	background: linear-gradient(135deg, #5e72e4 0%, #4a3fa3 100%);
-	color: white;
-	border: none;
-	outline: none;
-	cursor: pointer;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	box-shadow: 0 2px 6px rgba(94, 114, 228, 0.3);
-	transition: all 0.3s ease;
-	padding: 0;
-	margin-bottom: 4px;
-}
-
-.toolbar-fab svg {
-	width: 20px;
-	height: 20px;
-}
-
-.toolbar-fab:hover {
-	transform: scale(1.1);
-	box-shadow: 0 3px 10px rgba(94, 114, 228, 0.4);
-}
-
-.toolbar-fab:active {
-	transform: scale(0.95);
+	display: none;
 }
 
 .toolbar-menu {
@@ -138,62 +110,54 @@
 </style>
 
 <div class="toolbar-container">
-	<button class="toolbar-fab active" id="toolbar-fab" aria-label="Toggle Toolbar">
-		<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-			<circle cx="12" cy="12" r="1"></circle>
-			<circle cx="19" cy="12" r="1"></circle>
-			<circle cx="5" cy="12" r="1"></circle>
-		</svg>
-	</button>
-
 	<div class="toolbar-menu active" id="toolbar-menu">
 		<!-- Dashboard -->
-		<a href="/admin/" class="toolbar-item" title="Dashboard">
+		<a href="/cgi-bin/luci/admin/" class="toolbar-item" title="Dashboard">
 			<img src="/luci-static/argon/navbar/settings.png" alt="Dashboard" loading="lazy">
 		</a>
 
 		<!-- Status -->
-		<a href="/admin/status/overview" class="toolbar-item" title="Status">
+		<a href="/cgi-bin/luci/admin/status/overview" class="toolbar-item" title="Status">
 			<img src="/luci-static/argon/navbar/signal.png" alt="Status" loading="lazy">
 		</a>
 
 		<!-- Network -->
-		<a href="/admin/network/interfaces" class="toolbar-item" title="Network">
+		<a href="/cgi-bin/luci/admin/network/interfaces" class="toolbar-item" title="Network">
 			<img src="/luci-static/argon/navbar/network.png" alt="Network" loading="lazy">
 		</a>
 
 		<!-- Wireless -->
-		<a href="/admin/network/wireless" class="toolbar-item" title="Wireless">
+		<a href="/cgi-bin/luci/admin/network/wireless" class="toolbar-item" title="Wireless">
 			<img src="/luci-static/argon/navbar/wifi.png" alt="Wireless" loading="lazy">
 		</a>
 
 		<!-- Firewall -->
-		<a href="/admin/system/firewall" class="toolbar-item" title="Firewall">
+		<a href="/cgi-bin/luci/admin/system/firewall" class="toolbar-item" title="Firewall">
 			<img src="/luci-static/argon/navbar/firewall.png" alt="Firewall" loading="lazy">
 		</a>
 
 		<!-- System -->
-		<a href="/admin/system/system" class="toolbar-item" title="System">
+		<a href="/cgi-bin/luci/admin/system/system" class="toolbar-item" title="System">
 			<img src="/luci-static/argon/navbar/settings.png" alt="System" loading="lazy">
 		</a>
 
 		<!-- Services -->
-		<a href="/admin/system/startup" class="toolbar-item" title="Services">
+		<a href="/cgi-bin/luci/admin/system/startup" class="toolbar-item" title="Services">
 			<img src="/luci-static/argon/navbar/terminal.png" alt="Services" loading="lazy">
 		</a>
 
 		<!-- VPN -->
-		<a href="/admin/vpn" class="toolbar-item" title="VPN">
+		<a href="/cgi-bin/luci/admin/vpn" class="toolbar-item" title="VPN">
 			<img src="/luci-static/argon/navbar/vpn.png" alt="VPN" loading="lazy">
 		</a>
 
 		<!-- Files -->
-		<a href="/admin/system/files" class="toolbar-item" title="Files">
+		<a href="/cgi-bin/luci/admin/system/files" class="toolbar-item" title="Files">
 			<img src="/luci-static/argon/navbar/files.png" alt="Files" loading="lazy">
 		</a>
 
 		<!-- Log -->
-		<a href="/admin/status/logs" class="toolbar-item" title="System Log">
+		<a href="/cgi-bin/luci/admin/status/logs" class="toolbar-item" title="System Log">
 			<img src="/luci-static/argon/navbar/info.png" alt="System Log" loading="lazy">
 		</a>
 
@@ -205,23 +169,5 @@
 </div>
 
 <script type="text/javascript">//<![CDATA[
-(function() {
-	const fab = document.getElementById('toolbar-fab');
-	const menu = document.getElementById('toolbar-menu');
-
-	// Toggle toolbar menu
-	fab.addEventListener('click', function() {
-		menu.classList.toggle('active');
-		fab.classList.toggle('active');
-	});
-
-	// Close menu when clicking outside
-	document.addEventListener('click', function(e) {
-		if (!e.target.closest('.toolbar-container')) {
-			// Don't close - keep expanded by default
-			// menu.classList.remove('active');
-			// fab.classList.remove('active');
-		}
-	});
-})();
+// Toolbar is always visible, no toggle needed
 //]]></script>
