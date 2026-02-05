@@ -5,6 +5,7 @@ const SftpClient = require('ssh2-sftp-client');
 const { Client: SSHClient } = require('ssh2');
 const path = require('path');
 const fs = require('fs').promises;
+const { execSync } = require('child_process');
 
 // Configuration
 const CONFIG = {
@@ -284,8 +285,40 @@ async function main() {
   process.on('SIGINT', () => sync.cleanup());
   process.on('SIGTERM', () => sync.cleanup());
 
+  // Watch LESS files and auto-compile
+  watchLessFiles();
+
   await sync.connect();
   sync.startWatching();
+}
+
+function watchLessFiles() {
+  const lessDir = path.join(BASE_DIR, 'less');
+  
+  console.log('🔍 Watching LESS files for auto-compilation...\n');
+  
+  const lessWatcher = chokidar.watch(lessDir, {
+    ignored: /(^|[\/\\])\../, 
+    persistent: true,
+    awaitWriteFinish: {
+      stabilityThreshold: 500,
+      pollInterval: 100
+    }
+  });
+
+  lessWatcher.on('change', (filePath) => {
+    console.log(`📝 LESS file changed: ${path.basename(filePath)}`);
+    try {
+      console.log('🔨 Compiling LESS to CSS...');
+      execSync('npm run build', { 
+        cwd: BASE_DIR,
+        stdio: 'pipe'
+      });
+      console.log('✅ LESS compilation successful\n');
+    } catch (err) {
+      console.error('❌ LESS compilation failed:', err.message, '\n');
+    }
+  });
 }
 
 main().catch(err => {
