@@ -122,8 +122,8 @@ jobs:
         id: compile
         run: |
           cd sdk
-          echo "make package/luci-theme-noobwrt/{clean,compile} -j$(nproc)"
-          make package/luci-theme-noobwrt/{clean,compile} -j$(nproc) v=s
+          echo "make package/luci-theme-noobwrt/{clean,compile} -j$(nproc) V=s"
+          make package/luci-theme-noobwrt/{clean,compile} -j$(nproc) V=s
           mv bin/packages/x86_64/base/ ../
           rm .config .config.old
           cd ..
