@@ -43,8 +43,8 @@ It also supports automatic and manual switching between light and dark modes.
 [![download][download-badge]][download]
 
 
-<img src="/Screenshots/pc_1.png">
-<img src="/Screenshots/pc_2.png">
+<img src="Screenshots/pc_1.png">
+<img src="Screenshots/pc_2.png">
 </div>
 
 ## luci-theme-noobwrt
