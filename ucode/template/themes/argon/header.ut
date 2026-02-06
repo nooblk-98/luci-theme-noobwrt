@@ -1,11 +1,11 @@
 {#
 	Argon is a clean HTML5 theme for LuCI. It is based on luci-theme-material Argon Template
 
-	luci-theme-noobwrt
+	luci-theme-argon
 	Copyright 2020 Jerrykuku <jerrykuku@qq.com>
 
-	
-	
+	Have a bug? Please create an issue here on GitHub!
+	https://github.com/jerrykuku/luci-theme-argon/issues
 
 	luci-theme-material:
 	Copyright 2015 Lutty Yang <lutty@wcan.in>
@@ -36,15 +36,15 @@
 	let mode = 'normal';
 	let bar_color = '#5e72e4';
 	let primary, dark_primary, blur_radius, blur_radius_dark, blur_opacity, blur_opacity_dark;
-	const dark_css = readfile('/www/luci-static/noobwrt/css/dark.css');
-	if (access('/etc/config/noobwrt')) {
-		primary = cfg.get_first('noobwrt', 'global', 'primary');
-		dark_primary = cfg.get_first('noobwrt', 'global', 'dark_primary');
-		blur_radius = cfg.get_first('noobwrt', 'global', 'blur');
-		blur_radius_dark = cfg.get_first('noobwrt', 'global', 'blur_dark');
-		blur_opacity = cfg.get_first('noobwrt', 'global', 'transparency');
-		blur_opacity_dark = cfg.get_first('noobwrt', 'global', 'transparency_dark');
-		mode = cfg.get_first('noobwrt', 'global', 'mode');
+	const dark_css = readfile('/www/luci-static/argon/css/dark.css');
+	if (access('/etc/config/argon')) {
+		primary = cfg.get_first('argon', 'global', 'primary');
+		dark_primary = cfg.get_first('argon', 'global', 'dark_primary');
+		blur_radius = cfg.get_first('argon', 'global', 'blur');
+		blur_radius_dark = cfg.get_first('argon', 'global', 'blur_dark');
+		blur_opacity = cfg.get_first('argon', 'global', 'transparency');
+		blur_opacity_dark = cfg.get_first('argon', 'global', 'transparency_dark');
+		mode = cfg.get_first('argon', 'global', 'mode');
 		bar_color = (mode == 'dark') ? dark_primary : primary;
 	}
 
@@ -100,7 +100,7 @@
 		{% if (mode == 'dark'): %}
 			{{ dark_css }}
 		{% endif -%}
-		{% if (access('/etc/config/noobwrt')): %}
+		{% if (access('/etc/config/argon')): %}
 		:root {
 			--primary: {{ primary }};
 			--dark-primary: {{ dark_primary }};
@@ -129,10 +129,6 @@
 	class="lang_{{ dispatcher.lang }} {{ node?.title ? ` - ${striptags(node.title)}` : '' }} {% if (ctx.authsession): %}logged-in{% endif %}"
 	data-page="{{ entityencode(join('-', ctx.request_path), true) }}">
 
-	<!-- Toolbar Start -->
-	{% include("themes/" + theme + "/toolbar") %}
-	<!-- Toolbar End -->
-
 	<div class="main">
 		<div class="main-left" id="mainmenu" style="display:none">
 			<div class="sidenav-header d-flex align-items-center">
@@ -153,10 +149,11 @@
 		<div class="main-right">
 			<header class="bg-primary">
 				<div class="fill">
-						<div class="container">
-							<div class="flex1">
-								<a class="brand" href="#">{{ hostname }}</a>
-							</div>
+					<div class="container">
+						<div class="flex1">
+							<a class="showSide"></a>
+							<a class="brand" href="#">{{ hostname }}</a>
+						</div>
 						<div class="status" id="indicators"></div>
 					</div>
 				</div>

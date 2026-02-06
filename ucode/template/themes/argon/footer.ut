@@ -1,11 +1,11 @@
 {#
 	Argon is a clean HTML5 theme for LuCI. It is based on luci-theme-material Argon Template
 
-	luci-theme-noobwrt
+	luci-theme-argon
 	Copyright 2020 Jerrykuku <jerrykuku@qq.com>
 
-	
-	# removed
+	Have a bug? Please create an issue here on GitHub!
+	https://github.com/jerrykuku/luci-theme-argon/issues
 
 	luci-theme-material:
 	Copyright 2015 Lutty Yang <lutty@wcan.in>
@@ -19,11 +19,15 @@
 		</div>
 		<footer class="mobile-hide" style="text-wrap: auto">
 			<div class="footer-content" style="display: flex; flex-wrap: wrap; gap: 0.5em; justify-content: end;">
-				<span>Powered by <a href="https://github.com/nooblk-98/luci-theme-noobwrt" target="_blank" style="color: #10b981; text-decoration: none; font-weight: 500;">luci-theme-noobwrt</a></span>
+				<a class="luci-link" href="https://github.com/openwrt/luci" target="_blank">Powered by {{ version.luciname }} ({{ version.luciversion }})</a>
 
 				<span class="footer-separator">|</span>
 
-				<span>Developed by <a href="https://github.com/nooblk-98" target="_blank" style="color: #10b981; text-decoration: none; font-weight: 500;">nooblk</a></span>
+				<a href="https://github.com/jerrykuku/luci-theme-argon" target="_blank">ArgonTheme {# vPKG_VERSION #}</a>
+
+				<span class="footer-separator">|</span>
+
+				<a class="luci-link" href="{{ version.disturl }}" target="_blank">{{ version.distname }} {{ version.distversion }}-{{ version.distrevision }}</a>
 
 				<ul class="breadcrumb pull-right" id="modemenu" style="display:none"></ul>
 			</div>
@@ -46,6 +50,6 @@
 		}
 	});
 </script>
-<script type="text/javascript">L.require('menu-noobwrt')</script>
+<script type="text/javascript">L.require('menu-argon')</script>
 </body>
 </html>

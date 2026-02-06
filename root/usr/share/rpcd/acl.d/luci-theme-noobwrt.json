@@ -1,8 +1,0 @@
-{
-    "luci-theme-noobwrt": {
-        "description": "Grant UCI access for luci-theme-noobwrt",
-        "read": {
-            "uci": [ "noobwrt" ]
-        }
-    }
-}

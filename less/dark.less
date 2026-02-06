@@ -1,12 +1,12 @@
-// out: ../htdocs/luci-static/noobwrt/css/dark.css, compress: true , sourceMap: false
+// out: ../htdocs/luci-static/argon/css/dark.css, compress: true , sourceMap: false
 /**
  *  Argon is a clean HTML5 theme for LuCI. It is based on luci-theme-material and Argon Template
  *
- *  luci-theme-noobwrt
+ *  luci-theme-argon
  *      Copyright 2025 Jerryk <jerrykuku@gmail.com>
  *
- *  
- *      
+ *  Have a bug? Please create an issue here on GitHub!
+ *      https://github.com/jerrykuku/luci-theme-argon/issues
  *
  *  luci-theme-bootstrap:
  *      Copyright 2008 Steven Barth <steven@midlink.org>
@@ -28,29 +28,10 @@
  *  Licensed to the public under the Apache License 2.0
  */
 
-:root {
-    --primary: #60a5fa;
-    --dark-primary: #3b82f6;
-    --menu-bg-color: #111827;
-    --menu-color: #cbd5e1;
-    --main-menu-color: #f8fafc;
-    --background-color: #0b1220;
-    --surface-color: #111827;
-    --surface-muted: #172033;
-    --surface-elevated: #1e293b;
-    --text-color: #dbe7fb;
-    --text-muted: #93a6c4;
-    --border-color: #253550;
-    --border-strong: #3d5479;
-    --shadow-sm: 0 2px 8px rgba(2, 6, 23, 0.45);
-    --shadow-md: 0 12px 32px rgba(2, 6, 23, 0.55);
-    --shadow-lg: 0 20px 48px rgba(2, 6, 23, 0.6);
-    --focus-ring: 0 0 0 3px rgba(96, 165, 250, 0.3);
-}
 
 body {
-    background: var(--background-color);
-    color: var(--text-color);
+    background: #1e1e1e;
+    color: #cccccc;
 }
 
 .spinning::before {
@@ -109,9 +90,9 @@ header::after {
 
 .main {
     .main-left {
-        background-color: var(--menu-bg-color) !important;
-        border-right: 1px solid var(--border-color);
-        box-shadow: var(--shadow-md);
+
+        background-color: #333333 !important;
+        box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, .15);
 
         .sidenav-header .brand {
             color: #cccccc;
@@ -185,7 +166,7 @@ header::after {
     }
 
     .main-right {
-        background-color: var(--background-color);
+        background-color: #1e1e1e;
     }
 }
 
@@ -245,23 +226,13 @@ header.bg-primary {
 }
 
 .cbi-section {
-    background: var(--surface-color);
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-color);
-    box-shadow: var(--shadow-sm);
-    transition: box-shadow .2s ease, transform .2s ease, border-color .2s ease;
-}
-
-.cbi-section:hover {
-    border-color: var(--border-strong);
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
+    background: none;
+    box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, .35)
 }
 
 .panel-title {
-    color: var(--text-color);
-    background-color: var(--surface-muted);
-    border-bottom: 1px solid var(--border-color);
+    color: #ccc;
+    background-color: #333333;
 }
 
 div > table > tbody > tr:nth-of-type(2n),
@@ -283,14 +254,6 @@ table > tbody > tr > td,
 table > tfoot > tr > td,
 table > thead > tr > td {
     border-top: 1px solid #252526;
-}
-
-table > tbody > tr:nth-of-type(2n) {
-    background-color: #24282d;
-}
-
-table > tbody > tr:hover {
-    background-color: rgba(16, 185, 129, 0.12);
 }
 
 #swaptotal > div > div,
@@ -371,27 +334,11 @@ h4 {
 }
 
 .cbi-progressbar {
-    background: var(--surface-muted);
+    background: #282a2c;
 
     div {
-        background-color: var(--primary) !important;
+        background-color: var(--dark-primary) !important;
     }
-}
-
-progress {
-    background-color: var(--surface-muted);
-}
-
-progress::-webkit-progress-bar {
-    background-color: var(--surface-muted);
-}
-
-progress::-webkit-progress-value {
-    background-color: var(--primary);
-}
-
-progress::-moz-progress-bar {
-    background-color: var(--primary);
 }
 
 .cbi-section-table .cbi-section-table-titles .cbi-section-table-cell {
@@ -400,9 +347,8 @@ progress::-moz-progress-bar {
 
 .cbi-button {
     color: #ffffff !important;
-    background-color: #059669;
+    background-color: #483d8b;
     background-color: var(--dark-primary);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
 }
 
 .cbi-section-node {
@@ -410,7 +356,7 @@ progress::-moz-progress-bar {
 }
 
 abbr {
-    color: #10b981;
+    color: #5e72e4;
 }
 
 div > table > tbody > tr:nth-of-type(2n),
@@ -1271,10 +1217,6 @@ input,
 }
 
 .btn {
-    background-color: var(--primary);
-    border-color: var(--primary);
-    color: #ffffff;
+    background-color: rgb(112, 112, 112);
+    color: #fff;
 }
-
-/* accessibility + ui system enhancements for dark mode */
-@import url("dark-enhancements.less");
