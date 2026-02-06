@@ -18,12 +18,14 @@
 	background: rgba(255, 255, 255, 0.95);
 	padding: 8px;
 	border-radius: 12px;
+	border: 1px solid rgba(0, 0, 0, 0.85);
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 	transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
 body.dark-theme .toolbar-container {
 	background: rgba(20, 20, 25, 0.98);
+	border: 1px solid rgba(255, 255, 255, 0.85);
 	box-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
 }
 
