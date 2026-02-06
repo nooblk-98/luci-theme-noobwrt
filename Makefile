@@ -17,6 +17,15 @@ define Package/luci-theme-noobwrt/conffiles
 /etc/config/luci
 endef
 
+define Build/Prepare
+	$(call Build/Prepare/Default)
+	$(CP) ./src/* $(PKG_BUILD_DIR)/
+endef
+
+define Build/Compile
+	$(call LuCI/CompileCss,$(PKG_BUILD_DIR)/htdocs/luci-static/noobwrt/css)
+endef
+
 include $(TOPDIR)/feeds/luci/luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature
