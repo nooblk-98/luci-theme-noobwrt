@@ -100,10 +100,15 @@ jobs:
           echo "src-git-full packages https://github.com/openwrt/packages.git;master" >> feeds.conf
           echo "src-git-full luci https://github.com/openwrt/luci.git;master" >> feeds.conf
           echo "src-git-full routing https://git.openwrt.org/feed/routing.git;master"  >> feeds.conf
+          ./scripts/feeds update -a
+          ./scripts/feeds install -a
           git clone -b master https://github.com/${{ github.repository }}.git package/downloads/luci-theme-noobwrt
           ./scripts/feeds update -a
           echo "CONFIG_PACKAGE_luci-theme-noobwrt=m" > .config
+          echo "CONFIG_PACKAGE_wget=y" >> .config
+          echo "CONFIG_PACKAGE_jsonfilter=y" >> .config
           ./scripts/feeds install -d n luci-theme-noobwrt
+          make defconfig
           make download -j8
 
       - name: Configure noobwrt (master)
