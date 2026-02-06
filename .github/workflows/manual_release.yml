@@ -109,6 +109,10 @@ jobs:
       - name: Configure noobwrt
         run: |
           cd sdk
+          # Ensure cached SDK uses the current package sources
+          rm -rf package/downloads/luci-theme-noobwrt
+          mkdir -p package/downloads/luci-theme-noobwrt
+          rsync -a --delete --exclude 'sdk/' --exclude '.git/' ../ package/downloads/luci-theme-noobwrt/
           ./scripts/feeds install luci-theme-noobwrt
           echo "CONFIG_ALL_NONSHARED=n" > .config
           echo "CONFIG_ALL_KMODS=n" >> .config
