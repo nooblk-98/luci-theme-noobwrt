@@ -1,11 +1,11 @@
 {#
-	Argon is a clean HTML5 theme for LuCI. It is based on luci-theme-material Argon Template
+	NoobWrt is a clean HTML5 theme for LuCI. It is based on luci-theme-material NoobWrt Template
 
-	luci-theme-argon
+	luci-theme-noobwrt
 	Copyright 2020 Jerrykuku <jerrykuku@qq.com>
 
 	Have a bug? Please create an issue here on GitHub!
-	https://github.com/jerrykuku/luci-theme-argon/issues
+	https://github.com/jerrykuku/luci-theme-noobwrt/issues
 
 	luci-theme-material:
 	Copyright 2015 Lutty Yang <lutty@wcan.in>
@@ -21,7 +21,7 @@
 <footer style="text-wrap: auto">
 	<div>
 		<a class="luci-link" href="https://github.com/openwrt/luci" target="_blank">Powered by {{ version.luciname }} ({{ version.luciversion }})</a>
-		<a href="https://github.com/jerrykuku/luci-theme-argon" target="_blank">ArgonTheme {# vPKG_VERSION #}</a>
+		<a href="https://github.com/jerrykuku/luci-theme-noobwrt" target="_blank">NoobWrtTheme {# vPKG_VERSION #}</a>
 		<a class="luci-link" href="{{ version.disturl }}" target="_blank">{{ version.distname }} {{ version.distversion }}-{{ version.distrevision }}</a>
 	</div>
 </footer>
@@ -45,3 +45,5 @@
 </script>
 </body>
 </html>
+
+

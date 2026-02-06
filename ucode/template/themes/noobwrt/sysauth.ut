@@ -1,11 +1,11 @@
 {#
-	Argon is a clean HTML5 theme for LuCI. It is based on luci-theme-bootstrap and MUI and Argon Template
+	NoobWrt is a clean HTML5 theme for LuCI. It is based on luci-theme-bootstrap and MUI and NoobWrt Template
 
-	luci-theme-argon
+	luci-theme-noobwrt
 	Copyright 2020 Jerryk <jerrykuku@gmail.com>
 
 	Have a bug? Please create an issue here on GitHub!
-	https://github.com/jerrykuku/luci-theme-argon/issues
+	https://github.com/jerrykuku/luci-theme-noobwrt/issues
 
 	luci-theme-bootstrap:
 	Copyright 2008 Steven Barth <steven@midlink.org>
@@ -15,7 +15,7 @@
 	MUI:
 	https://github.com/muicss/mui
 
-	Argon Theme
+	NoobWrt Theme
 	https://demos.creative-tim.com/argon-dashboard/index.html
 
 	Licensed to the public under the Apache License 2.0
@@ -54,10 +54,10 @@
 		let backgroundType = "Image";
 		let mimeType = "";
 
-		if (fs.access("/etc/config/argon")) {
-			let online_wallpaper = cfg.get_first('argon', 'global', 'online_wallpaper') ?? (cfg.get_first('argon', 'global', 'bing_background') == '1' ? 'bing' : null);
+		if (fs.access("/etc/config/noobwrt")) {
+			let online_wallpaper = cfg.get_first('noobwrt', 'global', 'online_wallpaper') ?? (cfg.get_first('noobwrt', 'global', 'bing_background') == '1' ? 'bing' : null);
 			if (online_wallpaper && online_wallpaper != "none") {
-				const picurl = ubus.call("luci.argon_wallpaper", "get_url") ?? {};
+				const picurl = ubus.call("luci.noobwrt_wallpaper", "get_url") ?? {};
 				if (picurl?.url) {
 					bgUrl = picurl.url;
 					return {bgUrl, backgroundType, mimeType};
@@ -115,7 +115,7 @@
 	<div class="login-container">
 		<div class="login-form">
 			<!-- Logo Start -->
-			<a class="brand" href="/"><img src="{{ media }}/img/argon.svg" class="icon">
+			<a class="brand" href="/"><img src="{{ media }}/img/noobwrt.svg" class="icon">
 				<span class="brand-text">{{ hostname }}</span>
 			</a>
 			<!-- Logo End -->
@@ -147,3 +147,5 @@
 					input.focus();
 			//]]></script>
 {% include("themes/" + theme + "/footer_login") %}
+
+
