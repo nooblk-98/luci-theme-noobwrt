@@ -71,6 +71,8 @@ jobs:
     needs: job_check
     if: needs.job_check.outputs.has_update == 'true'
     runs-on: ubuntu-latest
+    env:
+      TERM: xterm
     steps:
       - name: Install packages
         run: |
@@ -103,6 +105,7 @@ jobs:
           rm -rf package/downloads/luci-theme-noobwrt
           git clone -b master https://github.com/${{ github.repository }}.git package/luci-theme-noobwrt
           ./scripts/feeds update -a
+          ./scripts/feeds install -a -p luci
           echo "CONFIG_PACKAGE_luci-theme-noobwrt=m" > .config
           make download -j8
 
@@ -114,6 +117,7 @@ jobs:
           rm -rf package/luci-theme-noobwrt
           mkdir -p package/luci-theme-noobwrt
           rsync -a --delete --exclude 'sdk/' --exclude '.git/' ../ package/luci-theme-noobwrt/
+          ./scripts/feeds install -a -p luci
           echo "CONFIG_ALL_NONSHARED=n" > .config
           echo "CONFIG_ALL_KMODS=n" >> .config
           echo "CONFIG_ALL=n" >> .config
