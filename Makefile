@@ -17,4 +17,11 @@ LUCI_MINIFY:=0
 
 include $(TOPDIR)/feeds/luci/luci.mk
 
+# Theme is pre-built/static assets; no compile/install steps needed
+define Build/Compile
+endef
+
+define Build/Install
+endef
+
 # call BuildPackage - OpenWrt buildroot signature
