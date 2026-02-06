@@ -24,7 +24,7 @@ on:
     branches:
       - "master"
     paths:
-      - "Makefile"
+      - "luci-theme-noobwrt/Makefile"
 env:
   TZ: Asia/Shanghai
 
@@ -34,7 +34,7 @@ jobs:
     name: Check Version
     runs-on: ubuntu-latest
     outputs:
-      noobwrt_version: ${{ steps.check_version.outputs.latest_version }}
+      argon_version: ${{ steps.check_version.outputs.latest_version }}
       has_update: ${{ steps.check_version.outputs.has_update }}
     steps:
       - name: Checkout
@@ -66,8 +66,8 @@ jobs:
           name: For openwrt official Snapshots LuCI master
           tag_name: ${{steps.check_version.outputs.latest_version}}
 
-  job_build_noobwrt:
-    name: Build noobwrt (master)
+  job_build_argon:
+    name: Build Argon (master)
     needs: job_check
     if: needs.job_check.outputs.has_update == 'true'
     runs-on: ubuntu-latest
@@ -100,18 +100,13 @@ jobs:
           echo "src-git-full packages https://github.com/openwrt/packages.git;master" >> feeds.conf
           echo "src-git-full luci https://github.com/openwrt/luci.git;master" >> feeds.conf
           echo "src-git-full routing https://git.openwrt.org/feed/routing.git;master"  >> feeds.conf
-          ./scripts/feeds update -a
-          ./scripts/feeds install -a
           git clone -b master https://github.com/${{ github.repository }}.git package/downloads/luci-theme-noobwrt
           ./scripts/feeds update -a
           echo "CONFIG_PACKAGE_luci-theme-noobwrt=m" > .config
-          echo "CONFIG_PACKAGE_wget=y" >> .config
-          echo "CONFIG_PACKAGE_jsonfilter=y" >> .config
           ./scripts/feeds install -d n luci-theme-noobwrt
-          make defconfig
           make download -j8
 
-      - name: Configure noobwrt (master)
+      - name: Configure Argon (master)
         run: |
           cd sdk
           ./scripts/feeds install luci-theme-noobwrt
@@ -123,7 +118,7 @@ jobs:
           echo "CONFIG_PACKAGE_luci-theme-noobwrt=m" >> .config
           make defconfig
 
-      - name: Compile noobwrt (master)
+      - name: Compile Argon (master)
         id: compile
         run: |
           cd sdk
@@ -135,11 +130,11 @@ jobs:
           echo "status=success" >> $GITHUB_OUTPUT
           echo "FIRMWARE=$PWD" >> $GITHUB_ENV
 
-      - name: Upload noobwrt (master) ipks to release
+      - name: Upload Argon (master) ipks to release
         uses: softprops/action-gh-release@v1
         if: steps.compile.outputs.status == 'success'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{needs.job_check.outputs.noobwrt_version}}
+          tag_name: ${{needs.job_check.outputs.argon_version}}
           files: ${{ env.FIRMWARE }}/base/luci-theme*.*
