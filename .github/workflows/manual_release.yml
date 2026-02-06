@@ -100,16 +100,15 @@ jobs:
           echo "src-git-full packages https://github.com/openwrt/packages.git;master" >> feeds.conf
           echo "src-git-full luci https://github.com/openwrt/luci.git;master" >> feeds.conf
           echo "src-git-full routing https://git.openwrt.org/feed/routing.git;master"  >> feeds.conf
-          git clone -b master https://github.com/${{ github.repository }}.git package/downloads/luci-theme-noobwrt
+          git clone -b master https://github.com/${{ github.repository }}.git package/luci-theme-noobwrt
           ./scripts/feeds update -a
           echo "CONFIG_PACKAGE_luci-theme-noobwrt=m" > .config
-          ./scripts/feeds install -d n luci-theme-noobwrt
           make download -j8
 
       - name: Configure Argon (master)
         run: |
           cd sdk
-          ./scripts/feeds install luci-theme-noobwrt
+          ./scripts/feeds install -d luci-theme-noobwrt
           echo "CONFIG_ALL_NONSHARED=n" > .config
           echo "CONFIG_ALL_KMODS=n" >> .config
           echo "CONFIG_ALL=n" >> .config
