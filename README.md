@@ -29,8 +29,6 @@
 [official]: https://github.com/openwrt/openwrt
 [immortalwrt]: https://github.com/immortalwrt/immortalwrt
 
-<div align="center">
-<img src="/Screenshots/screenshot_pc.jpg">
 
 # A brand new OpenWrt LuCI theme
 
@@ -43,20 +41,10 @@ It also supports automatic and manual switching between light and dark modes.
 [![issues][issues-badge]][issues]
 [![release][release-badge]][release]
 [![download][download-badge]][download]
-[![contact][contact-badge]][contact]
 
-**English** |
-[简体中文][zh-cn-link]
 
-[Key Features](#key-features) •
-[Branch](#branch-introduction) •
-[Version History](#version-history) •
-[Getting started](#getting-started) •
-[Screenshots](#screenshots) •
-[Contributors](#contributors) •
-[Credits](#credits)
-
-<img src="/Screenshots/screenshot_phone.jpg">
+<img src="/Screenshots/pc_1.jpg">
+<img src="/Screenshots/pc_2.jpg">
 </div>
 
 ## Key Features
