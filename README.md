@@ -9,15 +9,15 @@
 } -->
 
 [license]: /LICENSE
-[license-badge]: https://img.shields.io/github/license/jerrykuku/luci-theme-noobwrt?style=flat-square&a=1
-[prs]: https://github.com/jerrykuku/luci-theme-noobwrt/pulls
+[license-badge]: https://img.shields.io/github/license/nooblk-98/luci-theme-noobwrt?style=flat-square&a=1
+[prs]: https://github.com/nooblk-98/luci-theme-noobwrt/pulls
 [prs-badge]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
-[issues]: https://github.com/jerrykuku/luci-theme-noobwrt/issues/new
+[issues]: https://github.com/nooblk-98/luci-theme-noobwrt/issues/new
 [issues-badge]: https://img.shields.io/badge/Issues-welcome-brightgreen.svg?style=flat-square
-[release]: https://github.com/jerrykuku/luci-theme-noobwrt/releases
-[release-badge]: https://img.shields.io/github/v/release/jerrykuku/luci-theme-noobwrt?style=flat-square
-[download]: https://github.com/jerrykuku/luci-theme-noobwrt/releases
-[download-badge]: https://img.shields.io/github/downloads/jerrykuku/luci-theme-noobwrt/total?style=flat-square
+[release]: https://github.com/nooblk-98/luci-theme-noobwrt/releases
+[release-badge]: https://img.shields.io/github/v/release/nooblk-98/luci-theme-noobwrt?style=flat-square
+[download]: https://github.com/nooblk-98/luci-theme-noobwrt/releases
+[download-badge]: https://img.shields.io/github/downloads/nooblk-98/luci-theme-noobwrt/total?style=flat-square
 [contact]: https://t.me/jerryk6
 [contact-badge]: https://img.shields.io/badge/Contact-telegram-blue?style=flat-square
 [en-us-link]: /README.md
@@ -36,11 +36,13 @@ NoobWrt is **a clean and tidy OpenWrt LuCI theme** that allows<br/>
 users to customize their login interface with images or videos.  
 It also supports automatic and manual switching between light and dark modes.
 
+<p align="center">
 [![license][license-badge]][license]
 [![prs][prs-badge]][prs]
 [![issues][issues-badge]][issues]
 [![release][release-badge]][release]
 [![download][download-badge]][download]
+</p>
 
 
 <img src="screenshots/bg.png">
