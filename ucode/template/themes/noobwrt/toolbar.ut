@@ -272,7 +272,7 @@ body.dark-theme .theme-toggle svg {
 		</a>
 
 		<!-- Terminal -->
-		<a href="/cgi-bin/luci/admin/system/ttyd" class="toolbar-item" title="Terminal">
+		<a href="/cgi-bin/luci/admin/services/ttyd" class="toolbar-item" title="Terminal">
 			<img src="/luci-static/noobwrt/navbar/terminal.png" alt="Terminal" loading="lazy">
 		</a>
 
