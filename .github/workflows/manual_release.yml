@@ -88,14 +88,14 @@ jobs:
           key: openwrt-sdk-snapshot-x86-64
 
       - name: Initialization environment
-        # if: steps.cache-sdk.outputs.cache-hit != 'true'
+        if: steps.cache-sdk.outputs.cache-hit != 'true'
         env:
           url_sdk: https://archive.openwrt.org/releases/24.10.0/targets/x86/64/openwrt-sdk-24.10.0-x86-64_gcc-13.3.0_musl.Linux-x86_64.tar.zst
         run: |
           wget ${{ env.url_sdk }}
           file_name=$(echo ${{env.url_sdk}} | awk -F/ '{print $NF}')
           mkdir sdk && tar --zstd -xvf $file_name -C ./sdk --strip-components=1
-          cd sdk  
+          cd sdk
           echo "src-git base https://github.com/openwrt/openwrt.git;main" > feeds.conf
           echo "src-git-full packages https://github.com/openwrt/packages.git;master" >> feeds.conf
           echo "src-git-full luci https://github.com/openwrt/luci.git;master" >> feeds.conf
@@ -105,6 +105,13 @@ jobs:
           echo "CONFIG_PACKAGE_luci-theme-noobwrt=m" > .config
           ./scripts/feeds install -d n luci-theme-noobwrt
           make download -j8
+
+      - name: Update theme source on cache hit
+        if: steps.cache-sdk.outputs.cache-hit == 'true'
+        run: |
+          cd sdk/package/downloads/luci-theme-noobwrt
+          git fetch origin master
+          git reset --hard origin/master
 
       - name: Configure Argon (master)
         run: |
