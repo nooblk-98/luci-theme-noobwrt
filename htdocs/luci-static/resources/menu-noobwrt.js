@@ -8,12 +8,20 @@
  */
 const SlideAnimations = {
 	/**
-	 * Animation durations in milliseconds
+	 * Animation durations in milliseconds.
+	 * When prefers-reduced-motion is active, all animations use 0ms.
 	 */
 	durations: {
 		fast: 200,
 		normal: 400,
 		slow: 600
+	},
+
+	/**
+	 * Returns true if the user has requested reduced motion via OS/browser setting.
+	 */
+	prefersReducedMotion: function() {
+		return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 	},
 
 	/**
@@ -32,14 +40,15 @@ const SlideAnimations = {
 			console.warn('SlideAnimations.slideDown: No element provided');
 			return;
 		}
-		
+
 		// Stop any existing animation on this element
 		this.stop(element);
-		
-		// Convert duration string to milliseconds
-		const animDuration = typeof duration === 'string' ? 
-			this.durations[duration] || this.durations.normal : 
-			(duration || this.durations.normal);
+
+		// Convert duration string to milliseconds; skip animation for reduced-motion users
+		const animDuration = this.prefersReducedMotion() ? 0 :
+			(typeof duration === 'string' ?
+				this.durations[duration] || this.durations.normal :
+				(duration || this.durations.normal));
 		
 		// Store original styles
 		const originalStyles = {
@@ -98,14 +107,15 @@ const SlideAnimations = {
 			console.warn('SlideAnimations.slideUp: No element provided');
 			return;
 		}
-		
+
 		// Stop any existing animation on this element
 		this.stop(element);
-		
-		// Convert duration string to milliseconds
-		const animDuration = typeof duration === 'string' ? 
-			this.durations[duration] || this.durations.normal : 
-			(duration || this.durations.normal);
+
+		// Convert duration string to milliseconds; skip animation for reduced-motion users
+		const animDuration = this.prefersReducedMotion() ? 0 :
+			(typeof duration === 'string' ?
+				this.durations[duration] || this.durations.normal :
+				(duration || this.durations.normal));
 		
 		// Store original styles
 		const originalStyles = {

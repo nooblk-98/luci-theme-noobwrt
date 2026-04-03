@@ -39,6 +39,8 @@ fetch_pic_url() {
 		;;
 	unsplash_*)
 		local collection_id="${WEB_PIC_SRC#unsplash_}"
+		# Sanitize: allow only alphanumeric chars and hyphens
+		collection_id="$(printf '%s' "$collection_id" | tr -cd 'A-Za-z0-9-')"
 		if [ -z "$API_KEY" ]; then
 			local pic_id="$(wget -T3 --spider \
 				"https://source.unsplash.com/collection/${collection_id}/1920x1080" 2>&1 |
@@ -57,6 +59,8 @@ fetch_pic_url() {
 		;;
 	wallhaven_*)
 		local tag_id="${WEB_PIC_SRC#wallhaven_}"
+		# Sanitize: allow only alphanumeric chars and hyphens
+		tag_id="$(printf '%s' "$tag_id" | tr -cd 'A-Za-z0-9-')"
 		local use_reso="resolutions"
 		[ "$EXACT_RESO" -eq "1" ] || use_reso="atleast"
 		[ -z "$API_KEY" ] || API_KEY="apikey=$API_KEY&"
@@ -80,9 +84,11 @@ try_update() {
 			# download or browsed first before it can be shown as a background image
 			# if not, browser only displays a blank image
 			# NOTE: only happens to Wallhaven.cc source images
-			if [[ "$WEB_PIC_SRC" == wallhave* ]] ; then
+			case "$WEB_PIC_SRC" in
+			wallhave*)
 				wget -T3 -qO- "${picurl}" > /dev/null
-			fi
+				;;
+			esac
 
 			echo "$picurl" | tee "$CACHE"
 		else

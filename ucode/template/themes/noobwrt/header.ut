@@ -90,7 +90,7 @@
 	<link rel="apple-touch-icon" sizes="144x144" href="{{ media }}/icon/apple-icon-144x144.png">
 	<link rel="manifest" href="{{ media }}/icon/manifest.json" crossorigin="use-credentials">
 
-	<link rel="stylesheet" href="{{ media }}/css/cascade.css{# ?v=PKG_VERSION #}">
+	<link rel="stylesheet" href="{{ media }}/css/cascade.css?v={{ version.luciversion }}">
 	<style title="text/css">
 		{% if (mode == 'dark'): %}
 			{{ dark_css }}

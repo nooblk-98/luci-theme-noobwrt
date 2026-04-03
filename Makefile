@@ -11,7 +11,7 @@ LUCI_DEPENDS:=+wget +jsonfilter
 PKG_VERSION:=1.0.9
 PKG_RELEASE:=20260602
 
-CONFIG_LUCI_CSSTIDY:=
+CONFIG_LUCI_CSSTIDY:=1
 
 include $(TOPDIR)/feeds/luci/luci.mk
 

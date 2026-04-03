@@ -5,25 +5,7 @@
 // Mobile-first responsive design for LuCI admin interface
 // ==========================================================================
 
-// 1. Browser-Specific Fixes
-// ==========================================================================
-
-// Internet Explorer Specific Fixes
-@media all and (-ms-high-contrast: none) {
-    .main>.main-left>.nav>.slide>.menu::before {
-        top: 30.25%;
-    }
-
-    .main>.main-left>.nav>li:last-child::before {
-        top: 20%;
-    }
-
-    .showSide::before {
-        top: -12px;
-    }
-}
-
-// 2. Large Desktop Screens (1600px and below)
+// 1. Large Desktop Screens (1600px and below)
 // ==========================================================================
 
 @media screen and (max-width: 1600px) {
@@ -35,7 +17,7 @@
 
     // Sidebar width
     .main-left {
-        width: calc(0% + 13rem);
+        width: 13rem;
     }
 
     // Button and label sizing
@@ -84,7 +66,7 @@
 
     // Sidebar width
     .main-left {
-        width: calc(0% + 13rem);
+        width: 13rem;
     }
 
     // Tab styling
@@ -181,7 +163,7 @@
     }
 
     .main-left {
-        width: calc(0% + 13rem);
+        width: 13rem;
     }
 
     // Login page specific
