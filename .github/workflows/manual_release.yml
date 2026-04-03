@@ -168,11 +168,13 @@ jobs:
         run: |
           cd sdk
           make package/${{ env.PKG_NAME }}/{clean,compile} -j$(nproc)
-          mv bin/packages/x86_64/base/ ../
+          # Find the ipk regardless of which feed subdirectory it landed in
+          mkdir -p ../output
+          find bin/packages/ -name "${{ env.PKG_NAME }}*.ipk" -exec cp {} ../output/ \;
           rm .config .config.old
           cd ..
           echo "status=success" >> $GITHUB_OUTPUT
-          echo "FIRMWARE=$PWD" >> $GITHUB_ENV
+          echo "FIRMWARE=$PWD/output" >> $GITHUB_ENV
 
       - name: Upload ipks to release
         uses: softprops/action-gh-release@v1
@@ -181,5 +183,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ needs.job_check.outputs.pkg_version }}
-          files: ${{ env.FIRMWARE }}/base/${{ env.PKG_NAME }}*.*
+          files: ${{ env.FIRMWARE }}/${{ env.PKG_NAME }}*.ipk
           overwrite: true
