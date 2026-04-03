@@ -50,10 +50,42 @@ jobs:
           latest_release=$(wget -qO- -t1 -T2 ${{env.url_release}} | awk -F '"' '/tag_name/{print $4}')
           is_new_version=$([ "${latest_version}" != "${latest_release}" ] && echo true || echo false)
           echo "latest_version=${latest_version}" >> $GITHUB_OUTPUT
+          echo "latest_release=${latest_release}" >> $GITHUB_OUTPUT
           echo "is_new_version=${is_new_version}" >> $GITHUB_OUTPUT
           echo "latest_version: ${latest_version}"
           echo "latest_release: ${latest_release}"
           echo "is_new_version: ${is_new_version}"
+
+      - name: Generate release notes
+        id: release_notes
+        run: |
+          latest_version="${{ steps.check_version.outputs.latest_version }}"
+          latest_release="${{ steps.check_version.outputs.latest_release }}"
+
+          # Determine the base ref for comparison
+          if git rev-parse "${latest_release}" >/dev/null 2>&1; then
+            base_ref="${latest_release}"
+          else
+            base_ref=$(git rev-list --max-parents=0 HEAD)
+          fi
+
+          # Build changelog from commits since last release
+          changelog=$(git log "${base_ref}"..HEAD --pretty=format:"- %s (%h)" --no-merges)
+
+          if [ -z "$changelog" ]; then
+            changelog="- No changes recorded"
+          fi
+
+          # Write multiline notes to output
+          {
+            echo "notes<<EOF"
+            echo "## What's Changed"
+            echo ""
+            echo "${changelog}"
+            echo ""
+            echo "**Full diff:** [\`${base_ref:0:7}\` → \`${latest_version}\`](https://github.com/${{ github.repository }}/compare/${base_ref}...HEAD)"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
 
       - name: Generate new tag & release
         if: steps.check_version.outputs.is_new_version == 'true'
@@ -63,6 +95,16 @@ jobs:
         with:
           name: For openwrt official Snapshots LuCI master
           tag_name: ${{steps.check_version.outputs.latest_version}}
+          body: ${{ steps.release_notes.outputs.notes }}
+
+      - name: Update release notes on existing release
+        if: steps.check_version.outputs.is_new_version == 'false'
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{steps.check_version.outputs.latest_version}}
+          body: ${{ steps.release_notes.outputs.notes }}
 
   job_build_argon:
     name: Build Argon (master)
