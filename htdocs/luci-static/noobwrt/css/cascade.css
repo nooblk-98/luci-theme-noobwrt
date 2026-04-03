@@ -1064,6 +1064,8 @@ select[multiple="multiple"] {
   background-color: var(--menu-bg-color);
   box-shadow: rgba(0, 0, 0, 0.75) 0px 0px 15px -5px;
   transition: all 0.2s;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
 }
 .main-left .sidenav-header {
   padding: 1.5rem 0.5rem;
@@ -1333,14 +1335,22 @@ select[multiple="multiple"] {
   display: none;
 }
 .main-left::-webkit-scrollbar {
-  width: 5px;
+  width: 4px;
   height: 1px;
 }
 .main-left::-webkit-scrollbar-thumb {
-  background-color: #f6f9fc;
+  background-color: transparent;
+  border-radius: 4px;
+  transition: background-color 0.2s;
 }
 .main-left::-webkit-scrollbar-track {
-  background-color: #fff;
+  background-color: transparent;
+}
+.main-left:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.18);
+}
+.main-left:hover {
+  scrollbar-color: rgba(0, 0, 0, 0.18) transparent;
 }
 .main-right {
   height: 100%;
@@ -1486,6 +1496,13 @@ footer {
 footer > a {
   color: #aaa;
   text-decoration: none;
+}
+.tr.table-titles,
+.tr.cbi-section-table-titles {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: var(--background-color);
 }
 #view {
   border-radius: 0.25rem;

@@ -247,7 +247,7 @@ body.dark-theme .theme-toggle svg {
 
 
 		<!-- Data Usage -->
-		<a href="/cgi-bin/luci/admin/tools/vnstat" class="toolbar-item" title="Data Usage">
+		<a href="/cgi-bin/luci/admin/tools/netstat" class="toolbar-item" title="Data Usage">
 			<img src="/luci-static/noobwrt/navbar/network.png" alt="Data Usage" loading="lazy">
 		</a>
 
@@ -315,8 +315,17 @@ body.dark-theme .theme-toggle svg {
 	// Fetch dark CSS from existing file
 	const darkCssUrl = '/luci-static/noobwrt/css/dark.css';
 
+	// On first visit (no saved preference), honour the OS colour scheme setting
+	if (localStorage.getItem('luci-theme') === null) {
+		if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+			localStorage.setItem('luci-theme', 'dark');
+		} else {
+			localStorage.setItem('luci-theme', 'light');
+		}
+	}
+
 	// Check saved theme preference
-	const savedTheme = localStorage.getItem('luci-theme') || 'light';
+	const savedTheme = localStorage.getItem('luci-theme');
 
 	function loadDarkCSS() {
 		fetch(darkCssUrl)

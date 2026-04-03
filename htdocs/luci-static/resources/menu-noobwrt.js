@@ -263,12 +263,17 @@ return baseclass.extend({
 			ul.classList.remove('active');
 			ul.previousElementSibling.classList.remove('active');
 			SlideAnimations.slideUp(ul, 'fast');
-			
+
 			// Check if we're clicking on an already open menu (should collapse it)
 			if (!shouldCollapse && ul === slideMenu) {
 				shouldCollapse = true;
 			}
 		});
+
+		// Persist open section: clear since we just closed everything
+		try {
+			localStorage.setItem('noobwrt.sidenav.open', '[]');
+		} catch (e) {}
 
 		// Exit if there's no submenu to show
 		if (!slideMenu) {
@@ -284,6 +289,14 @@ return baseclass.extend({
 				slideMenu.classList.add('active');
 				target.classList.add('active');
 				SlideAnimations.slideDown(slideMenuElement, 'fast');
+
+				// Persist which section is open
+				try {
+					var openTitle = target.getAttribute('data-title');
+					if (openTitle) {
+						localStorage.setItem('noobwrt.sidenav.open', JSON.stringify([openTitle]));
+					}
+				} catch (e) {}
 			}
 			target.blur(); // Remove focus from the clicked element
 		}
@@ -353,9 +366,38 @@ return baseclass.extend({
 			if (mainMenuElement) {
 				mainMenuElement.appendChild(menuContainer);
 				mainMenuElement.style.display = '';
+
+				// Restore previously opened submenus from localStorage
+				var openSections = [];
+				try {
+					openSections = JSON.parse(localStorage.getItem('noobwrt.sidenav.open') || '[]');
+				} catch (e) {}
+
+				menuContainer.querySelectorAll('.nav > li.slide > a.menu').forEach(function(anchor) {
+					var title = anchor.getAttribute('data-title');
+					var slideMenu = anchor.nextElementSibling;
+					if (!slideMenu) return;
+
+					var isActive = anchor.classList.contains('active');
+					var wasOpen = openSections.indexOf(title) !== -1;
+
+					if (isActive || wasOpen) {
+						anchor.classList.add('active');
+						slideMenu.classList.add('active');
+						slideMenu.style.display = 'block';
+					}
+				});
+
+				// Scroll the active menu item into view smoothly
+				var activeItem = mainMenuElement.querySelector('.nav > li > a.active, .nav > li > a.menu.active');
+				if (activeItem) {
+					setTimeout(function() {
+						activeItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+					}, 150);
+				}
 			}
 		}
-		
+
 		return menuContainer;
 	},
 
