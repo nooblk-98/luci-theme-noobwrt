@@ -369,18 +369,32 @@
         display: none;
     }
 
-    // Scrollbar Styling
+    // Scrollbar: hidden at rest, appears on hover
     &::-webkit-scrollbar {
-        width: 5px;
+        width: 4px;
         height: 1px;
     }
 
     &::-webkit-scrollbar-thumb {
-        background-color: #f6f9fc;
+        background-color: transparent;
+        border-radius: 4px;
+        transition: background-color 0.2s;
     }
 
     &::-webkit-scrollbar-track {
-        background-color: #fff;
+        background-color: transparent;
+    }
+
+    &:hover::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.18);
+    }
+
+    // Firefox scrollbar
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+
+    &:hover {
+        scrollbar-color: rgba(0, 0, 0, 0.18) transparent;
     }
 }
 
@@ -577,7 +591,18 @@ footer {
 }
 
 
-// 6. View
+// 6. Sticky Table Headers
+// ==========================================================================
+
+.tr.table-titles,
+.tr.cbi-section-table-titles {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: var(--background-color);
+}
+
+// 7. View
 // ==========================================================================
 #view {
     border-radius: 0.25rem;

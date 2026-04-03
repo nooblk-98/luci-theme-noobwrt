@@ -33,18 +33,17 @@
   --green: #2dce89;
   --teal: #11cdef;
   --cyan: #2bffc6;
+  --white: #fff;
   --gray: #8898aa;
   --gray-dark: #32325d;
-  --light: #ced4da;
+  --light: #adb5bd;
   --lighter: #e9ecef;
   --success: #2dce89;
   --info: #11cdef;
   --warning: #fb6340;
   --danger: #f5365c;
-  --light: #adb5bd;
   --dark: #212529;
   --default: #172b4d;
-  --white: #fff;
   --darker: black;
   --background-color: #f4f5f7;
   --login-form-bg-color: rgba(244, 245, 247, 0.8);
@@ -1065,6 +1064,8 @@ select[multiple="multiple"] {
   background-color: var(--menu-bg-color);
   box-shadow: rgba(0, 0, 0, 0.75) 0px 0px 15px -5px;
   transition: all 0.2s;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
 }
 .main-left .sidenav-header {
   padding: 1.5rem 0.5rem;
@@ -1334,14 +1335,22 @@ select[multiple="multiple"] {
   display: none;
 }
 .main-left::-webkit-scrollbar {
-  width: 5px;
+  width: 4px;
   height: 1px;
 }
 .main-left::-webkit-scrollbar-thumb {
-  background-color: #f6f9fc;
+  background-color: transparent;
+  border-radius: 4px;
+  transition: background-color 0.2s;
 }
 .main-left::-webkit-scrollbar-track {
-  background-color: #fff;
+  background-color: transparent;
+}
+.main-left:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.18);
+}
+.main-left:hover {
+  scrollbar-color: rgba(0, 0, 0, 0.18) transparent;
 }
 .main-right {
   height: 100%;
@@ -1487,6 +1496,13 @@ footer {
 footer > a {
   color: #aaa;
   text-decoration: none;
+}
+.tr.table-titles,
+.tr.cbi-section-table-titles {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: var(--background-color);
 }
 #view {
   border-radius: 0.25rem;
@@ -4088,23 +4104,12 @@ div[style*="display:grid;grid-template-columns:repeat"] .ifacebox .ifacebox-body
   transform: none;
 }
 /* responsive */
-@media all and (-ms-high-contrast: none) {
-  .main > .main-left > .nav > .slide > .menu::before {
-    top: 30.25%;
-  }
-  .main > .main-left > .nav > li:last-child::before {
-    top: 20%;
-  }
-  .showSide::before {
-    top: -12px;
-  }
-}
 @media screen and (max-width: 1600px) {
   header > .fill > .container > #logo {
     margin: 0 2.5rem 0 0.5rem;
   }
   .main-left {
-    width: calc(0% + 13rem);
+    width: 13rem;
   }
   .btn:not(button),
   .label {
@@ -4136,7 +4141,7 @@ div[style*="display:grid;grid-template-columns:repeat"] .ifacebox .ifacebox-body
     cursor: default;
   }
   .main-left {
-    width: calc(0% + 13rem);
+    width: 13rem;
   }
   .tabs > li > a,
   .cbi-tabmenu > li > a {
@@ -4203,7 +4208,7 @@ div[style*="display:grid;grid-template-columns:repeat"] .ifacebox .ifacebox-body
     top: 25%;
   }
   .main-left {
-    width: calc(0% + 13rem);
+    width: 13rem;
   }
   body:not(.logged-in) .showSide {
     visibility: hidden;

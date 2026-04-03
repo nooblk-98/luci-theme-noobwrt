@@ -61,7 +61,9 @@ NoobWrt is <strong>a clean and tidy OpenWrt LuCI theme</strong> that allows user
 
 > **About this theme **
 >
-> "This theme originates from luci-theme-aragon but has been extensively modified and enhanced with additional features specifically for the NoobWrt firmware. It provides a clean, modern, and highly customizable interface for your OpenWrt router, focusing on user experience and visual appeal."
+> "NoobWRT Theme is a modern and extensively customized OpenWrt LuCI theme with unique features and enhancements specifically designed for the NoobWrt firmware. This is now an independent project providing a clean, modern, and highly customizable interface for your OpenWrt router, with a focus on user experience and visual appeal."
+>
+> Originally inspired by luci-theme-argon, this project has evolved into its own distinctive theme with unique features and continuous improvements.
 
 
 

@@ -23,10 +23,10 @@ on:
   push:
     branches:
       - "master"
-    paths:
-      - "Makefile"
 env:
   TZ: Asia/Shanghai
+  # Derived once from the repo name, used everywhere
+  PKG_NAME: ${{ github.event.repository.name }}
 
 jobs:
   job_check:
@@ -34,8 +34,9 @@ jobs:
     name: Check Version
     runs-on: ubuntu-latest
     outputs:
-      argon_version: ${{ steps.check_version.outputs.latest_version }}
-      has_update: ${{ steps.check_version.outputs.has_update }}
+      pkg_version: ${{ steps.check_version.outputs.latest_version }}
+      is_new_version: ${{ steps.check_version.outputs.is_new_version }}
+      latest_release: ${{ steps.check_version.outputs.latest_release }}
     steps:
       - name: Checkout
         uses: actions/checkout@main
@@ -49,32 +50,69 @@ jobs:
           url_release: https://api.github.com/repos/${{ github.repository }}/releases/latest
         run: |
           latest_version=$(grep -oP 'PKG_VERSION:=\K.*' Makefile | sed 's/^/v/')
-          latest_release=$(wget -qO- -t1 -T2 ${{env.url_release}} | awk -F '"' '/tag_name/{print $4}')
-          has_update=$([ "${latest_version}" != "${latest_release}" ] && echo true || echo false)
+          latest_release=$(wget -qO- -t1 -T2 ${{ env.url_release }} | awk -F '"' '/tag_name/{print $4}')
+          is_new_version=$([ "${latest_version}" != "${latest_release}" ] && echo true || echo false)
           echo "latest_version=${latest_version}" >> $GITHUB_OUTPUT
-          echo "has_update=${has_update}" >> $GITHUB_OUTPUT
+          echo "latest_release=${latest_release}" >> $GITHUB_OUTPUT
+          echo "is_new_version=${is_new_version}" >> $GITHUB_OUTPUT
           echo "latest_version: ${latest_version}"
           echo "latest_release: ${latest_release}"
-          echo "has_update: ${has_update}"
+          echo "is_new_version: ${is_new_version}"
 
-      - name: Generate new tag & release
-        if: steps.check_version.outputs.has_update == 'true'
+      - name: Generate release notes
+        id: release_notes
+        run: |
+          latest_version="${{ steps.check_version.outputs.latest_version }}"
+          latest_release="${{ steps.check_version.outputs.latest_release }}"
+
+          if git rev-parse "${latest_release}" >/dev/null 2>&1; then
+            base_ref="${latest_release}"
+          else
+            base_ref=$(git rev-list --max-parents=0 HEAD)
+          fi
+
+          changelog=$(git log "${base_ref}"..HEAD --pretty=format:"- %s (%h)" --no-merges)
+          if [ -z "$changelog" ]; then
+            changelog="- No changes recorded"
+          fi
+
+          {
+            echo "notes<<EOF"
+            echo "## What's Changed"
+            echo ""
+            echo "${changelog}"
+            echo ""
+            echo "**Full diff:** [\`${base_ref:0:7}\` → \`${latest_version}\`](https://github.com/${{ github.repository }}/compare/${base_ref}...HEAD)"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
+
+      - name: Create new tag & release
+        if: steps.check_version.outputs.is_new_version == 'true'
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: For openwrt official Snapshots LuCI master
-          tag_name: ${{steps.check_version.outputs.latest_version}}
+          name: "For openwrt official Snapshots LuCI master"
+          tag_name: ${{ steps.check_version.outputs.latest_version }}
+          body: ${{ steps.release_notes.outputs.notes }}
 
-  job_build_argon:
-    name: Build Argon (master)
+      - name: Update release notes on existing release
+        if: steps.check_version.outputs.is_new_version == 'false'
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.check_version.outputs.latest_version }}
+          body: ${{ steps.release_notes.outputs.notes }}
+
+  job_build:
+    name: Build ${{ github.event.repository.name }} (master)
     needs: job_check
-    if: needs.job_check.outputs.has_update == 'true'
+    if: always() && needs.job_check.result == 'success'
     runs-on: ubuntu-latest
     steps:
       - name: Install packages
         run: |
-          echo "Install packages"
           sudo -E apt-get -qq update
           sudo -E apt-get -qq install zstd build-essential clang flex bison g++ gawk gcc-multilib g++-multilib gettext git libncurses5-dev libssl-dev python3-venv rsync unzip zlib1g-dev file wget
           sudo -E apt-get -qq autoremove --purge
@@ -85,56 +123,65 @@ jobs:
         uses: actions/cache@v3
         with:
           path: sdk
-          key: openwrt-sdk-snapshot-x86-64
+          key: openwrt-sdk-24.10.0-x86-64
 
       - name: Initialization environment
-        # if: steps.cache-sdk.outputs.cache-hit != 'true'
+        if: steps.cache-sdk.outputs.cache-hit != 'true'
         env:
           url_sdk: https://archive.openwrt.org/releases/24.10.0/targets/x86/64/openwrt-sdk-24.10.0-x86-64_gcc-13.3.0_musl.Linux-x86_64.tar.zst
         run: |
           wget ${{ env.url_sdk }}
-          file_name=$(echo ${{env.url_sdk}} | awk -F/ '{print $NF}')
+          file_name=$(echo ${{ env.url_sdk }} | awk -F/ '{print $NF}')
           mkdir sdk && tar --zstd -xvf $file_name -C ./sdk --strip-components=1
-          cd sdk  
+          cd sdk
           echo "src-git base https://github.com/openwrt/openwrt.git;main" > feeds.conf
           echo "src-git-full packages https://github.com/openwrt/packages.git;master" >> feeds.conf
           echo "src-git-full luci https://github.com/openwrt/luci.git;master" >> feeds.conf
-          echo "src-git-full routing https://git.openwrt.org/feed/routing.git;master"  >> feeds.conf
-          git clone -b master https://github.com/${{ github.repository }}.git package/downloads/luci-theme-noobwrt
+          echo "src-git-full routing https://git.openwrt.org/feed/routing.git;master" >> feeds.conf
+          git clone -b master https://github.com/${{ github.repository }}.git package/downloads/${{ env.PKG_NAME }}
           ./scripts/feeds update -a
-          echo "CONFIG_PACKAGE_luci-theme-noobwrt=m" > .config
-          ./scripts/feeds install -d n luci-theme-noobwrt
+          echo "CONFIG_PACKAGE_${{ env.PKG_NAME }}=m" > .config
+          ./scripts/feeds install -d n ${{ env.PKG_NAME }}
           make download -j8
 
-      - name: Configure Argon (master)
+      - name: Update package source on cache hit
+        if: steps.cache-sdk.outputs.cache-hit == 'true'
+        run: |
+          cd sdk/package/downloads/${{ env.PKG_NAME }}
+          git fetch origin master
+          git reset --hard origin/master
+
+      - name: Configure package
         run: |
           cd sdk
-          ./scripts/feeds install luci-theme-noobwrt
+          ./scripts/feeds install ${{ env.PKG_NAME }}
           echo "CONFIG_ALL_NONSHARED=n" > .config
           echo "CONFIG_ALL_KMODS=n" >> .config
           echo "CONFIG_ALL=n" >> .config
           echo "CONFIG_AUTOREMOVE=n" >> .config
           echo "CONFIG_LUCI_LANG_zh_Hans=y" >> .config
-          echo "CONFIG_PACKAGE_luci-theme-noobwrt=m" >> .config
+          echo "CONFIG_PACKAGE_${{ env.PKG_NAME }}=m" >> .config
           make defconfig
 
-      - name: Compile Argon (master)
+      - name: Compile package
         id: compile
         run: |
           cd sdk
-          echo "make package/luci-theme-noobwrt/{clean,compile} -j$(nproc)"
-          make package/luci-theme-noobwrt/{clean,compile} -j$(nproc)
-          mv bin/packages/x86_64/base/ ../
+          make package/${{ env.PKG_NAME }}/{clean,compile} -j$(nproc)
+          # Find the ipk regardless of which feed subdirectory it landed in
+          mkdir -p ../output
+          find bin/packages/ -name "${{ env.PKG_NAME }}*.ipk" -exec cp {} ../output/ \;
           rm .config .config.old
           cd ..
           echo "status=success" >> $GITHUB_OUTPUT
-          echo "FIRMWARE=$PWD" >> $GITHUB_ENV
+          echo "FIRMWARE=$PWD/output" >> $GITHUB_ENV
 
-      - name: Upload Argon (master) ipks to release
+      - name: Upload ipks to release
         uses: softprops/action-gh-release@v1
         if: steps.compile.outputs.status == 'success'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{needs.job_check.outputs.argon_version}}
-          files: ${{ env.FIRMWARE }}/base/luci-theme*.*
+          tag_name: ${{ needs.job_check.outputs.pkg_version }}
+          files: ${{ env.FIRMWARE }}/${{ env.PKG_NAME }}*.ipk
+          overwrite: true
