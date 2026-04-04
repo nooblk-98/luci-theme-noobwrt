@@ -52,6 +52,18 @@
 
 ---
 
+## Preview
+
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=pxMpUKWQ3nU">
+    <img src="https://img.youtube.com/vi/pxMpUKWQ3nU/maxresdefault.jpg" alt="NoobWRT Theme Preview" width="80%">
+  </a>
+  <br>
+  <sub><b>▶ Watch on YouTube</b></sub>
+</p>
+
+---
+
 ## Screenshots
 
 ### Desktop
