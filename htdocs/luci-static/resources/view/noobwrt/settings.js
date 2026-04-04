@@ -28,6 +28,8 @@ return view.extend({
         s.tab('appearance', _('Appearance'));
         s.tab('wallpaper',  _('Wallpaper'));
         s.tab('effects',    _('Background Effects'));
+        s.tab('toolbar',    _('Toolbar Panel'));
+        s.tab('about',      _('About'));
 
         /* ---- Appearance ---- */
         o = s.taboption('appearance', form.ListValue, 'mode',
@@ -93,34 +95,59 @@ return view.extend({
             _('Overlay opacity on the login page background for dark mode. Default: 0.8'));
         o.placeholder = '0.8';
 
+        /* ---- Toolbar tab placeholder – TableSection is injected here after render ---- */
+        o = s.taboption('toolbar', form.DummyValue, '_toolbar_anchor', '');
+        o.rawhtml = true;
+        o.default = '<div id="noobwrt-toolbar-anchor"></div>';
+
+        /* ---- About ---- */
+        o = s.taboption('about', form.DummyValue, '_about', '');
+        o.rawhtml = true;
+        o.default = '\
+<div style="max-width:480px;padding:4px 0">\
+  <table style="width:100%;border-collapse:collapse;line-height:1.8">\
+    <tr><td style="width:120px;color:#888;padding:4px 0">Developer</td>\
+        <td><strong>NoobLk</strong></td></tr>\
+    <tr><td style="color:#888;padding:4px 0">Repository</td>\
+        <td><a href="https://github.com/nooblk-98/luci-theme-noobwrt" target="_blank" rel="noopener">github.com/nooblk-98/luci-theme-noobwrt</a></td></tr>\
+    <tr><td style="color:#888;padding:4px 0">Contributors</td>\
+        <td><a href="https://github.com/nooblk-98/luci-theme-noobwrt/graphs/contributors" target="_blank" rel="noopener">View on GitHub</a></td></tr>\
+    <tr><td style="color:#888;padding:4px 0">License</td>\
+        <td>MIT</td></tr>\
+    <tr><td style="color:#888;padding:4px 0">Issues / Support</td>\
+        <td><a href="https://github.com/nooblk-98/luci-theme-noobwrt/issues" target="_blank" rel="noopener">Open an issue</a></td></tr>\
+  </table>\
+  <p style="margin-top:16px;color:#aaa;font-size:12px;text-align:center">Made with \u2665 for the OpenWrt community</p>\
+</div>';
+
         /* ============================================================
          * SECTION: Toolbar Panel Items (TableSection)
          * ============================================================ */
-        s = m.section(form.TableSection, 'toolbar_item',
+        var ts = m.section(form.TableSection, 'toolbar_item',
             _('Toolbar Panel Items'),
             _('Quick-access links displayed in the right-side toolbar panel on every page. ' +
               'Items are rendered in ascending Order number. ' +
               'Use the Add button below to create new entries.'));
-        s.addremove = true;
-        s.anonymous = true;
-        s.sortable  = false;
-        s.nodescriptions = true;
+        ts.addremove = true;
+        ts.anonymous = true;
+        ts.sortable  = false;
+        ts.nodescriptions = true;
 
-        o = s.option(form.Flag, 'enabled', _('Enable'));
+        o = ts.option(form.Flag, 'enabled', _('Enable'));
         o.default = '1';
         o.editable = true;
 
-        o = s.option(form.Value, 'title', _('Label'));
+        o = ts.option(form.Value, 'title', _('Label'));
         o.placeholder = 'Home';
         o.rmempty = false;
         o.editable = true;
 
-        o = s.option(form.Value, 'url', _('URL / Path'));
+        o = ts.option(form.Value, 'url', _('URL / Path'));
         o.placeholder = '/cgi-bin/luci/admin/status/overview';
         o.rmempty = false;
         o.editable = true;
 
-        o = s.option(form.ListValue, 'icon', _('Icon'));
+        o = ts.option(form.ListValue, 'icon', _('Icon'));
         [
             ['home.png',     _('Home')],
             ['signal.png',   _('Signal / Status')],
@@ -138,13 +165,21 @@ return view.extend({
         ].forEach(function (v) { o.value(v[0], v[1]); });
         o.editable = true;
 
-        o = s.option(form.Value, 'order',
+        o = ts.option(form.Value, 'order',
             _('Order'),
             _('Lower numbers appear first in the toolbar.'));
         o.datatype = 'uinteger';
         o.placeholder = '10';
         o.editable = true;
 
-        return m.render();
+        return m.render().then(function (node) {
+            /* Move the TableSection node into the Toolbar tab content area */
+            var anchor = node.querySelector('#noobwrt-toolbar-anchor');
+            var tsNode = node.querySelector('.cbi-section:last-of-type');
+            if (anchor && tsNode) {
+                anchor.appendChild(tsNode);
+            }
+            return node;
+        });
     }
 });
