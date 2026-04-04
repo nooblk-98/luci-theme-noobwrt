@@ -1,18 +1,6 @@
 {#
-	NoobWrt is a clean HTML5 theme for LuCI. It is based on luci-theme-material NoobWrt Template
-
-	luci-theme-noobwrt
-	Copyright 2020 Jerrykuku <jerrykuku@qq.com>
-
-	Have a bug? Please create an issue here on GitHub!
-	https://github.com/jerrykuku/luci-theme-noobwrt/issues
-
-	luci-theme-material:
-	Copyright 2015 Lutty Yang <lutty@wcan.in>
-
-	NoobWrt Theme
-	https://demos.creative-tim.com/argon-dashboard/index.html
-
+	NoobWrt - A clean modern LuCI theme for OpenWrt routers.
+	https://github.com/nooblk-98/luci-theme-noobwrt
 	Licensed to the public under the Apache License 2.0
 -#}
 
@@ -91,11 +79,11 @@
 	<link rel="manifest" href="{{ media }}/icon/manifest.json" crossorigin="use-credentials">
 
 	<link rel="stylesheet" href="{{ media }}/css/cascade.css?v={{ version.luciversion }}">
-	<style title="text/css">
-		{% if (mode == 'dark'): %}
-			{{ dark_css }}
-		{% endif -%}
-		{% if (access('/etc/config/noobwrt')): %}
+	{% if (mode == 'dark'): %}
+	<style id="dark-theme-style">{{ dark_css }}</style>
+	{% endif -%}
+	{% if (access('/etc/config/noobwrt')): %}
+	<style>
 		:root {
 			--primary: {{ primary }};
 			--dark-primary: {{ dark_primary }};
@@ -104,8 +92,8 @@
 			--blur-radius-dark:{{ blur_radius_dark }}px;
 			--blur-opacity-dark:{{ blur_opacity_dark }};
 		}
-		{% endif -%}
 	</style>
+	{% endif -%}
 	<!-- Stylesheets -->
 	{% if (node?.css): %}
 	<link rel="stylesheet" href="{{ resource }}/{{ node.css}}">

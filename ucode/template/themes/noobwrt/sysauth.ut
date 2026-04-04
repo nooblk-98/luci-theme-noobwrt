@@ -1,23 +1,6 @@
 {#
-	NoobWrt is a clean HTML5 theme for LuCI. It is based on luci-theme-bootstrap and MUI and NoobWrt Template
-
-	luci-theme-noobwrt
-	Copyright 2020 Jerryk <jerrykuku@gmail.com>
-
-	Have a bug? Please create an issue here on GitHub!
-	https://github.com/jerrykuku/luci-theme-noobwrt/issues
-
-	luci-theme-bootstrap:
-	Copyright 2008 Steven Barth <steven@midlink.org>
-	Copyright 2008-2016 Jo-Philipp Wich <jow@openwrt.org>
-	Copyright 2012 David Menting <david@nut-bolt.nl>
-
-	MUI:
-	https://github.com/muicss/mui
-
-	NoobWrt Theme
-	https://demos.creative-tim.com/argon-dashboard/index.html
-
+	NoobWrt - A clean modern LuCI theme for OpenWrt routers.
+	https://github.com/nooblk-98/luci-theme-noobwrt
 	Licensed to the public under the Apache License 2.0
 -#}
 
@@ -38,7 +21,8 @@
 	function fetchMedia(path, themeDir) {
 		let backgroundTable = [];
 		for (f in (fs.lsdir(path))) {
-			let ext = lc(split(f, '.')?.[1]);
+			let parts = split(f, '.');
+			let ext = lc(parts?.[length(parts) - 1]);
 			if (ext && index(allTypes, " " + ext + " ") != -1) {
 				let bg = {};
 				bg.type = ext;
@@ -139,7 +123,7 @@
 				</div>
 				<div class="login-panel">
 					<!-- Title Start -->
-					<div class="brand-text-only">{{ _('Router Admin Login') }}</div>
+					<div class="brand-text-only">{{ hostname }}</div>
 					<div class="login-subtitle">{{ _('Sign in to manage your router') }}</div>
 					<!-- Title End -->
 					<!-- Login Form Start -->
@@ -172,5 +156,3 @@
 					input.focus();
 			//]]></script>
 {% include("themes/" + theme + "/footer_login") %}
-
-

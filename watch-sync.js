@@ -35,6 +35,23 @@ const PATH_MAPPINGS = [
     remote: '/www/luci-static/resources/menu-noobwrt.js',
     description: 'Menu NoobWrt JS',
     isFile: true
+  },
+  {
+    local: 'htdocs\\luci-static\\resources\\view\\noobwrt',
+    remote: '/www/luci-static/resources/view/noobwrt',
+    description: 'NoobWrt view JS files'
+  },
+  {
+    local: 'root\\usr\\share\\luci\\menu.d\\luci-theme-noobwrt.json',
+    remote: '/usr/share/luci/menu.d/luci-theme-noobwrt.json',
+    description: 'NoobWrt menu definition',
+    isFile: true
+  },
+  {
+    local: 'root\\usr\\share\\rpcd\\acl.d\\luci-theme-noobwrt.json',
+    remote: '/usr/share/rpcd/acl.d/luci-theme-noobwrt.json',
+    description: 'NoobWrt ACL permissions',
+    isFile: true
   }
 ];
 

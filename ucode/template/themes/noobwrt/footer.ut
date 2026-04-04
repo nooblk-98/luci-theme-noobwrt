@@ -1,18 +1,6 @@
 {#
-	NoobWrt is a clean HTML5 theme for LuCI. It is based on luci-theme-material NoobWrt Template
-
-	luci-theme-noobwrt
-	Copyright 2020 Jerrykuku <jerrykuku@qq.com>
-
-	Have a bug? Please create an issue here on GitHub!
-	https://github.com/jerrykuku/luci-theme-noobwrt/issues
-
-	luci-theme-material:
-	Copyright 2015 Lutty Yang <lutty@wcan.in>
-
-	Agron Theme
-	https://demos.creative-tim.com/argon-dashboard/index.html
-
+	NoobWrt - A clean modern LuCI theme for OpenWrt routers.
+	https://github.com/nooblk-98/luci-theme-noobwrt
 	Licensed to the public under the Apache License 2.0
 -#}
 
@@ -38,7 +26,6 @@
 {% include("themes/" + theme + "/toolbar") %}
 {% endif %}
 <script>
-	// thanks for Jo-Philipp Wich <jow@openwrt.org>
 	var luciLocation = {{ ctx.path }};
 	var winHeight = window.innerHeight;
 	window.addEventListener('resize', function () {
@@ -56,5 +43,3 @@
 <script type="text/javascript">L.require('menu-noobwrt')</script>
 </body>
 </html>
-
-

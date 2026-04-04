@@ -1,5 +1,6 @@
 #!/bin/sh
 
+# Register NoobWrt as a LuCI theme (skip on upgrade)
 if [ "$PKG_UPGRADE" != 1 ]; then
 	uci get luci.themes.NoobWrt >/dev/null 2>&1 || \
 	uci batch <<-EOF
@@ -9,5 +10,117 @@ if [ "$PKG_UPGRADE" != 1 ]; then
 	EOF
 fi
 
-exit 0
+# Initialise global appearance/wallpaper defaults (only if section absent)
+uci get noobwrt.global >/dev/null 2>&1 || \
+uci batch <<-EOF
+	set noobwrt.global=global
+	set noobwrt.global.mode=normal
+	set noobwrt.global.primary=#5e72e4
+	set noobwrt.global.dark_primary=#7c8ff5
+	set noobwrt.global.blur=10
+	set noobwrt.global.blur_dark=10
+	set noobwrt.global.transparency=0.8
+	set noobwrt.global.transparency_dark=0.8
+	set noobwrt.global.online_wallpaper=none
+	set noobwrt.global.use_exact_resolution=1
+	commit noobwrt
+EOF
 
+# Initialise default toolbar panel items (only if absent)
+uci get noobwrt.toolbar_home >/dev/null 2>&1 || \
+uci batch <<-EOF
+	set noobwrt.toolbar_home=toolbar_item
+	set noobwrt.toolbar_home.title=Home
+	set noobwrt.toolbar_home.url=/cgi-bin/luci/admin/status/overview
+	set noobwrt.toolbar_home.icon=home.png
+	set noobwrt.toolbar_home.enabled=1
+	set noobwrt.toolbar_home.order=1
+
+	set noobwrt.toolbar_status=toolbar_item
+	set noobwrt.toolbar_status.title=Status
+	set noobwrt.toolbar_status.url=/cgi-bin/luci/admin/modem/modemdata
+	set noobwrt.toolbar_status.icon=signal.png
+	set noobwrt.toolbar_status.enabled=1
+	set noobwrt.toolbar_status.order=2
+
+	set noobwrt.toolbar_modem=toolbar_item
+	set noobwrt.toolbar_modem.title=Modem
+	set noobwrt.toolbar_modem.url=/cgi-bin/luci/admin/modem/qmodem
+	set noobwrt.toolbar_modem.icon=cell.png
+	set noobwrt.toolbar_modem.enabled=1
+	set noobwrt.toolbar_modem.order=3
+
+	set noobwrt.toolbar_sms=toolbar_item
+	set noobwrt.toolbar_sms.title=SMS
+	set noobwrt.toolbar_sms.url=/cgi-bin/luci/admin/modem/luci-app-sms-tool-js
+	set noobwrt.toolbar_sms.icon=sms.png
+	set noobwrt.toolbar_sms.enabled=1
+	set noobwrt.toolbar_sms.order=4
+
+	set noobwrt.toolbar_data=toolbar_item
+	set noobwrt.toolbar_data.title=Data Usage
+	set noobwrt.toolbar_data.url=/cgi-bin/luci/admin/tools/netstat
+	set noobwrt.toolbar_data.icon=network.png
+	set noobwrt.toolbar_data.enabled=1
+	set noobwrt.toolbar_data.order=5
+
+	set noobwrt.toolbar_nas=toolbar_item
+	set noobwrt.toolbar_nas.title=NAS
+	set noobwrt.toolbar_nas.url=/cgi-bin/luci/admin/services/samba4
+	set noobwrt.toolbar_nas.icon=nas.png
+	set noobwrt.toolbar_nas.enabled=1
+	set noobwrt.toolbar_nas.order=6
+
+	set noobwrt.toolbar_wireless=toolbar_item
+	set noobwrt.toolbar_wireless.title=Wireless
+	set noobwrt.toolbar_wireless.url=/cgi-bin/luci/admin/network/wireless
+	set noobwrt.toolbar_wireless.icon=wifi.png
+	set noobwrt.toolbar_wireless.enabled=1
+	set noobwrt.toolbar_wireless.order=7
+
+	set noobwrt.toolbar_firewall=toolbar_item
+	set noobwrt.toolbar_firewall.title=Firewall
+	set noobwrt.toolbar_firewall.url=/cgi-bin/luci/admin/network/firewall
+	set noobwrt.toolbar_firewall.icon=firewall.png
+	set noobwrt.toolbar_firewall.enabled=1
+	set noobwrt.toolbar_firewall.order=8
+
+	set noobwrt.toolbar_system=toolbar_item
+	set noobwrt.toolbar_system.title=Settings
+	set noobwrt.toolbar_system.url=/cgi-bin/luci/admin/system/noobwrt
+	set noobwrt.toolbar_system.icon=settings.png
+	set noobwrt.toolbar_system.enabled=1
+	set noobwrt.toolbar_system.order=9
+
+	set noobwrt.toolbar_terminal=toolbar_item
+	set noobwrt.toolbar_terminal.title=Terminal
+	set noobwrt.toolbar_terminal.url=/cgi-bin/luci/admin/services/ttyd
+	set noobwrt.toolbar_terminal.icon=terminal.png
+	set noobwrt.toolbar_terminal.enabled=1
+	set noobwrt.toolbar_terminal.order=10
+
+	set noobwrt.toolbar_vpn=toolbar_item
+	set noobwrt.toolbar_vpn.title=VPN
+	set noobwrt.toolbar_vpn.url=/cgi-bin/luci/admin/services/passwall
+	set noobwrt.toolbar_vpn.icon=vpn.png
+	set noobwrt.toolbar_vpn.enabled=1
+	set noobwrt.toolbar_vpn.order=11
+
+	set noobwrt.toolbar_files=toolbar_item
+	set noobwrt.toolbar_files.title=Files
+	set noobwrt.toolbar_files.url=/cgi-bin/luci/admin/nas/tinyfilemanager
+	set noobwrt.toolbar_files.icon=files.png
+	set noobwrt.toolbar_files.enabled=1
+	set noobwrt.toolbar_files.order=12
+
+	set noobwrt.toolbar_log=toolbar_item
+	set noobwrt.toolbar_log.title=System Log
+	set noobwrt.toolbar_log.url=/cgi-bin/luci/admin/status/logs
+	set noobwrt.toolbar_log.icon=info.png
+	set noobwrt.toolbar_log.enabled=1
+	set noobwrt.toolbar_log.order=13
+
+	commit noobwrt
+EOF
+
+exit 0
