@@ -2,80 +2,14 @@
 'require view';
 'require form';
 'require uci';
-'require rpc';
-
-/*
- * When /etc/config/noobwrt does not exist the page would throw an RPC error.
- * Bootstrap creates the config on the router via uci/add + commit, then
- * does a real uci.load() so the form renders with proper section data.
- */
-
-var callUciAdd = rpc.declare({
-    object: 'uci',
-    method: 'add',
-    params: ['config', 'type', 'name', 'values'],
-    reject: false
-});
-
-var callUciCommit = rpc.declare({
-    object: 'uci',
-    method: 'commit',
-    params: ['config'],
-    reject: false
-});
-
-var DEFAULT_TOOLBAR = [
-    ['toolbar_home',     'Home',       '/cgi-bin/luci/admin/status/overview',              'home.png',     '1' ],
-    ['toolbar_status',   'Status',     '/cgi-bin/luci/admin/modem/modemdata',               'signal.png',   '2' ],
-    ['toolbar_modem',    'Modem',      '/cgi-bin/luci/admin/modem/qmodem',                  'cell.png',     '3' ],
-    ['toolbar_sms',      'SMS',        '/cgi-bin/luci/admin/modem/luci-app-sms-tool-js',    'sms.png',      '4' ],
-    ['toolbar_data',     'Data Usage', '/cgi-bin/luci/admin/tools/netstat',                 'network.png',  '5' ],
-    ['toolbar_nas',      'NAS',        '/cgi-bin/luci/admin/services/samba4',               'nas.png',      '6' ],
-    ['toolbar_wireless', 'Wireless',   '/cgi-bin/luci/admin/network/wireless',              'wifi.png',     '7' ],
-    ['toolbar_firewall', 'Firewall',   '/cgi-bin/luci/admin/network/firewall',              'firewall.png', '8' ],
-    ['toolbar_system',   'System',     '/cgi-bin/luci/admin/system/system',                 'settings.png', '9' ],
-    ['toolbar_terminal', 'Terminal',   '/cgi-bin/luci/admin/services/ttyd',                 'terminal.png', '10'],
-    ['toolbar_vpn',      'VPN',        '/cgi-bin/luci/admin/services/passwall',             'vpn.png',      '11'],
-    ['toolbar_files',    'Files',      '/cgi-bin/luci/admin/nas/tinyfilemanager',           'files.png',    '12'],
-    ['toolbar_log',      'System Log', '/cgi-bin/luci/admin/status/logs',                   'info.png',     '13']
-];
-
-function bootstrapConfig() {
-    var tasks = [];
-
-    tasks.push(callUciAdd('noobwrt', 'global', 'global', {
-        mode:                'normal',
-        primary:             '#5e72e4',
-        dark_primary:        '#7c8ff5',
-        blur:                '10',
-        blur_dark:           '10',
-        transparency:        '0.8',
-        transparency_dark:   '0.8',
-        online_wallpaper:    'bing',
-        use_exact_resolution:'1'
-    }));
-
-    DEFAULT_TOOLBAR.forEach(function (t) {
-        tasks.push(callUciAdd('noobwrt', 'toolbar_item', t[0], {
-            title:   t[1],
-            url:     t[2],
-            icon:    t[3],
-            enabled: '1',
-            order:   t[4]
-        }));
-    });
-
-    return Promise.all(tasks)
-        .then(function () { return callUciCommit('noobwrt'); })
-        .then(function () { return uci.load('noobwrt'); });
-}
 
 return view.extend({
     load: function () {
-        return uci.load('noobwrt').catch(function () {
-            /* Config not found — create defaults on the router then reload. */
-            return bootstrapConfig();
-        });
+        /* Silently ignore a missing /etc/config/noobwrt.
+         * The form renders with placeholder defaults; the first Save will
+         * create the config.  Attempting to bootstrap via uci/commit fails
+         * with -32002 when no root password is set (unauthenticated session). */
+        return uci.load('noobwrt').catch(function () {});
     },
 
     render: function () {
