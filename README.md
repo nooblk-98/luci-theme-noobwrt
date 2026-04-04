@@ -77,10 +77,18 @@
 
 ### Mobile
 
-<p align="center">
-  <img src="screenshots/sc_mobile.png" alt="Mobile View" width="320">
-  <br><sub><b>Responsive Mobile Layout</b></sub>
-</p>
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="screenshots/sc_mobile.png" alt="Mobile — Status" width="320">
+      <br><sub><b>Mobile — Status</b></sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="screenshots/sc_mobile_login.png" alt="Mobile — Login" width="320">
+      <br><sub><b>Mobile — Login</b></sub>
+    </td>
+  </tr>
+</table>
 
 ---
 
