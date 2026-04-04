@@ -24,7 +24,7 @@
 
 # NoobWRT LuCI Theme
 
-> A clean, modern OpenWrt LuCI theme with live wallpapers, animated progress bars, customizable accent colors, and a quick-access toolbar.
+> A clean, modern OpenWrt LuCI theme with live wallpapers, animated progress bars, automatic light/dark scheduling, customizable accent colors, and a quick-access toolbar.
 
 <p align="center">
   <a href="https://github.com/nooblk-98/luci-theme-noobwrt/blob/master/LICENSE">
@@ -102,7 +102,8 @@
 - **Online wallpapers** — Bing Daily Photo, Lorem Picsum, or Wikimedia Picture of the Day, no API key required
 - **Custom wallpaper upload** — upload your own JPG/PNG/WebP login background
 - **Accent color picker** — separate colors for light and dark mode, applied everywhere
-- **Light / Dark mode** — toggle with sun/moon button, or set default via settings; respects OS preference on first visit
+- **Automatic Light / Dark scheduling** — switches to Dark from 6 PM to 6 AM and Light from 6 AM to 6 PM automatically; enable/disable in settings (default: enabled)
+- **Light / Dark mode** — manual toggle via toolbar sun/moon button; respects OS preference when auto-schedule is off
 - **Quick-access toolbar** — configurable icon panel on every page with tooltips
 - **Blur & opacity controls** — fine-tune the login page background effect
 - **Responsive** — works on desktop and mobile
@@ -117,7 +118,8 @@ Go to **System → NoobWrt Theme** in the LuCI menu.
 
 | Option | Description |
 |--------|-------------|
-| **Default Theme Mode** | `Light` or `Dark` — applied on page load. Toggle anytime via the toolbar sun/moon button. |
+| **Automatic Light / Dark Mode** | When enabled (default), the theme switches to Dark from **6 PM to 6 AM** and to Light from **6 AM to 6 PM** automatically. The toolbar toggle still works but the schedule takes effect on the next minute tick. Disable to use manual mode. |
+| **Default Theme Mode** | `Light` or `Dark` — applied on page load when Automatic mode is disabled. Toggle anytime via the toolbar sun/moon button. |
 | **Accent Color — Light Mode** | Hex color for the light theme, e.g. `#5e72e4`. Used for progress bars, buttons, active states. |
 | **Accent Color — Dark Mode** | Hex color for the dark theme, e.g. `#7c8ff5`. |
 

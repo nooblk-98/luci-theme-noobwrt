@@ -10,6 +10,7 @@
 
 	/* Build sorted list of enabled toolbar items from UCI config */
 	let toolbar_items = [];
+	let auto_dark_mode = true;
 	if (access('/etc/config/noobwrt')) {
 		const tcfg = cursor();
 		tcfg.foreach('noobwrt', 'toolbar_item', function(s) {
@@ -22,6 +23,8 @@
 			});
 		});
 		sort(toolbar_items, (a, b) => a.order - b.order);
+		const adm = tcfg.get_first('noobwrt', 'global', 'auto_dark_mode');
+		auto_dark_mode = (adm !== '0');
 	}
 -%}
 
@@ -270,6 +273,8 @@ body.dark-theme .theme-toggle svg {
 
 <script type="text/javascript">//<![CDATA[
 (function() {
+	const AUTO_DARK_MODE = {% if (auto_dark_mode): %}true{% else %}false{% endif %};
+
 	const themeToggle = document.getElementById('theme-toggle');
 	const sunIcon = themeToggle.querySelector('.sun-icon');
 	const moonIcon = themeToggle.querySelector('.moon-icon');
@@ -287,85 +292,101 @@ body.dark-theme .theme-toggle svg {
 
 	const darkCssUrl = '/luci-static/noobwrt/css/dark.css';
 
-	// On first visit (no saved preference), honour the OS colour scheme setting
-	if (localStorage.getItem('luci-theme') === null) {
-		if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-			localStorage.setItem('luci-theme', 'dark');
-		} else {
-			localStorage.setItem('luci-theme', 'light');
-		}
+	// Returns true if the current local hour is in the dark period (18:00–05:59)
+	function isNightTime() {
+		const h = new Date().getHours();
+		return h >= 18 || h < 6;
 	}
 
-	// If the server already inlined dark CSS (UCI mode=dark), body already has
-	// 'dark-theme' class — sync localStorage and icons immediately, no fetch needed.
-	if (document.body.classList.contains('server-dark')) {
-		localStorage.setItem('luci-theme', 'dark');
-		sunIcon.style.display = 'none';
-		moonIcon.style.display = 'block';
+	function setIcons(dark) {
+		sunIcon.style.display  = dark ? 'none'  : 'block';
+		moonIcon.style.display = dark ? 'block' : 'none';
 	}
 
-	// Check saved theme preference
-	const savedTheme = localStorage.getItem('luci-theme');
-
-	function loadDarkCSS() {
-		// Dark CSS already inlined by the server — just add the class
+	function loadDarkCSS(savePreference) {
 		if (darkThemeStyle.textContent) {
 			document.body.classList.add('dark-theme');
-			sunIcon.style.display = 'none';
-			moonIcon.style.display = 'block';
-			localStorage.setItem('luci-theme', 'dark');
+			setIcons(true);
+			if (savePreference) localStorage.setItem('luci-theme', 'dark');
 			return;
 		}
 		fetch(darkCssUrl)
-			.then(response => response.text())
+			.then(r => r.text())
 			.then(css => {
 				darkThemeStyle.textContent = css;
 				document.body.classList.add('dark-theme');
-				sunIcon.style.display = 'none';
-				moonIcon.style.display = 'block';
-				localStorage.setItem('luci-theme', 'dark');
+				setIcons(true);
+				if (savePreference) localStorage.setItem('luci-theme', 'dark');
 			})
 			.catch(err => {
 				console.error('Failed to load dark theme:', err);
-				enableDarkThemeFallback();
+				document.body.classList.add('dark-theme');
+				setIcons(true);
+				if (savePreference) localStorage.setItem('luci-theme', 'dark');
 			});
 	}
 
-	function removeDarkCSS() {
+	function removeDarkCSS(savePreference) {
 		darkThemeStyle.textContent = '';
 		document.body.classList.remove('dark-theme');
-		sunIcon.style.display = 'block';
-		moonIcon.style.display = 'none';
-		localStorage.setItem('luci-theme', 'light');
+		setIcons(false);
+		if (savePreference) localStorage.setItem('luci-theme', 'light');
 	}
 
-	function enableDarkThemeFallback() {
-		document.body.classList.add('dark-theme');
-		sunIcon.style.display = 'none';
-		moonIcon.style.display = 'block';
-		localStorage.setItem('luci-theme', 'dark');
+	// Apply theme based on schedule (no localStorage side-effect)
+	function applyScheduledTheme() {
+		if (isNightTime()) {
+			loadDarkCSS(false);
+		} else {
+			removeDarkCSS(false);
+		}
 	}
 
-	// Apply saved theme on load
-	if (savedTheme === 'dark') {
-		loadDarkCSS();
+	/* ---- Initial theme application ---- */
+	if (AUTO_DARK_MODE) {
+		// Auto mode: schedule drives the theme, ignore saved manual preference
+		// If server already inlined dark CSS keep it and sync icons
+		if (document.body.classList.contains('server-dark')) {
+			setIcons(true);
+		}
+		applyScheduledTheme();
+
+		// Re-check every minute so the switch happens close to the hour boundary
+		setInterval(applyScheduledTheme, 60000);
+	} else {
+		// Manual mode — honour server-side setting first, then localStorage
+		if (document.body.classList.contains('server-dark')) {
+			localStorage.setItem('luci-theme', 'dark');
+			setIcons(true);
+		} else {
+			// On first visit (no saved preference), honour OS colour scheme
+			if (localStorage.getItem('luci-theme') === null) {
+				if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+					localStorage.setItem('luci-theme', 'dark');
+				} else {
+					localStorage.setItem('luci-theme', 'light');
+				}
+			}
+			if (localStorage.getItem('luci-theme') === 'dark') {
+				loadDarkCSS(true);
+			}
+		}
 	}
 
-	// Toggle theme on click
+	// Manual toggle — always works; in auto mode it applies until next schedule tick
 	themeToggle.addEventListener('click', function(e) {
 		e.preventDefault();
 		const isDark = document.body.classList.contains('dark-theme');
 		if (isDark) {
-			removeDarkCSS();
+			removeDarkCSS(!AUTO_DARK_MODE);
 		} else {
-			loadDarkCSS();
+			loadDarkCSS(!AUTO_DARK_MODE);
 		}
 	});
 
+	/* ---- Toolbar collapse/expand ---- */
 	function applyToolbarState(collapsed) {
-		if (!toolbarContainer || !toolbarMenu || !toolbarToggle) {
-			return;
-		}
+		if (!toolbarContainer || !toolbarMenu || !toolbarToggle) return;
 		toolbarContainer.classList.toggle('collapsed', collapsed);
 		toolbarMenu.classList.toggle('active', !collapsed);
 		toolbarToggle.setAttribute('aria-pressed', collapsed ? 'true' : 'false');
@@ -374,9 +395,7 @@ body.dark-theme .theme-toggle svg {
 
 	function initToolbarState() {
 		let state = null;
-		try {
-			state = localStorage.getItem('noobwrt.toolbar');
-		} catch (e) {}
+		try { state = localStorage.getItem('noobwrt.toolbar'); } catch (e) {}
 		applyToolbarState(state === 'collapsed');
 	}
 
@@ -385,9 +404,7 @@ body.dark-theme .theme-toggle svg {
 			e.preventDefault();
 			const collapsed = !(toolbarContainer && toolbarContainer.classList.contains('collapsed'));
 			applyToolbarState(collapsed);
-			try {
-				localStorage.setItem('noobwrt.toolbar', collapsed ? 'collapsed' : 'expanded');
-			} catch (e) {}
+			try { localStorage.setItem('noobwrt.toolbar', collapsed ? 'collapsed' : 'expanded'); } catch (e) {}
 		});
 	}
 

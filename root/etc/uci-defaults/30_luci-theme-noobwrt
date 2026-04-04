@@ -23,6 +23,7 @@ uci batch <<-EOF
 	set noobwrt.global.transparency_dark=0.8
 	set noobwrt.global.online_wallpaper=none
 	set noobwrt.global.use_exact_resolution=1
+	set noobwrt.global.auto_dark_mode=0
 	commit noobwrt
 EOF
 

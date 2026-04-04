@@ -46,9 +46,14 @@ return view.extend({
         s.tab('about',      _('About'));
 
         /* ---- Appearance ---- */
+        o = s.taboption('appearance', form.Flag, 'auto_dark_mode',
+            _('Automatic Light / Dark Mode'),
+            _('Automatically switch to Dark mode from 6 PM to 6 AM and Light mode from 6 AM to 6 PM. When enabled, the schedule overrides the manual toolbar toggle.'));
+        o.default = '1';
+
         o = s.taboption('appearance', form.ListValue, 'mode',
             _('Default Theme Mode'),
-            _('Theme applied on page load. Users can toggle it at any time using the toolbar sun/moon button.'));
+            _('Theme applied on page load when Automatic mode is disabled. Users can also toggle it manually using the toolbar sun/moon button.'));
         o.value('normal', _('Light'));
         o.value('dark',   _('Dark'));
 
