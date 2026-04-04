@@ -134,7 +134,7 @@
 				<div class="fill">
 					<div class="container">
 						<div class="flex1">
-							<a class="showSide"></a>
+							<a class="showSide" href="#"></a>
 							<a class="brand" href="#">{{ hostname }}</a>
 						</div>
 						<div class="status" id="indicators"></div>

@@ -4418,6 +4418,9 @@ div[style*="display:grid;grid-template-columns:repeat"] .ifacebox .ifacebox-body
     position: relative;
     z-index: 99;
     display: inline-block !important;
+    visibility: visible !important;
+    width: auto !important;
+    margin: 0 !important;
   }
   .showSide::before {
     font-family: 'noobwrt' !important;
