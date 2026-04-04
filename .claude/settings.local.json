@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ssh root@192.168.1.1 \"service rpcd reload && sleep 2 && echo 'rpcd reloaded'\")",
+      "Bash(python3 -c \"import sys,json; r=json.load\\(sys.stdin\\); acls=r['result'][1].get\\('acls',{}\\); print\\(list\\(acls.keys\\(\\)\\)\\)\")",
+      "Bash(ssh root@192.168.1.1 \"strings /www/cgi-bin/cgi-upload | grep -i 'acl\\\\|scope\\\\|session\\\\|access\\\\|path\\\\|write\\\\|upload\\\\|file' | head -40\")",
+      "Bash(ssh root@192.168.1.1 \"strings /www/cgi-bin/cgi-upload | grep -E 'scope|cgi|upload|write|file' | head -30\")",
+      "Bash(ssh root@192.168.1.1 \"grep -A20 'flash\\\\|upload' /usr/share/rpcd/acl.d/luci-mod-system.json | head -40\")"
+    ]
+  }
+}
