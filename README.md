@@ -104,7 +104,7 @@
 - **Accent color picker** — separate colors for light and dark mode, applied everywhere
 - **Automatic Light / Dark scheduling** — switches to Dark from 6 PM to 6 AM and Light from 6 AM to 6 PM automatically; enable/disable in settings (default: enabled)
 - **Light / Dark mode** — manual toggle via toolbar sun/moon button; respects OS preference when auto-schedule is off
-- **Quick-access toolbar** — configurable icon panel on every page with tooltips
+- **Quick-access toolbar** — slides in from the right edge; hover the `‹` tab to peek, click to pin open/closed
 - **Blur & opacity controls** — fine-tune the login page background effect
 - **Responsive** — works on desktop and mobile
 
@@ -143,6 +143,12 @@ Go to **System → NoobWrt Theme** in the LuCI menu.
 | **Background Opacity — Dark Mode** | Overlay opacity, dark mode. Default: `0.8` |
 
 ### Toolbar Panel
+
+The toolbar is a quick-access icon panel fixed to the right edge of every page.
+
+**Behaviour:**
+- A `‹` tab is always visible on the right edge. **Hover** it to slide the panel in temporarily — move the mouse away and it slides back.
+- **Click** the tab to pin the panel open or closed. The state is saved across page loads.
 
 | Field | Description |
 |-------|-------------|
