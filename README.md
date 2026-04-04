@@ -18,26 +18,17 @@
 [release-badge]: https://img.shields.io/github/v/release/nooblk-98/luci-theme-noobwrt?style=flat-square
 [download]: https://github.com/nooblk-98/luci-theme-noobwrt/releases
 [download-badge]: https://img.shields.io/github/downloads/nooblk-98/luci-theme-noobwrt/total?style=flat-square
-[contact]: https://t.me/jerryk6
-[contact-badge]: https://img.shields.io/badge/Contact-telegram-blue?style=flat-square
-[en-us-link]: /README.md
-[zh-cn-link]: /README_ZH.md
-[en-us-release-log]: /RELEASE.md
-[zh-cn-release-log]: /RELEASE_ZH.md
-[config-link]: https://github.com/jerrykuku/luci-app-noobwrt-config/releases
-[lede]: https://github.com/coolsnowwolf/lede
 [official]: https://github.com/openwrt/openwrt
 [immortalwrt]: https://github.com/immortalwrt/immortalwrt
 
 
-# A brand new LuCI theme NoobWRT
+# NoobWRT LuCI Theme
 
-NoobWrt is <strong>a clean and tidy OpenWrt LuCI theme</strong> that allows users to customize their login interface with images or videos.  It also supports automatic and manual switching between light and dark modes.
-
+> A clean, modern OpenWrt LuCI theme with live wallpapers, animated progress bars, customizable accent colors, and a quick-access toolbar.
 
 <p align="center">
   <a href="https://github.com/nooblk-98/luci-theme-noobwrt/blob/master/LICENSE">
-    <img src="https://img.shields.io/github/license/nooblk-98/luci-theme-noobwrt?style=flat-square&a=1" alt="license">
+    <img src="https://img.shields.io/github/license/nooblk-98/luci-theme-noobwrt?style=flat-square" alt="license">
   </a>
   <a href="https://github.com/nooblk-98/luci-theme-noobwrt/pulls">
     <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square" alt="prs">
@@ -53,91 +44,107 @@ NoobWrt is <strong>a clean and tidy OpenWrt LuCI theme</strong> that allows user
   </a>
 </p>
 
+<br>
 
-<img src="screenshots/bg.png">
-</div>
+<p align="center">
+  <img src="screenshots/bg.png" alt="NoobWRT Login Page" width="100%">
+</p>
 
-## luci-theme-noobwrt
+---
 
-> **About this theme **
->
-> "NoobWRT Theme is a modern and extensively customized OpenWrt LuCI theme with unique features and enhancements specifically designed for the NoobWrt firmware. This is now an independent project providing a clean, modern, and highly customizable interface for your OpenWrt router, with a focus on user experience and visual appeal."
->
-> Originally inspired by luci-theme-argon, this project has evolved into its own distinctive theme with unique features and continuous improvements.
+## Screenshots
 
+### Desktop
 
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="screenshots/sc_desktop_light.png" alt="Overview — Light Mode" width="100%">
+      <br><sub><b>Overview — Light Mode</b></sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="screenshots/sc_desktop_dark.png" alt="Overview — Dark Mode" width="100%">
+      <br><sub><b>Overview — Dark Mode</b></sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" colspan="2">
+      <img src="screenshots/sc_settings.png" alt="Theme Settings — Toolbar Panel" width="100%">
+      <br><sub><b>Theme Settings — Toolbar Panel</b></sub>
+    </td>
+  </tr>
+</table>
+
+### Mobile
+
+<p align="center">
+  <img src="screenshots/sc_mobile.png" alt="Mobile View" width="320">
+  <br><sub><b>Responsive Mobile Layout</b></sub>
+</p>
+
+---
+
+## Features
+
+- **Animated progress bars** — diagonal stripe animation using your accent color
+- **Online wallpapers** — Bing Daily Photo, Lorem Picsum, or Wikimedia Picture of the Day, no API key required
+- **Custom wallpaper upload** — upload your own JPG/PNG/WebP login background
+- **Accent color picker** — separate colors for light and dark mode, applied everywhere
+- **Light / Dark mode** — toggle with sun/moon button, or set default via settings; respects OS preference on first visit
+- **Quick-access toolbar** — configurable icon panel on every page with tooltips
+- **Blur & opacity controls** — fine-tune the login page background effect
+- **Responsive** — works on desktop and mobile
+
+---
 
 ## Theme Settings
 
-The settings page is available at **System → NoobWrt Theme** in the LuCI menu.
-
----
+Go to **System → NoobWrt Theme** in the LuCI menu.
 
 ### Appearance
 
 | Option | Description |
 |--------|-------------|
-| **Default Theme Mode** | Sets the theme applied on page load — `Light` or `Dark`. Users can toggle at any time using the sun/moon button in the toolbar. |
-| **Accent Color — Light Mode** | Primary accent color used in the light theme. Enter a hex value, e.g. `#5e72e4`. |
-| **Accent Color — Dark Mode** | Primary accent color used in the dark theme. Enter a hex value, e.g. `#7c8ff5`. |
-
----
+| **Default Theme Mode** | `Light` or `Dark` — applied on page load. Toggle anytime via the toolbar sun/moon button. |
+| **Accent Color — Light Mode** | Hex color for the light theme, e.g. `#5e72e4`. Used for progress bars, buttons, active states. |
+| **Accent Color — Dark Mode** | Hex color for the dark theme, e.g. `#7c8ff5`. |
 
 ### Wallpaper
 
-Customize the login page background image.
-
 | Action | Description |
 |--------|-------------|
-| **Upload Wallpaper** | Upload a custom JPG, PNG, or WebP image (max 10 MB) to use as the login page background. A preview is shown after upload. |
-| **Revert to Default** | Removes the custom wallpaper and restores the built-in default background. |
+| **Online Wallpaper Source** | `Bing Daily Photo`, `Lorem Picsum (Random)`, or `Wikimedia Picture of the Day`. Set to `None` to use a custom upload or the default. |
+| **Upload Wallpaper** | Upload a JPG, PNG, or WebP image (max 10 MB) as the login background. |
+| **Revert to Default** | Remove the custom wallpaper and restore the built-in default. |
 
-> The uploaded wallpaper takes effect on the login page immediately. If an online wallpaper source is configured, it takes priority over the custom upload.
-
----
+> Online sources are cached for 12 hours. Delete `/var/run/noobwrt_*.url` on the router to force a refresh.
 
 ### Background Effects
 
-Controls the visual effects applied to the login page background.
-
 | Option | Description |
 |--------|-------------|
-| **Blur Radius — Light Mode** | How much the background image is blurred (in pixels) in light mode. Default: `10` |
-| **Blur Radius — Dark Mode** | How much the background image is blurred (in pixels) in dark mode. Default: `10` |
-| **Background Opacity — Light Mode** | Opacity of the overlay on top of the background in light mode. Range: `0.0` (fully transparent) to `1.0` (fully opaque). Default: `0.8` |
-| **Background Opacity — Dark Mode** | Opacity of the overlay in dark mode. Default: `0.8` |
-
----
+| **Blur Radius — Light Mode** | Background blur in pixels, light mode. Default: `10` |
+| **Blur Radius — Dark Mode** | Background blur in pixels, dark mode. Default: `10` |
+| **Background Opacity — Light Mode** | Overlay opacity, `0.0` (transparent) to `1.0` (opaque). Default: `0.8` |
+| **Background Opacity — Dark Mode** | Overlay opacity, dark mode. Default: `0.8` |
 
 ### Toolbar Panel
 
-Manage the quick-access icon buttons displayed in the right-side toolbar on every page.
-
-Each item has the following fields:
-
 | Field | Description |
 |-------|-------------|
-| **Enable** | Toggle to show or hide this item in the toolbar. |
-| **Label** | Display name shown as a tooltip when hovering over the icon. |
-| **URL / Path** | The page to navigate to when the icon is clicked. Can be a full URL or a LuCI path like `/cgi-bin/luci/admin/status/overview`. |
-| **Icon** | Icon image to display. Choose from the built-in icon set (Home, Signal, Cell, SMS, Network, NAS, WiFi, Firewall, Settings, Terminal, VPN, Files, Info). |
-| **Order** | Controls the position of the item in the toolbar. Lower numbers appear first. |
-
-Use **Add** to create new toolbar items and **Remove** to delete existing ones. Click **Save & Apply** to apply changes.
-
----
-
-### About
-
-Displays theme information including the version, developer, repository link, and license.
+| **Enable** | Show or hide this item. |
+| **Label** | Tooltip text shown on hover. |
+| **URL / Path** | Destination URL, e.g. `/cgi-bin/luci/admin/status/overview`. |
+| **Icon** | Choose from: Home, Signal, Cell, SMS, Network, NAS, WiFi, Firewall, Settings, Terminal, VPN, Files, Info. |
+| **Order** | Position in the toolbar — lower numbers appear first. |
 
 ---
 
 ## Installation
 
-### Install via opkg (recommended)
+### Install via opkg
 
-Download the latest `.ipk` from [Releases](https://github.com/nooblk-98/luci-theme-noobwrt/releases) and install:
+Download the latest `.ipk` from [Releases](https://github.com/nooblk-98/luci-theme-noobwrt/releases) and run:
 
 ```bash
 opkg install luci-theme-noobwrt_*.ipk
@@ -151,6 +158,8 @@ git clone https://github.com/nooblk-98/luci-theme-noobwrt.git
 make menuconfig  # LUCI → Themes → luci-theme-noobwrt
 make -j1 V=s
 ```
+
+---
 
 ## Credits
 
