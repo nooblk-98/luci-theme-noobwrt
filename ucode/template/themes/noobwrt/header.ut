@@ -79,11 +79,11 @@
 	<link rel="manifest" href="{{ media }}/icon/manifest.json" crossorigin="use-credentials">
 
 	<link rel="stylesheet" href="{{ media }}/css/cascade.css?v={{ version.luciversion }}">
-	<style title="text/css">
-		{% if (mode == 'dark'): %}
-			{{ dark_css }}
-		{% endif -%}
-		{% if (access('/etc/config/noobwrt')): %}
+	{% if (mode == 'dark'): %}
+	<style id="dark-theme-style">{{ dark_css }}</style>
+	{% endif -%}
+	{% if (access('/etc/config/noobwrt')): %}
+	<style>
 		:root {
 			--primary: {{ primary }};
 			--dark-primary: {{ dark_primary }};
@@ -92,8 +92,8 @@
 			--blur-radius-dark:{{ blur_radius_dark }}px;
 			--blur-opacity-dark:{{ blur_opacity_dark }};
 		}
-		{% endif -%}
 	</style>
+	{% endif -%}
 	<!-- Stylesheets -->
 	{% if (node?.css): %}
 	<link rel="stylesheet" href="{{ resource }}/{{ node.css}}">

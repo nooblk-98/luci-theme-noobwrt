@@ -54,19 +54,58 @@ return view.extend({
 
         o = s.taboption('appearance', form.Value, 'primary',
             _('Accent Color — Light Mode'),
-            _('Primary accent color used throughout the light theme. Hex format, e.g. #5e72e4'));
+            _('Primary accent color used throughout the light theme.'));
         o.placeholder = '#5e72e4';
         o.rmempty = false;
+        o.renderWidget = function(section_id, option_index, cfgvalue) {
+            var node = form.Value.prototype.renderWidget.apply(this, arguments);
+            var input = node.querySelector('input');
+            if (input) {
+                input.style.cssText = 'width:140px;display:inline-block;vertical-align:middle;margin-right:6px';
+                var picker = document.createElement('input');
+                picker.type = 'color';
+                picker.value = (cfgvalue && cfgvalue !== this.placeholder) ? cfgvalue : this.placeholder;
+                picker.style.cssText = 'width:40px;height:32px;padding:2px;border:1px solid #ccc;border-radius:4px;cursor:pointer;vertical-align:middle';
+                picker.addEventListener('input', function() { input.value = picker.value; input.dispatchEvent(new Event('input', { bubbles: true })); });
+                input.addEventListener('input', function() { if (/^#[0-9a-fA-F]{6}$/.test(input.value)) picker.value = input.value; });
+                node.appendChild(picker);
+            }
+            return node;
+        };
 
         o = s.taboption('appearance', form.Value, 'dark_primary',
             _('Accent Color — Dark Mode'),
-            _('Primary accent color used throughout the dark theme. Hex format, e.g. #7c8ff5'));
+            _('Primary accent color used throughout the dark theme.'));
         o.placeholder = '#7c8ff5';
         o.rmempty = false;
+        o.renderWidget = function(section_id, option_index, cfgvalue) {
+            var node = form.Value.prototype.renderWidget.apply(this, arguments);
+            var input = node.querySelector('input');
+            if (input) {
+                input.style.cssText = 'width:140px;display:inline-block;vertical-align:middle;margin-right:6px';
+                var picker = document.createElement('input');
+                picker.type = 'color';
+                picker.value = (cfgvalue && cfgvalue !== this.placeholder) ? cfgvalue : this.placeholder;
+                picker.style.cssText = 'width:40px;height:32px;padding:2px;border:1px solid #ccc;border-radius:4px;cursor:pointer;vertical-align:middle';
+                picker.addEventListener('input', function() { input.value = picker.value; input.dispatchEvent(new Event('input', { bubbles: true })); });
+                input.addEventListener('input', function() { if (/^#[0-9a-fA-F]{6}$/.test(input.value)) picker.value = input.value; });
+                node.appendChild(picker);
+            }
+            return node;
+        };
 
         /* ---- Wallpaper ---- */
         var BGURL = '/luci-static/noobwrt/background/custom.jpg';
         var BGTMP = '/tmp/noobwrt_wallpaper.tmp';
+
+        o = s.taboption('wallpaper', form.ListValue, 'online_wallpaper',
+            _('Online Wallpaper Source'),
+            _('Automatically fetch a wallpaper from an online source for the login page background. Set to None to use a custom uploaded image or the built-in default.'));
+        o.value('none',      _('None (use custom / default)'));
+        o.value('bing',      _('Bing Daily Photo'));
+        o.value('unsplash',  _('Unsplash Random'));
+        o.value('wallhaven', _('Wallhaven Random'));
+        o.default = 'none';
 
         o = s.taboption('wallpaper', form.DummyValue, '_wallpaper_ui', '');
         o.rawhtml = true;

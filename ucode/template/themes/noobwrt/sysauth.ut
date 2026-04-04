@@ -21,7 +21,8 @@
 	function fetchMedia(path, themeDir) {
 		let backgroundTable = [];
 		for (f in (fs.lsdir(path))) {
-			let ext = lc(split(f, '.')?.[1]);
+			let parts = split(f, '.');
+			let ext = lc(parts?.[length(parts) - 1]);
 			if (ext && index(allTypes, " " + ext + " ") != -1) {
 				let bg = {};
 				bg.type = ext;
@@ -122,7 +123,7 @@
 				</div>
 				<div class="login-panel">
 					<!-- Title Start -->
-					<div class="brand-text-only">{{ _('Router Admin Login') }}</div>
+					<div class="brand-text-only">{{ hostname }}</div>
 					<div class="login-subtitle">{{ _('Sign in to manage your router') }}</div>
 					<!-- Title End -->
 					<!-- Login Form Start -->

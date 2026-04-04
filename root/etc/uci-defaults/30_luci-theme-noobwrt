@@ -21,7 +21,7 @@ uci batch <<-EOF
 	set noobwrt.global.blur_dark=10
 	set noobwrt.global.transparency=0.8
 	set noobwrt.global.transparency_dark=0.8
-	set noobwrt.global.online_wallpaper=bing
+	set noobwrt.global.online_wallpaper=none
 	set noobwrt.global.use_exact_resolution=1
 	commit noobwrt
 EOF

@@ -285,7 +285,6 @@ body.dark-theme .theme-toggle svg {
 		document.head.appendChild(darkThemeStyle);
 	}
 
-	// Fetch dark CSS from existing file
 	const darkCssUrl = '/luci-static/noobwrt/css/dark.css';
 
 	// On first visit (no saved preference), honour the OS colour scheme setting
@@ -300,7 +299,19 @@ body.dark-theme .theme-toggle svg {
 	// Check saved theme preference
 	const savedTheme = localStorage.getItem('luci-theme');
 
+	// If the server already inlined dark CSS (UCI mode=dark), mark the style
+	// element as populated so loadDarkCSS skips the fetch on initial load.
+	const serverInjectedDark = document.body.classList.contains('server-dark');
+
 	function loadDarkCSS() {
+		// Skip fetch if dark CSS was already inlined by the server
+		if (darkThemeStyle.textContent) {
+			document.body.classList.add('dark-theme');
+			sunIcon.style.display = 'none';
+			moonIcon.style.display = 'block';
+			localStorage.setItem('luci-theme', 'dark');
+			return;
+		}
 		fetch(darkCssUrl)
 			.then(response => response.text())
 			.then(css => {
