@@ -19,7 +19,7 @@ return view.extend({
             _('Customize the appearance, wallpaper, background effects, and toolbar panel of the NoobWrt LuCI theme.'));
 
         /* ============================================================
-         * SECTION: Global – tabbed (Appearance / Wallpaper / Effects)
+         * SECTION: Global – tabbed (Appearance / Wallpaper / Effects / Toolbar / About)
          * ============================================================ */
         s = m.section(form.NamedSection, 'global', 'global');
         s.addremove = false;
@@ -95,33 +95,36 @@ return view.extend({
             _('Overlay opacity on the login page background for dark mode. Default: 0.8'));
         o.placeholder = '0.8';
 
-        /* ---- Toolbar tab placeholder – TableSection is injected here after render ---- */
-        o = s.taboption('toolbar', form.DummyValue, '_toolbar_anchor', '');
-        o.rawhtml = true;
-        o.default = '<div id="noobwrt-toolbar-anchor"></div>';
+        /* ---- Toolbar tab – placeholder only, real table rendered below ---- */
+        o = s.taboption('toolbar', form.DummyValue, '_toolbar_placeholder', '');
+        o.rawhtml  = true;
+        o.default  = '<div id="noobwrt-toolbar-tab-content"></div>';
 
         /* ---- About ---- */
         o = s.taboption('about', form.DummyValue, '_about', '');
         o.rawhtml = true;
         o.default = '\
-<div style="max-width:480px;padding:4px 0">\
-  <table style="width:100%;border-collapse:collapse;line-height:1.8">\
-    <tr><td style="width:120px;color:#888;padding:4px 0">Developer</td>\
+<div style="max-width:480px;background:var(--color-bg-1,#fff);border:1px solid var(--color-border,#e5e7eb);border-radius:12px;padding:20px 24px;box-shadow:0 2px 8px rgba(0,0,0,0.06)">\
+  <h3 style="margin:0 0 6px;font-size:16px;font-weight:600">NoobWrt Theme</h3>\
+  <p style="margin:0 0 16px;color:#888;font-size:13px">A clean modern LuCI theme for OpenWrt routers.</p>\
+  <table style="width:100%;border-collapse:collapse;line-height:1.9;font-size:13px">\
+    <tr><td style="width:130px;color:#888;padding:3px 0">Developer</td>\
         <td><strong>NoobLk</strong></td></tr>\
-    <tr><td style="color:#888;padding:4px 0">Repository</td>\
-        <td><a href="https://github.com/nooblk-98/luci-theme-noobwrt" target="_blank" rel="noopener">github.com/nooblk-98/luci-theme-noobwrt</a></td></tr>\
-    <tr><td style="color:#888;padding:4px 0">Contributors</td>\
-        <td><a href="https://github.com/nooblk-98/luci-theme-noobwrt/graphs/contributors" target="_blank" rel="noopener">View on GitHub</a></td></tr>\
-    <tr><td style="color:#888;padding:4px 0">License</td>\
+    <tr><td style="color:#888;padding:3px 0">Repository</td>\
+        <td><a href="https://github.com/nooblk-98/luci-theme-noobwrt" target="_blank" rel="noopener" style="color:#5e72e4">github.com/nooblk-98/luci-theme-noobwrt</a></td></tr>\
+    <tr><td style="color:#888;padding:3px 0">Contributors</td>\
+        <td><a href="https://github.com/nooblk-98/luci-theme-noobwrt/graphs/contributors" target="_blank" rel="noopener" style="color:#5e72e4">View on GitHub</a></td></tr>\
+    <tr><td style="color:#888;padding:3px 0">License</td>\
         <td>MIT</td></tr>\
-    <tr><td style="color:#888;padding:4px 0">Issues / Support</td>\
-        <td><a href="https://github.com/nooblk-98/luci-theme-noobwrt/issues" target="_blank" rel="noopener">Open an issue</a></td></tr>\
+    <tr><td style="color:#888;padding:3px 0">Issues / Support</td>\
+        <td><a href="https://github.com/nooblk-98/luci-theme-noobwrt/issues" target="_blank" rel="noopener" style="color:#5e72e4">Open an issue</a></td></tr>\
   </table>\
-  <p style="margin-top:16px;color:#aaa;font-size:12px;text-align:center">Made with \u2665 for the OpenWrt community</p>\
+  <p style="margin:16px 0 0;color:#bbb;font-size:12px;text-align:center;border-top:1px solid var(--color-border,#e5e7eb);padding-top:12px">Made with \u2665 for the OpenWrt community</p>\
 </div>';
 
         /* ============================================================
          * SECTION: Toolbar Panel Items (TableSection)
+         * Rendered separately, then moved into the Toolbar tab via JS.
          * ============================================================ */
         var ts = m.section(form.TableSection, 'toolbar_item',
             _('Toolbar Panel Items'),
@@ -173,12 +176,25 @@ return view.extend({
         o.editable = true;
 
         return m.render().then(function (node) {
-            /* Move the TableSection node into the Toolbar tab content area */
-            var anchor = node.querySelector('#noobwrt-toolbar-anchor');
-            var tsNode = node.querySelector('.cbi-section:last-of-type');
-            if (anchor && tsNode) {
-                anchor.appendChild(tsNode);
+            /* Find the TableSection node (last .cbi-section inside the map) and
+             * move it into the Toolbar tab placeholder div.  The section stays
+             * part of the form so save/add/remove all keep working normally. */
+            var tabContent = node.querySelector('#noobwrt-toolbar-tab-content');
+            var sections   = node.querySelectorAll('.cbi-map > .cbi-section');
+            /* The TableSection is always the last top-level section in the map */
+            var tsNode = sections[sections.length - 1];
+
+            if (tabContent && tsNode) {
+                /* Strip the section heading since the tab label already names it */
+                var heading = tsNode.querySelector('h3, .cbi-section-legend');
+                if (heading) heading.style.display = 'none';
+                tabContent.appendChild(tsNode);
             }
+
+            /* Wire up tab clicks so the toolbar section shows/hides with its tab.
+             * LuCI hides tab content via display:none on the wrapping div —
+             * the TableSection node is now inside that div so it follows naturally.
+             * No extra JS needed beyond the move above. */
             return node;
         });
     }
