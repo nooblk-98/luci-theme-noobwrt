@@ -192,25 +192,58 @@ return view.extend({
         o.editable = true;
 
         return m.render().then(function (node) {
-            /* Find the TableSection node (last .cbi-section inside the map) and
-             * move it into the Toolbar tab placeholder div.  The section stays
-             * part of the form so save/add/remove all keep working normally. */
+            /* ---- Wire wallpaper buttons ---- */
+            var uploadBtn = node.querySelector('#noobwrt-wp-upload');
+            var revertBtn = node.querySelector('#noobwrt-wp-revert');
+            var wpImg     = node.querySelector('#noobwrt-wp-img');
+            var wpPh      = node.querySelector('#noobwrt-wp-placeholder');
+            var wpSt      = node.querySelector('#noobwrt-wp-status');
+
+            function setStatus(msg, ok) {
+                wpSt.textContent = msg;
+                wpSt.style.color = ok === true ? '#2dce89' : ok === false ? '#f5365c' : '#888';
+            }
+
+            fetch(BGURL, { method: 'HEAD' })
+                .then(function (r) {
+                    if (r.ok) { wpImg.src = BGURL + '?_=' + Date.now(); wpImg.style.display = ''; wpPh.style.display = 'none'; }
+                }).catch(function () {});
+
+            uploadBtn.addEventListener('click', function (ev) {
+                ui.uploadFile(BGTMP, ev.target)
+                    .then(function () { return callSetCustomWallpaper(); })
+                    .then(function (result) {
+                        if (result === 0) {
+                            wpImg.src = BGURL + '?_=' + Date.now(); wpImg.style.display = ''; wpPh.style.display = 'none';
+                            setStatus(_('Wallpaper uploaded! Refresh the login page to see it.'), true);
+                        } else {
+                            setStatus(_('Failed to save wallpaper.'), false);
+                        }
+                    })
+                    .catch(function (e) { setStatus(_('Upload error: ') + e.message, false); });
+            });
+
+            revertBtn.addEventListener('click', function () {
+                if (!window.confirm(_('Remove custom wallpaper and revert to default?'))) return;
+                callRemoveCustomWallpaper()
+                    .then(function () {
+                        wpImg.src = ''; wpImg.style.display = 'none'; wpPh.style.display = '';
+                        setStatus(_('Reverted to default wallpaper.'), true);
+                    })
+                    .catch(function (e) { setStatus(_('Could not remove: ') + e.message, false); });
+            });
+
+            /* ---- Move TableSection into Toolbar tab ---- */
             var tabContent = node.querySelector('#noobwrt-toolbar-tab-content');
             var sections   = node.querySelectorAll('.cbi-map > .cbi-section');
-            /* The TableSection is always the last top-level section in the map */
-            var tsNode = sections[sections.length - 1];
+            var tsNode     = sections[sections.length - 1];
 
             if (tabContent && tsNode) {
-                /* Strip the section heading since the tab label already names it */
                 var heading = tsNode.querySelector('h3, .cbi-section-legend');
                 if (heading) heading.style.display = 'none';
                 tabContent.appendChild(tsNode);
             }
 
-            /* Wire up tab clicks so the toolbar section shows/hides with its tab.
-             * LuCI hides tab content via display:none on the wrapping div —
-             * the TableSection node is now inside that div so it follows naturally.
-             * No extra JS needed beyond the move above. */
             return node;
         });
     }

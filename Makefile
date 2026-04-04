@@ -8,7 +8,7 @@ include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=Noobwrt Theme
 LUCI_DEPENDS:=+wget +jsonfilter
-PKG_VERSION:=1.1.2
+PKG_VERSION:=1.1.3
 PKG_RELEASE:=20260602
 
 CONFIG_LUCI_CSSTIDY:=1
