@@ -10,7 +10,8 @@
       "Bash(python3 -c \"import sys,json; [print\\(f['path']\\) for f in json.load\\(sys.stdin\\)['tree'] if 'js' in f['path'] or 'lua' in f['path'] or 'argon' in f['path'].lower\\(\\)]\")",
       "Bash(curl -s \"https://raw.githubusercontent.com/jerrykuku/luci-app-argon-config/master/htdocs/luci-static/resources/view/argon-config.js\")",
       "Bash(curl -s \"https://raw.githubusercontent.com/jerrykuku/luci-app-argon-config/master/root/usr/libexec/rpcd/luci.argon\")",
-      "Bash(ssh root@192.168.1.1 \"ubus list | grep noobwrt; echo exit=$?\")"
+      "Bash(ssh root@192.168.1.1 \"ubus list | grep noobwrt; echo exit=$?\")",
+      "Bash(wc -l /c/Users/lahiru/Documents/github/luci-theme-noobwrt/ucode/template/themes/noobwrt/*.ut)"
     ]
   }
 }

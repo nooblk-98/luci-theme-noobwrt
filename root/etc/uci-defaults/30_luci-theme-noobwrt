@@ -86,8 +86,8 @@ uci batch <<-EOF
 	set noobwrt.toolbar_firewall.order=8
 
 	set noobwrt.toolbar_system=toolbar_item
-	set noobwrt.toolbar_system.title=System
-	set noobwrt.toolbar_system.url=/cgi-bin/luci/admin/system/system
+	set noobwrt.toolbar_system.title=Settings
+	set noobwrt.toolbar_system.url=/cgi-bin/luci/admin/system/noobwrt
 	set noobwrt.toolbar_system.icon=settings.png
 	set noobwrt.toolbar_system.enabled=1
 	set noobwrt.toolbar_system.order=9
