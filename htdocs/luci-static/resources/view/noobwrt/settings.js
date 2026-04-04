@@ -3,7 +3,19 @@
 'require form';
 'require uci';
 'require rpc';
-'require request';
+'require ui';
+
+var callSetCustomWallpaper = rpc.declare({
+    object: 'luci.noobwrt_wallpaper',
+    method: 'set_custom',
+    expect: { result: -1 }
+});
+
+var callRemoveCustomWallpaper = rpc.declare({
+    object: 'luci.noobwrt_wallpaper',
+    method: 'remove_custom',
+    expect: { result: -1 }
+});
 
 return view.extend({
     load: function () {
@@ -53,87 +65,77 @@ return view.extend({
         o.rmempty = false;
 
         /* ---- Wallpaper ---- */
-        o = s.taboption('wallpaper', form.DummyValue, '_wallpaper_ui', '');
+        var BGDEST = '/www/luci-static/noobwrt/background/custom.jpg';
+        var BGURL  = '/luci-static/noobwrt/background/custom.jpg';
+        var BGTMP  = '/tmp/noobwrt_wallpaper.tmp';
+
+        o = s.taboption('wallpaper', form.DummyValue, '_wallpaper_info', '');
         o.rawhtml = true;
-        o.default = '\
-<div style="max-width:520px">\
-  <p style="margin:0 0 12px;color:#888;font-size:13px">Upload a custom image to use as the login page background. Supported formats: JPG, PNG, WebP (max 10 MB).</p>\
-  <div id="noobwrt-wp-preview" style="margin-bottom:16px;border-radius:10px;overflow:hidden;background:#f0f0f0;height:160px;display:flex;align-items:center;justify-content:center">\
-    <img id="noobwrt-wp-img" src="" style="width:100%;height:100%;object-fit:cover;display:none" />\
-    <span id="noobwrt-wp-placeholder" style="color:#aaa;font-size:13px">No custom wallpaper \u2014 using default</span>\
-  </div>\
-  <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">\
-    <label id="noobwrt-wp-label" style="display:inline-flex;align-items:center;gap:8px;cursor:pointer;background:#5e72e4;color:#fff;padding:8px 18px;border-radius:6px;font-size:13px;font-weight:500">\
-      <input id="noobwrt-wp-file" type="file" accept="image/jpeg,image/png,image/webp" style="display:none" />\
-      Upload Wallpaper\
-    </label>\
-    <button id="noobwrt-wp-revert" type="button" style="padding:8px 16px;border-radius:6px;font-size:13px;border:1px solid #ddd;background:#fff;cursor:pointer;color:#555">Revert to Default</button>\
-  </div>\
-  <p id="noobwrt-wp-status" style="margin-top:10px;font-size:12px;color:#888;min-height:18px"></p>\
-</div>\
-<script>\
-(function(){\
-  var BGPATH  = "/www/luci-static/noobwrt/background/custom.jpg";\
-  var BGURL   = "/luci-static/noobwrt/background/custom.jpg";\
-  var img     = document.getElementById("noobwrt-wp-img");\
-  var ph      = document.getElementById("noobwrt-wp-placeholder");\
-  var st      = document.getElementById("noobwrt-wp-status");\
-  var fi      = document.getElementById("noobwrt-wp-file");\
-  var label   = document.getElementById("noobwrt-wp-label");\
-  var rv      = document.getElementById("noobwrt-wp-revert");\
-  function setStatus(msg, ok) {\
-    st.textContent = msg;\
-    st.style.color = ok === true ? "#2dce89" : ok === false ? "#f5365c" : "#888";\
-  }\
-  function showPreview(url) { img.src = url; img.style.display = ""; ph.style.display = "none"; }\
-  function hidePreview() { img.src = ""; img.style.display = "none"; ph.style.display = ""; }\
-  /* Show preview if custom wallpaper already exists */\
-  fetch(BGURL, { method: "HEAD" })\
-    .then(function(r) { if (r.ok) showPreview(BGURL + "?_=" + Date.now()); })\
-    .catch(function() {});\
-  label.addEventListener("click", function() { fi.click(); });\
-  fi.addEventListener("change", function() {\
-    var file = fi.files[0];\
-    if (!file) return;\
-    if (file.size > 10 * 1024 * 1024) { setStatus("File too large (max 10 MB)", false); return; }\
-    setStatus("Uploading...", null);\
-    var sid = L.env.sessionid;\
-    var fd = new FormData();\
-    fd.append("sessionid", sid);\
-    fd.append("filename", BGPATH);\
-    fd.append("filedata", file);\
-    fetch(L.env.cgi_base + "/cgi-upload", { method: "POST", body: fd })\
-      .then(function(res) { return res.json(); })\
-      .then(function(reply) {\
-        if (reply && (reply.size > 0 || reply.size === 0 && !reply.failure)) {\
-          setStatus("Wallpaper uploaded! Refresh the login page to see it.", true);\
-          showPreview(BGURL + "?_=" + Date.now());\
-        } else {\
-          setStatus("Upload failed \u2014 " + (reply && reply.failure ? reply.failure : "check permissions"), false);\
-        }\
-      }).catch(function(e) { setStatus("Upload error: " + e.message, false); });\
-  });\
-  rv.addEventListener("click", function() {\
-    if (!confirm("Remove custom wallpaper and revert to default?")) return;\
-    setStatus("Removing...", null);\
-    var sid = L.env.sessionid;\
-    fetch("/ubus", {\
-      method: "POST",\
-      headers: { "Content-Type": "application/json" },\
-      body: JSON.stringify({ jsonrpc:"2.0", id:1, method:"call",\
-        params: [sid, "file", "remove", { path: BGPATH }] })\
-    }).then(function(res) { return res.json(); })\
-      .then(function(reply) {\
-        if (reply && reply.result && reply.result[0] === 0) {\
-          setStatus("Reverted to default wallpaper.", true);\
-          hidePreview();\
-        } else {\
-          setStatus("Could not remove: check permissions", false);\
-        }\
-      }).catch(function(e) { setStatus("Could not remove: " + e.message, false); });\
-  });\
-})();\
-</script>';
+        o.default = '<p style="color:#888;font-size:13px;margin:0 0 8px">Upload a custom image to use as the login page background. Supported formats: JPG, PNG, WebP (max 10 MB).</p>';
+
+        /* Preview image */
+        o = s.taboption('wallpaper', form.DummyValue, '_wallpaper_preview', '');
+        o.rawhtml = true;
+        o.default = '<div id="noobwrt-wp-preview" style="max-width:480px;margin-bottom:12px;border-radius:10px;overflow:hidden;background:#f0f0f0;height:160px;display:flex;align-items:center;justify-content:center">' +
+            '<img id="noobwrt-wp-img" src="" style="width:100%;height:100%;object-fit:cover;display:none" />' +
+            '<span id="noobwrt-wp-placeholder" style="color:#aaa;font-size:13px">No custom wallpaper \u2014 using default</span>' +
+            '</div>' +
+            '<p id="noobwrt-wp-status" style="font-size:12px;color:#888;min-height:18px;margin:4px 0 12px"></p>' +
+            '<script>(function(){' +
+            'var img=document.getElementById("noobwrt-wp-img");' +
+            'var ph=document.getElementById("noobwrt-wp-placeholder");' +
+            'fetch("' + BGURL + '",{method:"HEAD"})' +
+            '.then(function(r){if(r.ok){img.src="' + BGURL + '?_="+Date.now();img.style.display="";ph.style.display="none";}})' +
+            '.catch(function(){});' +
+            '})();<\/script>';
+
+        /* Upload button */
+        o = s.taboption('wallpaper', form.Button, '_wallpaper_upload', _('Upload Wallpaper'));
+        o.inputstyle = 'action';
+        o.inputtitle = _('Upload Wallpaper...');
+        o.onclick = L.bind(function (ev) {
+            return ui.uploadFile(BGTMP, ev.target)
+                .then(function () {
+                    return callSetCustomWallpaper();
+                })
+                .then(function (result) {
+                    var img = document.getElementById('noobwrt-wp-img');
+                    var ph  = document.getElementById('noobwrt-wp-placeholder');
+                    var st  = document.getElementById('noobwrt-wp-status');
+                    if (result === 0) {
+                        if (img) { img.src = BGURL + '?_=' + Date.now(); img.style.display = ''; }
+                        if (ph)  { ph.style.display = 'none'; }
+                        if (st)  { st.textContent = _('Wallpaper uploaded! Refresh the login page to see it.'); st.style.color = '#2dce89'; }
+                    } else {
+                        if (st) { st.textContent = _('Failed to save wallpaper.'); st.style.color = '#f5365c'; }
+                    }
+                })
+                .catch(function (e) {
+                    var st = document.getElementById('noobwrt-wp-status');
+                    if (st) { st.textContent = _('Upload error: ') + e.message; st.style.color = '#f5365c'; }
+                });
+        }, this);
+
+        /* Revert button */
+        o = s.taboption('wallpaper', form.Button, '_wallpaper_revert', _('Revert to Default'));
+        o.inputstyle = 'reset';
+        o.inputtitle = _('Revert to Default');
+        o.onclick = L.bind(function () {
+            if (!window.confirm(_('Remove custom wallpaper and revert to default?'))) return;
+            return callRemoveCustomWallpaper()
+                .then(function () {
+                    var img = document.getElementById('noobwrt-wp-img');
+                    var ph  = document.getElementById('noobwrt-wp-placeholder');
+                    var st  = document.getElementById('noobwrt-wp-status');
+                    if (img) { img.src = ''; img.style.display = 'none'; }
+                    if (ph)  { ph.style.display = ''; }
+                    if (st)  { st.textContent = _('Reverted to default wallpaper.'); st.style.color = '#2dce89'; }
+                })
+                .catch(function (e) {
+                    var st = document.getElementById('noobwrt-wp-status');
+                    if (st) { st.textContent = _('Could not remove: ') + e.message; st.style.color = '#f5365c'; }
+                });
+        }, this);
 
         /* ---- Background Effects ---- */
         o = s.taboption('effects', form.Value, 'blur',

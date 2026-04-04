@@ -9,15 +9,12 @@
         },
         "write": {
             "uci": [ "noobwrt" ],
-            "cgi-io": {
-                "upload": [ "write" ],
-                "/www/luci-static/noobwrt/background/custom.jpg": [ "write" ]
-            },
+            "cgi-io": [ "upload" ],
             "file": {
-                "/www/luci-static/noobwrt/background/*": [ "write", "remove" ]
+                "/tmp/noobwrt_wallpaper.tmp": [ "write" ]
             },
             "ubus": {
-                "file": [ "remove" ]
+                "luci.noobwrt_wallpaper": [ "set_custom", "remove_custom" ]
             }
         }
     }

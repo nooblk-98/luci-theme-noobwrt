@@ -104,16 +104,35 @@ try_update() {
 	fi
 }
 
+CUSTOM_BG="/www/luci-static/noobwrt/background/custom.jpg"
+UPLOAD_TMP="/tmp/noobwrt_wallpaper.tmp"
+
 case "$1" in
 "list")
 	json_init
 	json_add_object "get_url"
+	json_close_object
+	json_add_object "set_custom"
+	json_close_object
+	json_add_object "remove_custom"
 	json_close_object
 	json_dump
 	json_cleanup
 	;;
 "call")
 	case "$2" in
+	"set_custom")
+		if [ -f "$UPLOAD_TMP" ]; then
+			mv "$UPLOAD_TMP" "$CUSTOM_BG" && chmod 0644 "$CUSTOM_BG"
+			echo '{ "result": 0 }'
+		else
+			echo '{ "result": 1, "error": "tmp file not found" }'
+		fi
+		;;
+	"remove_custom")
+		rm -f "$CUSTOM_BG"
+		echo '{ "result": 0 }'
+		;;
 	"get_url")
 		read -r input
 		if [ -f "$CACHE" ]; then
