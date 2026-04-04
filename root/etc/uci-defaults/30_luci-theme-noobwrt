@@ -90,7 +90,7 @@ uci batch <<-EOF
 	set noobwrt.toolbar_system.url=/cgi-bin/luci/admin/system/noobwrt
 	set noobwrt.toolbar_system.icon=settings.png
 	set noobwrt.toolbar_system.enabled=1
-	set noobwrt.toolbar_system.order=9
+	set noobwrt.toolbar_system.order=13
 
 	set noobwrt.toolbar_terminal=toolbar_item
 	set noobwrt.toolbar_terminal.title=Terminal
@@ -118,7 +118,7 @@ uci batch <<-EOF
 	set noobwrt.toolbar_log.url=/cgi-bin/luci/admin/status/logs
 	set noobwrt.toolbar_log.icon=info.png
 	set noobwrt.toolbar_log.enabled=0
-	set noobwrt.toolbar_log.order=13
+	set noobwrt.toolbar_log.order=9
 
 	commit noobwrt
 EOF
