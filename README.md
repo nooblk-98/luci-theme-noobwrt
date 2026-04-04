@@ -79,12 +79,12 @@
 
 <table>
   <tr>
-    <td align="center" width="50%">
-      <img src="screenshots/sc_mobile.png" alt="Mobile — Status" width="320">
+    <td align="center" valign="top" width="50%">
+      <img src="screenshots/sc_mobile.png" alt="Mobile — Status" height="500">
       <br><sub><b>Mobile — Status</b></sub>
     </td>
-    <td align="center" width="50%">
-      <img src="screenshots/sc_mobile_login.png" alt="Mobile — Login" width="320">
+    <td align="center" valign="top" width="50%">
+      <img src="screenshots/sc_mobile_login.png" alt="Mobile — Login" height="500">
       <br><sub><b>Mobile — Login</b></sub>
     </td>
   </tr>
