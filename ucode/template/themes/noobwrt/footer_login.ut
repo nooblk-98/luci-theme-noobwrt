@@ -9,7 +9,6 @@
 	<div>
 		<a class="luci-link" href="https://github.com/openwrt/luci" target="_blank">Powered by {{ version.luciname }} ({{ version.luciversion }})</a>
 		<a href="https://github.com/nooblk-98/luci-theme-noobwrt" target="_blank">NoobWrt Theme</a>
-		<a class="luci-link" href="{{ version.disturl }}" target="_blank">{{ version.distname }} {{ version.distversion }}-{{ version.distrevision }}</a>
 	</div>
 </footer>
 </div>
