@@ -6,13 +6,14 @@
 CUSTOM_BG="/www/luci-static/noobwrt/background/custom.jpg"
 UPLOAD_TMP="/tmp/noobwrt_wallpaper.tmp"
 
-# Online wallpaper source (bing/unsplash/wallhaven or none)
+# Online wallpaper source (bing/picsum/wikimedia or none) — no API key required
 WEB_PIC_SRC="$(uci -q get noobwrt.@global[0].online_wallpaper || echo 'bing')"
 
-# API_KEY: optional Unsplash/Wallhaven API key for higher-quality results
-# EXACT_RESO: when 1, use exact 1920x1080 resolution; otherwise use 'atleast'
-API_KEY="$(uci -q get noobwrt.@global[0].use_api_key)"
-EXACT_RESO="$(uci -q get noobwrt.@global[0].use_exact_resolution || echo '1')"
+# Normalise legacy / unknown values to 'bing' so the case always matches
+case "$WEB_PIC_SRC" in
+bing|picsum|wikimedia|none) ;;
+*) WEB_PIC_SRC="bing" ;;
+esac
 
 CACHE="/var/run/noobwrt_${WEB_PIC_SRC}.url"
 WRLOCK="/var/lock/noobwrt_${WEB_PIC_SRC}.lock"
@@ -20,53 +21,33 @@ WRLOCK="/var/lock/noobwrt_${WEB_PIC_SRC}.lock"
 fetch_pic_url() {
 	case "$WEB_PIC_SRC" in
 	bing)
-		local picpath="$(wget -T3 -qO- \
+		local picpath="$(wget -T5 -qO- \
 			"https://www.bing.com/HPImageArchive.aspx?format=js&n=1" |
 			jsonfilter -qe '@.images[0].url' |
 			sed 's/1920x1080/UHD/g')"
-		[ -n "${picpath}" ] && echo "//www.bing.com${picpath}"
+		[ -n "${picpath}" ] && echo "https://www.bing.com${picpath}"
 		;;
-	unsplash)
-		if [ -z "$API_KEY" ]; then
-			local pic_id="$(wget -T3 --spider \
-				"https://source.unsplash.com/1920x1080/daily?wallpapers" 2>&1 |
-				grep -Eo "photo-\w+-\w+" | head -n1)"
-			[ -n "${pic_id}" ] && echo "https://images.unsplash.com/${pic_id}?fm=jpg&fit=crop&w=1920&h=1080"
+	picsum)
+		# Lorem Picsum — free random photo, no API key needed
+		# Follow the 302 redirect and cache the direct CDN image URL
+		local seed="$(($(date '+%s') % 1000))"
+		local cdnurl="$(wget -T5 -S -O /dev/null \
+			"https://picsum.photos/seed/${seed}/1920/1080" 2>&1 |
+			grep -i 'location:' | head -n1 |
+			sed 's/.*[Ll]ocation: *//' | tr -d '\r\n')"
+		if [ -n "$cdnurl" ]; then
+			echo "$cdnurl"
 		else
-			wget -T3 -qO- "https://api.unsplash.com/photos/random?client_id=${API_KEY}" |
-				jsonfilter -qe '@["urls"]["regular"]'
+			echo "https://picsum.photos/seed/${seed}/1920/1080"
 		fi
 		;;
-	unsplash_*)
-		local collection_id="${WEB_PIC_SRC#unsplash_}"
-		# Sanitize: allow only alphanumeric chars and hyphens
-		collection_id="$(printf '%s' "$collection_id" | tr -cd 'A-Za-z0-9-')"
-		if [ -z "$API_KEY" ]; then
-			local pic_id="$(wget -T3 --spider \
-				"https://source.unsplash.com/collection/${collection_id}/1920x1080" 2>&1 |
-				grep -Eo "photo-\w+-\w+" | head -n1)"
-			[ -n "${pic_id}" ] && echo "https://images.unsplash.com/${pic_id}?fm=jpg&fit=crop&w=1920&h=1080"
-		else
-			wget -T3 -qO- \
-				"https://api.unsplash.com/photos/random?client_id=${API_KEY}&collections=${collection_id}" |
-				jsonfilter -qe '@["urls"]["regular"]'
-		fi
-		;;
-	wallhaven)
-		wget -T3 -qO- \
-			"https://wallhaven.cc/api/v1/search?resolutions=1920x1080&sorting=random" |
-			jsonfilter -qe "@.data[0].path"
-		;;
-	wallhaven_*)
-		local tag_id="${WEB_PIC_SRC#wallhaven_}"
-		# Sanitize: allow only alphanumeric chars and hyphens
-		tag_id="$(printf '%s' "$tag_id" | tr -cd 'A-Za-z0-9-')"
-		local use_reso="resolutions"
-		[ "$EXACT_RESO" -eq "1" ] || use_reso="atleast"
-		[ -z "$API_KEY" ] || API_KEY="apikey=$API_KEY&"
-		wget -T3 -qO- \
-			"https://wallhaven.cc/api/v1/search?${API_KEY}q=id%3A${tag_id}&${use_reso}=1920x1080&sorting=random" |
-			jsonfilter -qe '@.data[0].path'
+	wikimedia)
+		# Wikimedia Commons Picture of the Day — free, no API key needed
+		# Fetch the featured image URL from the Wikimedia REST API
+		local today="$(date '+%Y/%m/%d')"
+		wget -T5 -qO- \
+			"https://api.wikimedia.org/feed/v1/wikipedia/en/featured/${today}" |
+			jsonfilter -qe '@.image.image.source' 2>/dev/null
 		;;
 	esac
 }
@@ -78,18 +59,6 @@ try_update() {
 	if flock -n 200 >"/dev/null" 2>&1; then
 		local picurl="$(fetch_pic_url)"
 		if [ -n "$picurl" ]; then
-
-			# below is quirk fix for all browsers
-			# for some weird reason on first load, wallhaven images needs to be
-			# download or browsed first before it can be shown as a background image
-			# if not, browser only displays a blank image
-			# NOTE: only happens to Wallhaven.cc source images
-			case "$WEB_PIC_SRC" in
-			wallhave*)
-				wget -T3 -qO- "${picurl}" > /dev/null
-				;;
-			esac
-
 			echo "$picurl" | tee "$CACHE"
 		else
 			if [ -s "$CACHE" ]; then
@@ -132,6 +101,10 @@ case "$1" in
 		;;
 	"get_url")
 		read -r input
+		if [ "$WEB_PIC_SRC" = "none" ]; then
+			echo '{ "url": "" }'
+			return 0
+		fi
 		if [ -f "$CACHE" ]; then
 			idle_t="$(($(date '+%s') - $(date -r "$CACHE" '+%s' 2>/dev/null || echo '0')))"
 			if [ -s "$CACHE" ]; then

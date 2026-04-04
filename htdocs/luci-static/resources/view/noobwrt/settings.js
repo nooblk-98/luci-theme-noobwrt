@@ -103,8 +103,8 @@ return view.extend({
             _('Automatically fetch a wallpaper from an online source for the login page background. Set to None to use a custom uploaded image or the built-in default.'));
         o.value('none',      _('None (use custom / default)'));
         o.value('bing',      _('Bing Daily Photo'));
-        o.value('unsplash',  _('Unsplash Random'));
-        o.value('wallhaven', _('Wallhaven Random'));
+        o.value('picsum',    _('Lorem Picsum (Random)'));
+        o.value('wikimedia', _('Wikimedia Picture of the Day'));
         o.default = 'none';
 
         o = s.taboption('wallpaper', form.DummyValue, '_wallpaper_ui', '');
