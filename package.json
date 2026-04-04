@@ -7,6 +7,7 @@
     "build": "lessc less/cascade.less htdocs/luci-static/argon/css/cascade.css && lessc less/dark.less htdocs/luci-static/argon/css/dark.css",
     "watch:less": "nodemon --watch less --ext less --exec \"npm run build\"",
     "sync": "node watch-sync.js",
+    "sync:force": "node watch-sync.js --force-sync",
     "start": "concurrently \"npm run watch:less\" \"npm run sync\"",
     "dev": "concurrently \"npm run watch:less\" \"npm run sync\""
   },
