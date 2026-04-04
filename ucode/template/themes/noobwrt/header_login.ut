@@ -1,18 +1,6 @@
 {#
-	NoobWrt is a clean HTML5 theme for LuCI. It is based on luci-theme-material NoobWrt Template
-
-	luci-theme-noobwrt
-	Copyright 2020 Jerrykuku <jerrykuku@qq.com>
-
-	Have a bug? Please create an issue here on GitHub!
-	https://github.com/jerrykuku/luci-theme-noobwrt/issues
-
-	luci-theme-material:
-	Copyright 2015 Lutty Yang <lutty@wcan.in>
-
-	NoobWrt Theme
-	https://demos.creative-tim.com/argon-dashboard/index.html
-
+	NoobWrt - A clean modern LuCI theme for OpenWrt routers.
+	https://github.com/nooblk-98/luci-theme-noobwrt
 	Licensed to the public under the Apache License 2.0
 -#}
 
@@ -89,7 +77,7 @@
 	<link rel="apple-touch-icon" sizes="144x144" href="{{ media }}/icon/apple-icon-144x144.png">
 	<link rel="manifest" href="{{ media }}/icon/manifest.json" crossorigin="use-credentials">
 
-	<link rel="stylesheet" href="{{ media }}/css/cascade.css{# ?v=PKG_VERSION #}">
+	<link rel="stylesheet" href="{{ media }}/css/cascade.css">
 	<style title="text/css">
 		{% if (mode == 'dark'): %}
 			{{ dark_css }}
@@ -105,7 +93,6 @@
 		}
 		{% endif -%}
 	</style>
-	<link rel="shortcut icon" href="{{ media }}/favicon.ico">
 	{% if (node?.css): %}
 	<link rel="stylesheet" href="{{ resource }}/{{ node.css}}">
 	{% endif -%}
@@ -118,5 +105,3 @@
 </head>
 
 <body>
-
-

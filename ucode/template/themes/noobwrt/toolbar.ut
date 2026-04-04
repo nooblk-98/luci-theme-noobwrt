@@ -312,7 +312,6 @@ body.dark-theme .theme-toggle svg {
 			})
 			.catch(err => {
 				console.error('Failed to load dark theme:', err);
-				// Fallback: apply dark theme inline
 				enableDarkThemeFallback();
 			});
 	}
@@ -361,7 +360,7 @@ body.dark-theme .theme-toggle svg {
 	function initToolbarState() {
 		let state = null;
 		try {
-			state = localStorage.getItem('argon.toolbar');
+			state = localStorage.getItem('noobwrt.toolbar');
 		} catch (e) {}
 		applyToolbarState(state === 'collapsed');
 	}
@@ -372,7 +371,7 @@ body.dark-theme .theme-toggle svg {
 			const collapsed = !(toolbarContainer && toolbarContainer.classList.contains('collapsed'));
 			applyToolbarState(collapsed);
 			try {
-				localStorage.setItem('argon.toolbar', collapsed ? 'collapsed' : 'expanded');
+				localStorage.setItem('noobwrt.toolbar', collapsed ? 'collapsed' : 'expanded');
 			} catch (e) {}
 		});
 	}
