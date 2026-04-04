@@ -47,7 +47,7 @@
 <br>
 
 <p align="center">
-  <img src="screenshots/bg.png" alt="NoobWRT Login Page" width="100%">
+  <img src="screenshots/banner.png" alt="NoobWRT Login Page" width="100%">
 </p>
 
 ---
