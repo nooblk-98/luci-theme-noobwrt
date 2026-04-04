@@ -109,7 +109,7 @@
 </head>
 
 <body
-	class="lang_{{ dispatcher.lang }} {{ node?.title ? ` - ${striptags(node.title)}` : '' }} {% if (ctx.authsession): %}logged-in{% endif %}"
+	class="lang_{{ dispatcher.lang }} {% if (ctx.authsession): %}logged-in{% endif %}{% if (mode == 'dark'): %} server-dark dark-theme{% endif %}"
 	data-page="{{ entityencode(join('-', ctx.request_path), true) }}">
 
 	<div class="main">

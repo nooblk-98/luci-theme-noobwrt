@@ -94,12 +94,12 @@ body.dark-theme .toolbar-item img {
 }
 
 .toolbar-item:hover {
-	background: rgba(94, 114, 228, 0.1);
+	background: color-mix(in srgb, var(--primary) 12%, transparent);
 	border-radius: 8px;
 }
 
 body.dark-theme .toolbar-item:hover {
-	background: rgba(94, 114, 228, 0.3);
+	background: color-mix(in srgb, var(--dark-primary) 30%, transparent);
 }
 
 .toolbar-item:hover img {
@@ -140,16 +140,16 @@ body.dark-theme .toolbar-item:hover img {
 	line-height: 1;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	color: #5e72e4;
+	color: var(--primary);
 	font-size: 20px;
 }
 
 body.dark-theme .toolbar-item.toolbar-toggle::before {
-	color: #7c8ff5;
+	color: var(--dark-primary);
 }
 
 body.toolbar-collapsed .toolbar-item.toolbar-toggle {
-	background: rgba(94, 114, 228, 0.15);
+	background: color-mix(in srgb, var(--primary) 15%, transparent);
 }
 
 .toolbar-container.collapsed .toolbar-menu {
@@ -173,7 +173,7 @@ body.toolbar-collapsed .toolbar-item.toolbar-toggle {
 
 /* Theme Toggle Styling */
 .theme-toggle {
-	background: linear-gradient(135deg, rgba(94, 114, 228, 0.2) 0%, rgba(94, 114, 228, 0.1) 100%);
+	background: color-mix(in srgb, var(--primary) 15%, transparent);
 	border-radius: 8px;
 	margin-bottom: 4px;
 	transition: background 0.3s ease;
@@ -185,18 +185,18 @@ body.toolbar-collapsed .toolbar-item.toolbar-toggle {
 }
 
 body.dark-theme .theme-toggle {
-	background: linear-gradient(135deg, rgba(94, 114, 228, 0.4) 0%, rgba(94, 114, 228, 0.3) 100%);
+	background: color-mix(in srgb, var(--dark-primary) 35%, transparent);
 }
 
 .theme-toggle svg {
 	width: 20px;
 	height: 20px;
-	stroke: #5e72e4;
+	stroke: var(--primary);
 	transition: transform 0.3s ease, stroke 0.3s ease;
 }
 
 body.dark-theme .theme-toggle svg {
-	stroke: #7c8ff5;
+	stroke: var(--dark-primary);
 }
 
 .theme-toggle:hover svg {
@@ -296,15 +296,19 @@ body.dark-theme .theme-toggle svg {
 		}
 	}
 
+	// If the server already inlined dark CSS (UCI mode=dark), body already has
+	// 'dark-theme' class — sync localStorage and icons immediately, no fetch needed.
+	if (document.body.classList.contains('server-dark')) {
+		localStorage.setItem('luci-theme', 'dark');
+		sunIcon.style.display = 'none';
+		moonIcon.style.display = 'block';
+	}
+
 	// Check saved theme preference
 	const savedTheme = localStorage.getItem('luci-theme');
 
-	// If the server already inlined dark CSS (UCI mode=dark), mark the style
-	// element as populated so loadDarkCSS skips the fetch on initial load.
-	const serverInjectedDark = document.body.classList.contains('server-dark');
-
 	function loadDarkCSS() {
-		// Skip fetch if dark CSS was already inlined by the server
+		// Dark CSS already inlined by the server — just add the class
 		if (darkThemeStyle.textContent) {
 			document.body.classList.add('dark-theme');
 			sunIcon.style.display = 'none';

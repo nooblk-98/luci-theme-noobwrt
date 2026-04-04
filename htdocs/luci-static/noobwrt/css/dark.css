@@ -287,10 +287,24 @@ h4 {
   background-color: #1e1e1f;
 }
 .cbi-progressbar {
-  background: #282a2c;
+  background: #1e2124;
+  box-shadow: inset 0 1px 4px rgba(0,0,0,0.4);
 }
-.cbi-progressbar div {
+.cbi-progressbar > div {
   background-color: var(--dark-primary) !important;
+}
+.cbi-progressbar > div::before {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(255,255,255,0.18) 0px,
+    rgba(255,255,255,0.18) 10px,
+    transparent            10px,
+    transparent            20px
+  ) !important;
+}
+.cbi-progressbar::after {
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.6);
 }
 .cbi-section-table .cbi-section-table-titles .cbi-section-table-cell {
   background-color: #1e1e1f;
