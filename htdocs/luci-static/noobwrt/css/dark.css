@@ -96,8 +96,8 @@ header::after {
   background-color: #1e1e1e !important;
 }
 .main .main-left {
-  background-color: #252528 !important;
-  box-shadow: rgba(0, 0, 0, 0.6) 0px 0px 15px -5px;
+  background-color: #333333 !important;
+  box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.15);
 }
 .main .main-left .sidenav-header .brand {
   color: #cccccc;
@@ -137,19 +137,10 @@ header::after {
   color: #ffffff !important;
 }
 .main .main-left::-webkit-scrollbar-thumb {
-  background-color: transparent !important;
+  background-color: #252526 !important;
 }
 .main .main-left::-webkit-scrollbar-track {
-  background-color: transparent !important;
-}
-.main .main-left:hover::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.15) !important;
-}
-.main .main-left {
-  scrollbar-color: transparent transparent;
-}
-.main .main-left:hover {
-  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+  background-color: #333;
 }
 .main .main-right {
   background-color: #1e1e1e;
@@ -287,24 +278,10 @@ h4 {
   background-color: #1e1e1f;
 }
 .cbi-progressbar {
-  background: #1e2124;
-  box-shadow: inset 0 1px 4px rgba(0,0,0,0.4);
+  background: #282a2c;
 }
-.cbi-progressbar > div {
+.cbi-progressbar div {
   background-color: var(--dark-primary) !important;
-}
-.cbi-progressbar > div::before {
-  background-image: repeating-linear-gradient(
-    -45deg,
-    rgba(255,255,255,0.18) 0px,
-    rgba(255,255,255,0.18) 10px,
-    transparent            10px,
-    transparent            20px
-  ) !important;
-}
-.cbi-progressbar::after {
-  color: #fff;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.6);
 }
 .cbi-section-table .cbi-section-table-titles .cbi-section-table-cell {
   background-color: #1e1e1f;
@@ -983,13 +960,4 @@ input,
 .btn {
   background-color: #707070;
   color: #fff;
-}
-/* Sticky table headers in dark mode */
-.tr.table-titles,
-.tr.cbi-section-table-titles {
-  background-color: #252528 !important;
-}
-/* Sidenav header separator in dark mode */
-.main .main-left .sidenav-header {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }

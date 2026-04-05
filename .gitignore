@@ -2,3 +2,14 @@
 node_modules
 settings.local.json
 .claude
+./package-lock.json
+./yarn.lock
+./package.json
+./.env
+./.env.local
+./.env.development
+./.env.production
+./.env.test
+./.env.*.local  
+./.vscode
+./.idea

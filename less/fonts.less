@@ -5,13 +5,20 @@
 // ==========================================================================
 
 @font-face {
-    font-family: 'Google Sans';
-    src: local('Google Sans'),
-        local('GoogleSans-Regular'),
-        url('../fonts/GoogleSans-Regular.woff2') format('woff2'),
-        url('../fonts/GoogleSans-Regular.woff') format('woff');
-    font-weight: normal;
+    font-family: 'Red Hat Display';
+    src: url('../fonts/RedHatDisplay-Variable.woff2') format('woff2 supports variations'),
+         url('../fonts/RedHatDisplay-Variable.woff2') format('woff2');
+    font-weight: 300 900;
     font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Red Hat Display';
+    src: url('../fonts/RedHatDisplay-Italic-Variable.woff2') format('woff2 supports variations'),
+         url('../fonts/RedHatDisplay-Italic-Variable.woff2') format('woff2');
+    font-weight: 300 900;
+    font-style: italic;
     font-display: swap;
 }
 
