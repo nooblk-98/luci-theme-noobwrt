@@ -11,7 +11,9 @@ if [ "$PKG_UPGRADE" != 1 ]; then
 fi
 
 # Initialise global appearance/wallpaper defaults (only if section absent)
-uci get noobwrt.global >/dev/null 2>&1 || \
+# touch ensures the config file exists before uci batch tries to write it
+uci get noobwrt.global >/dev/null 2>&1 || {
+touch /etc/config/noobwrt
 uci batch <<-EOF
 	set noobwrt.global=global
 	set noobwrt.global.mode=normal
@@ -26,10 +28,11 @@ uci batch <<-EOF
 	set noobwrt.global.auto_dark_mode=0
 	commit noobwrt
 EOF
+}
 
 # Initialise default toolbar panel items (only if absent)
 uci get noobwrt.toolbar_home >/dev/null 2>&1 || \
-uci batch <<-EOF
+{ touch /etc/config/noobwrt; uci batch <<-EOF
 	set noobwrt.toolbar_home=toolbar_item
 	set noobwrt.toolbar_home.title=Home
 	set noobwrt.toolbar_home.url=/cgi-bin/luci/admin/status/overview
@@ -123,5 +126,6 @@ uci batch <<-EOF
 
 	commit noobwrt
 EOF
+}
 
 exit 0

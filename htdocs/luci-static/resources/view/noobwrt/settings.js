@@ -19,11 +19,24 @@ var callRemoveCustomWallpaper = rpc.declare({
 
 return view.extend({
     load: function () {
-        /* Silently ignore a missing /etc/config/noobwrt.
-         * The form renders with placeholder defaults; the first Save will
-         * create the config.  Attempting to bootstrap via uci/commit fails
-         * with -32002 when no root password is set (unauthenticated session). */
-        return uci.load('noobwrt').catch(function () {});
+        return uci.load('noobwrt').catch(function () {
+            /* /etc/config/noobwrt is absent (fresh install or missing defaults).
+             * Seed an in-memory named section 'global' so form.NamedSection
+             * can render without firing uci/get RPCs that return code 4.
+             * uci.add() returns the internal sid; setting .name promotes it
+             * to a named section that form.NamedSection('global') will find. */
+            var sid = uci.add('noobwrt', 'global');
+            uci.set('noobwrt', sid, '.name', 'global');
+            uci.set('noobwrt', sid, 'mode', 'normal');
+            uci.set('noobwrt', sid, 'primary', '#5e72e4');
+            uci.set('noobwrt', sid, 'dark_primary', '#7c8ff5');
+            uci.set('noobwrt', sid, 'blur', '10');
+            uci.set('noobwrt', sid, 'blur_dark', '10');
+            uci.set('noobwrt', sid, 'transparency', '0.8');
+            uci.set('noobwrt', sid, 'transparency_dark', '0.8');
+            uci.set('noobwrt', sid, 'online_wallpaper', 'none');
+            uci.set('noobwrt', sid, 'auto_dark_mode', '0');
+        });
     },
 
     render: function () {
