@@ -174,11 +174,11 @@ jobs:
 
           cd "$SDK_DIR"
           cat > feeds.conf <<'FEEDS'
-          src-git base https://github.com/openwrt/openwrt.git;main
-          src-git-full packages https://github.com/openwrt/packages.git;master
-          src-git-full luci https://github.com/openwrt/luci.git;master
-          src-git-full routing https://git.openwrt.org/feed/routing.git;master
-          FEEDS
+src-git base https://github.com/openwrt/openwrt.git;main
+src-git-full packages https://github.com/openwrt/packages.git;master
+src-git-full luci https://github.com/openwrt/luci.git;master
+src-git-full routing https://git.openwrt.org/feed/routing.git;master
+FEEDS
 
           git clone -b master \
             "https://github.com/${{ github.repository }}.git" \
@@ -211,17 +211,18 @@ jobs:
           ./scripts/feeds install "$PKG_NAME"
 
           cat > .config <<EOF
-          CONFIG_ALL_NONSHARED=n
-          CONFIG_ALL_KMODS=n
-          CONFIG_ALL=n
-          CONFIG_AUTOREMOVE=n
-          CONFIG_LUCI_LANG_zh_Hans=y
-          CONFIG_PACKAGE_${PKG_NAME}=m
-          EOF
+CONFIG_ALL_NONSHARED=n
+CONFIG_ALL_KMODS=n
+CONFIG_ALL=n
+CONFIG_AUTOREMOVE=n
+CONFIG_LUCI_LANG_zh_Hans=y
+CONFIG_PACKAGE_${PKG_NAME}=m
+EOF
           make defconfig
 
-          make "package/$PKG_NAME/{clean,compile}" -j$(nproc) \
-            || make "package/$PKG_NAME/{clean,compile}" -j1 V=s
+          make package/${PKG_NAME}/clean -j$(nproc)
+          make package/${PKG_NAME}/compile -j$(nproc) \
+            || make package/${PKG_NAME}/compile -j1 V=s
 
           cd ..
           mkdir -p "$OUT_DIR"
