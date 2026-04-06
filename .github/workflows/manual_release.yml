@@ -15,6 +15,10 @@ on:
 
   workflow_dispatch:
     inputs:
+      branch:
+        description: "Branch to build from (master or main)"
+        required: false
+        default: "master"
       pkg_name:
         description: "Package name (default: repo name)"
         required: false
@@ -27,9 +31,11 @@ on:
   push:
     branches:
       - "master"
+      - "main"
 
 env:
   TZ: Asia/Shanghai
+  BRANCH: ${{ inputs.branch || github.ref_name }}
 
 jobs:
   # ── 1. Determine version & create / update the GitHub Release ────────────────
@@ -46,7 +52,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: "master"
+          ref: ${{ env.BRANCH }}
 
       - name: Resolve inputs & read version
         id: version
@@ -181,7 +187,7 @@ jobs:
           echo "src-git-full luci https://github.com/openwrt/luci.git;master"           >> feeds.conf
           echo "src-git-full routing https://git.openwrt.org/feed/routing.git;master"   >> feeds.conf
 
-          git clone -b master \
+          git clone -b "$BRANCH" \
             "https://github.com/${{ github.repository }}.git" \
             "package/downloads/$PKG_NAME"
 
@@ -194,8 +200,8 @@ jobs:
         if: steps.cache-sdk.outputs.cache-hit == 'true'
         run: |
           cd "$SDK_DIR/package/downloads/$PKG_NAME"
-          git fetch origin master
-          git reset --hard origin/master
+          git fetch origin "$BRANCH"
+          git reset --hard "origin/$BRANCH"
 
       - name: Sync custom Makefile (if not repo root)
         if: env.MK_PATH != 'Makefile'
