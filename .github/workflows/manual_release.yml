@@ -23,12 +23,6 @@ on:
         description: "Path to Makefile relative to repo root (default: Makefile)"
         required: false
         default: "Makefile"
-      force_release:
-        description: "Force publish even if version unchanged"
-        required: false
-        default: "false"
-        type: choice
-        options: ["false", "true"]
 
   push:
     branches:
@@ -43,10 +37,9 @@ jobs:
     name: Check Version & Create Release
     runs-on: ubuntu-latest
     outputs:
-      pkg_version:    ${{ steps.version.outputs.pkg_version }}
-      pkg_name:       ${{ steps.version.outputs.pkg_name }}
-      makefile_path:  ${{ steps.version.outputs.makefile_path }}
-      should_build:   ${{ steps.version.outputs.should_build }}
+      pkg_version:   ${{ steps.version.outputs.pkg_version }}
+      pkg_name:      ${{ steps.version.outputs.pkg_name }}
+      makefile_path: ${{ steps.version.outputs.makefile_path }}
 
     steps:
       - name: Checkout
@@ -80,22 +73,10 @@ jobs:
           fi
           TAG="v${PKG_VER}"
 
-          # ── compare with latest release ───────────────────────────────────────
-          LATEST_TAG=$(gh release list --limit 1 --json tagName -q '.[0].tagName' 2>/dev/null || true)
-          FORCE="${{ inputs.force_release }}"
-          if [ "$TAG" != "$LATEST_TAG" ] || [ "$FORCE" = "true" ]; then
-            SHOULD_BUILD=true
-          else
-            SHOULD_BUILD=false
-          fi
-
-          echo "pkg_name=$PKG_NAME"         >> $GITHUB_OUTPUT
-          echo "makefile_path=$MK_PATH"     >> $GITHUB_OUTPUT
-          echo "pkg_version=$TAG"           >> $GITHUB_OUTPUT
-          echo "should_build=$SHOULD_BUILD" >> $GITHUB_OUTPUT
-          echo "Latest release : $LATEST_TAG"
-          echo "This version   : $TAG"
-          echo "Should build   : $SHOULD_BUILD"
+          echo "pkg_name=$PKG_NAME"     >> $GITHUB_OUTPUT
+          echo "makefile_path=$MK_PATH" >> $GITHUB_OUTPUT
+          echo "pkg_version=$TAG"       >> $GITHUB_OUTPUT
+          echo "This version : $TAG"
 
       - name: Generate release notes
         id: notes
@@ -137,7 +118,7 @@ jobs:
   job_build:
     name: "Build ${{ matrix.label }}"
     needs: job_check
-    if: needs.job_check.outputs.should_build == 'true'
+    if: always() && needs.job_check.result == 'success'
     runs-on: ubuntu-latest
 
     strategy:
