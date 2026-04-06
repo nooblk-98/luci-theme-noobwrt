@@ -173,12 +173,10 @@ jobs:
           tar --zstd -xf "$FILE" -C "$SDK_DIR" --strip-components=1
 
           cd "$SDK_DIR"
-          cat > feeds.conf <<'FEEDS'
-src-git base https://github.com/openwrt/openwrt.git;main
-src-git-full packages https://github.com/openwrt/packages.git;master
-src-git-full luci https://github.com/openwrt/luci.git;master
-src-git-full routing https://git.openwrt.org/feed/routing.git;master
-FEEDS
+          echo "src-git base https://github.com/openwrt/openwrt.git;main"               >  feeds.conf
+          echo "src-git-full packages https://github.com/openwrt/packages.git;master"   >> feeds.conf
+          echo "src-git-full luci https://github.com/openwrt/luci.git;master"           >> feeds.conf
+          echo "src-git-full routing https://git.openwrt.org/feed/routing.git;master"   >> feeds.conf
 
           git clone -b master \
             "https://github.com/${{ github.repository }}.git" \
@@ -210,14 +208,12 @@ FEEDS
           cd "$SDK_DIR"
           ./scripts/feeds install "$PKG_NAME"
 
-          cat > .config <<EOF
-CONFIG_ALL_NONSHARED=n
-CONFIG_ALL_KMODS=n
-CONFIG_ALL=n
-CONFIG_AUTOREMOVE=n
-CONFIG_LUCI_LANG_zh_Hans=y
-CONFIG_PACKAGE_${PKG_NAME}=m
-EOF
+          echo "CONFIG_ALL_NONSHARED=n"             >  .config
+          echo "CONFIG_ALL_KMODS=n"                 >> .config
+          echo "CONFIG_ALL=n"                       >> .config
+          echo "CONFIG_AUTOREMOVE=n"                >> .config
+          echo "CONFIG_LUCI_LANG_zh_Hans=y"         >> .config
+          echo "CONFIG_PACKAGE_${PKG_NAME}=m"       >> .config
           make defconfig
 
           make package/${PKG_NAME}/clean -j$(nproc)
