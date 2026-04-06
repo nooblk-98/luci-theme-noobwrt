@@ -18,7 +18,7 @@ uci get noobwrt.global >/dev/null 2>&1 || uci set noobwrt.global=global
 
 # Set each global option only if not already present
 uci get noobwrt.global.mode                  >/dev/null 2>&1 || uci set noobwrt.global.mode=normal
-uci get noobwrt.global.primary               >/dev/null 2>&1 || uci set noobwrt.global.primary='#5e72e4'
+uci get noobwrt.global.primary               >/dev/null 2>&1 || uci set noobwrt.global.primary='#7689f4'
 uci get noobwrt.global.dark_primary          >/dev/null 2>&1 || uci set noobwrt.global.dark_primary='#7c8ff5'
 uci get noobwrt.global.blur                  >/dev/null 2>&1 || uci set noobwrt.global.blur=10
 uci get noobwrt.global.blur_dark             >/dev/null 2>&1 || uci set noobwrt.global.blur_dark=10
