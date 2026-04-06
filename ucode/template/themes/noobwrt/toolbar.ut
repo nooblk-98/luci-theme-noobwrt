@@ -8,9 +8,26 @@
 	import { cursor } from 'uci';
 	import { access } from 'fs';
 
+	/* Default toolbar items — match uci-defaults seed values */
+	const default_toolbar = [
+		{ title: 'Home',       url: '/cgi-bin/luci/admin/status/overview',            icon: 'home.png',     enabled: true,  order: 1  },
+		{ title: 'Status',     url: '/cgi-bin/luci/admin/modem/modemdata',             icon: 'signal.png',   enabled: true,  order: 2  },
+		{ title: 'Modem',      url: '/cgi-bin/luci/admin/modem/qmodem',               icon: 'cell.png',     enabled: false, order: 3  },
+		{ title: 'SMS',        url: '/cgi-bin/luci/admin/modem/luci-app-sms-tool-js', icon: 'sms.png',      enabled: true,  order: 4  },
+		{ title: 'Data Usage', url: '/cgi-bin/luci/admin/tools/netstat',              icon: 'network.png',  enabled: true,  order: 5  },
+		{ title: 'NAS',        url: '/cgi-bin/luci/admin/services/samba4',            icon: 'nas.png',      enabled: false, order: 6  },
+		{ title: 'Wireless',   url: '/cgi-bin/luci/admin/network/wireless',           icon: 'wifi.png',     enabled: true,  order: 7  },
+		{ title: 'Firewall',   url: '/cgi-bin/luci/admin/network/firewall',           icon: 'firewall.png', enabled: false, order: 8  },
+		{ title: 'System Log', url: '/cgi-bin/luci/admin/status/logs',                icon: 'info.png',     enabled: false, order: 9  },
+		{ title: 'Terminal',   url: '/cgi-bin/luci/admin/services/ttyd',              icon: 'terminal.png', enabled: true,  order: 10 },
+		{ title: 'VPN',        url: '/cgi-bin/luci/admin/services/passwall',          icon: 'vpn.png',      enabled: false, order: 11 },
+		{ title: 'Files',      url: '/cgi-bin/luci/admin/nas/tinyfilemanager',        icon: 'files.png',    enabled: true,  order: 12 },
+		{ title: 'Settings',   url: '/cgi-bin/luci/admin/system/noobwrt',             icon: 'settings.png', enabled: true,  order: 13 },
+	];
+
 	/* Build sorted list of enabled toolbar items from UCI config */
 	let toolbar_items = [];
-	let auto_dark_mode = true;
+	let auto_dark_mode = false;
 	if (access('/etc/config/noobwrt')) {
 		const tcfg = cursor();
 		tcfg.foreach('noobwrt', 'toolbar_item', function(s) {
@@ -26,6 +43,7 @@
 		const adm = tcfg.get_first('noobwrt', 'global', 'auto_dark_mode');
 		auto_dark_mode = (adm !== '0');
 	}
+	if (length(toolbar_items) == 0) toolbar_items = default_toolbar;
 -%}
 
 <style>
