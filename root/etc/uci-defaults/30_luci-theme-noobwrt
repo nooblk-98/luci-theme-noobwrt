@@ -57,4 +57,11 @@ seed_toolbar toolbar_system   'Settings'    '/cgi-bin/luci/admin/system/noobwrt'
 
 uci commit noobwrt
 
+# Ensure the rpcd wallpaper script is executable so ubus registers it
+chmod +x /usr/libexec/rpcd/luci.noobwrt_wallpaper 2>/dev/null
+
+# Reload rpcd so luci.noobwrt_wallpaper is registered on first install
+# (only needed when rpcd is already running; harmless if it isn't yet)
+/etc/init.d/rpcd reload 2>/dev/null
+
 exit 0

@@ -56,7 +56,7 @@ try_update() {
 	local lock="$WRLOCK"
 	exec 200>"$lock"
 
-	if flock -n 200 >"/dev/null" 2>&1; then
+	if flock -n 200 >/dev/null 2>&1; then
 		local picurl="$(fetch_pic_url)"
 		if [ -n "$picurl" ]; then
 			echo "$picurl" | tee "$CACHE"
@@ -67,7 +67,7 @@ try_update() {
 				touch "$CACHE"
 			fi
 		fi
-		flock -u 200 >"/dev/null" 2>&1
+		flock -u 200 >/dev/null 2>&1
 	elif [ -s "$CACHE" ]; then
 		cat "$CACHE"
 	fi
@@ -103,22 +103,24 @@ case "$1" in
 		read -r input
 		if [ "$WEB_PIC_SRC" = "none" ]; then
 			echo '{ "url": "" }'
-			return 0
+			exit 0
 		fi
 		if [ -f "$CACHE" ]; then
 			idle_t="$(($(date '+%s') - $(date -r "$CACHE" '+%s' 2>/dev/null || echo '0')))"
 			if [ -s "$CACHE" ]; then
-				if [ "$idle_t" -le "43200" ]; then
+				if [ "$idle_t" -le 43200 ]; then
 					json_init
 					json_add_string "url" "$(cat "$CACHE")"
 					json_dump
 					json_cleanup
-					return 0
+					exit 0
 				fi
 			else
+				# Empty cache file means a fetch is in progress or recently
+				# failed — suppress retry for 120 s to avoid hammering the API
 				if [ "$idle_t" -le 120 ]; then
 					echo '{ "url": "" }'
-					return 1
+					exit 0
 				fi
 			fi
 		fi
@@ -127,7 +129,7 @@ case "$1" in
 		json_add_string "url" "$(try_update)"
 		json_dump
 		json_cleanup
-		return 0
+		exit 0
 		;;
 	esac
 	;;
