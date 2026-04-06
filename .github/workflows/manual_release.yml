@@ -82,9 +82,12 @@ jobs:
         id: notes
         run: |
           TAG="${{ steps.version.outputs.pkg_version }}"
-          LATEST_TAG=$(git tag --sort=-version:refname | grep -v "^$TAG$" | head -1)
+          # Only consider tags that match our versioning scheme (v1.x.x)
+          # to avoid picking up old Argon fork tags (v2.x)
+          LATEST_TAG=$(gh release list --limit 10 --json tagName -q '.[].tagName' \
+            | grep -v "^${TAG}$" | head -1 || true)
 
-          if git rev-parse "${LATEST_TAG}" >/dev/null 2>&1; then
+          if [ -n "$LATEST_TAG" ] && git rev-parse "${LATEST_TAG}" >/dev/null 2>&1; then
             BASE="${LATEST_TAG}"
           else
             BASE=$(git rev-list --max-parents=0 HEAD)
