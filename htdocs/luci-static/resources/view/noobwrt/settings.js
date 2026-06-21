@@ -130,16 +130,16 @@ return view.extend({
         o.default = [
             '<div style="max-width:520px">',
             '<p style="color:#888;font-size:13px;margin:0 0 12px">',
-            'Upload a custom image to use as the login page background. Supported formats: JPG, PNG, WebP (max 10 MB).',
+            _('Upload a custom image to use as the login page background. Supported formats: JPG, PNG, WebP (max 10 MB).'),  
             '</p>',
             '<div id="noobwrt-wp-preview" style="margin-bottom:12px;border-radius:10px;overflow:hidden;background:#f0f0f0;height:160px;display:flex;align-items:center;justify-content:center">',
             '<img id="noobwrt-wp-img" src="" style="width:100%;height:100%;object-fit:cover;display:none" />',
-            '<span id="noobwrt-wp-placeholder" style="color:#aaa;font-size:13px">No custom wallpaper \u2014 using default</span>',
+            '<span id="noobwrt-wp-placeholder" style="color:#aaa;font-size:13px">' + _('No custom wallpaper — using default') + '</span>',
             '</div>',
             '<p id="noobwrt-wp-status" style="font-size:12px;color:#888;min-height:18px;margin:0 0 12px"></p>',
             '<div style="display:flex;gap:10px">',
-            '<button id="noobwrt-wp-upload" type="button" class="btn cbi-button cbi-button-action">Upload Wallpaper...</button>',
-            '<button id="noobwrt-wp-revert" type="button" class="btn cbi-button cbi-button-reset">Revert to Default</button>',
+            '<button id="noobwrt-wp-upload" type="button" class="btn cbi-button cbi-button-action">' + _('Upload Wallpaper...') + '</button>',
+            '<button id="noobwrt-wp-revert" type="button" class="btn cbi-button cbi-button-reset">' + _('Revert to Default') + '</button>',
             '</div>',
             '</div>'
         ].join('');
@@ -176,24 +176,25 @@ return view.extend({
         /* ---- About ---- */
         o = s.taboption('about', form.DummyValue, '_about', '');
         o.rawhtml = true;
-        o.default = '\
-<div style="max-width:480px;background:var(--color-bg-1,#fff);border:1px solid var(--color-border,#e5e7eb);border-radius:12px;padding:20px 24px;box-shadow:0 2px 8px rgba(0,0,0,0.06)">\
-  <h3 style="margin:0 0 6px;font-size:16px;font-weight:600">NoobWrt Theme</h3>\
-  <p style="margin:0 0 16px;color:#888;font-size:13px">A clean modern LuCI theme for OpenWrt routers.</p>\
-  <table style="width:100%;border-collapse:collapse;line-height:1.9;font-size:13px">\
-    <tr><td style="width:130px;color:#888;padding:3px 0">Developer</td>\
-        <td><strong>NoobLk</strong></td></tr>\
-    <tr><td style="color:#888;padding:3px 0">Repository</td>\
-        <td><a href="https://github.com/nooblk-98/luci-theme-noobwrt" target="_blank" rel="noopener" style="color:#5e72e4">github.com/nooblk-98/luci-theme-noobwrt</a></td></tr>\
-    <tr><td style="color:#888;padding:3px 0">Contributors</td>\
-        <td><a href="https://github.com/nooblk-98/luci-theme-noobwrt/graphs/contributors" target="_blank" rel="noopener" style="color:#5e72e4">View on GitHub</a></td></tr>\
-    <tr><td style="color:#888;padding:3px 0">License</td>\
-        <td>MIT</td></tr>\
-    <tr><td style="color:#888;padding:3px 0">Issues / Support</td>\
-        <td><a href="https://github.com/nooblk-98/luci-theme-noobwrt/issues" target="_blank" rel="noopener" style="color:#5e72e4">Open an issue</a></td></tr>\
-  </table>\
-  <p style="margin:16px 0 0;color:#bbb;font-size:12px;text-align:center;border-top:1px solid var(--color-border,#e5e7eb);padding-top:12px">Made with \u2665 for the OpenWrt community</p>\
-</div>';
+        o.default = [
+            '<div style="max-width:480px;background:var(--color-bg-1,#fff);border:1px solid var(--color-border,#e5e7eb);border-radius:12px;padding:20px 24px;box-shadow:0 2px 8px rgba(0,0,0,0.06)">',
+            '  <h3 style="margin:0 0 6px;font-size:16px;font-weight:600">' + _('NoobWrt Theme') + '</h3>',
+            '  <p style="margin:0 0 16px;color:#888;font-size:13px">' + _('A clean modern LuCI theme for OpenWrt routers.') + '</p>',
+            '  <table style="width:100%;border-collapse:collapse;line-height:1.9;font-size:13px">',
+            '    <tr><td style="width:130px;color:#888;padding:3px 0">' + _('Developer') + '</td>',
+            '        <td><strong>NoobLk</strong></td></tr>',
+            '    <tr><td style="color:#888;padding:3px 0">' + _('Repository') + '</td>',
+            '        <td><a href="https://github.com/nooblk-98/luci-theme-noobwrt" target="_blank" rel="noopener" style="color:#5e72e4">github.com/nooblk-98/luci-theme-noobwrt</a></td></tr>',
+            '    <tr><td style="color:#888;padding:3px 0">' + _('Contributors') + '</td>',
+            '        <td><a href="https://github.com/nooblk-98/luci-theme-noobwrt/graphs/contributors" target="_blank" rel="noopener" style="color:#5e72e4">' + _('View on GitHub') + '</a></td></tr>',
+            '    <tr><td style="color:#888;padding:3px 0">' + _('License') + '</td>',
+            '        <td>MIT</td></tr>',
+            '    <tr><td style="color:#888;padding:3px 0">' + _('Issues / Support') + '</td>',
+            '        <td><a href="https://github.com/nooblk-98/luci-theme-noobwrt/issues" target="_blank" rel="noopener" style="color:#5e72e4">' + _('Open an issue') + '</a></td></tr>',
+            '  </table>',
+            '  <p style="margin:16px 0 0;color:#bbb;font-size:12px;text-align:center;border-top:1px solid var(--color-border,#e5e7eb);padding-top:12px">' + _('Made with \u2665 for the OpenWrt community') + '</p>',
+            '</div>'
+        ].join('\n');
 
         /* ============================================================
          * SECTION: Toolbar Panel Items (TableSection)
@@ -201,9 +202,7 @@ return view.extend({
          * ============================================================ */
         var ts = m.section(form.TableSection, 'toolbar_item',
             _('Toolbar Panel Items'),
-            _('Quick-access links displayed in the right-side toolbar panel on every page. ' +
-              'Items are rendered in ascending Order number. ' +
-              'Use the Add button below to create new entries.'));
+            _('Quick-access links displayed in the right-side toolbar panel on every page. Items are rendered in ascending Order number. Use the Add button below to create new entries.'));
         ts.addremove = true;
         ts.anonymous = true;
         ts.sortable  = false;
