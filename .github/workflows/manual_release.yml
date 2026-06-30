@@ -157,14 +157,23 @@ jobs:
     steps:
       - name: Install build dependencies
         run: |
+          # Newer luci feed packages (e.g. rpcd-mod-luci) require CMake >= 3.31,
+          # but ubuntu-latest ships an older release. Pull CMake from Kitware's
+          # APT repo so the host `cmake` on PATH is new enough.
+          wget -qO- https://apt.kitware.com/keys/kitware-archive-latest.asc \
+            | gpg --dearmor | sudo tee /usr/share/keyrings/kitware.gpg >/dev/null
+          echo "deb [signed-by=/usr/share/keyrings/kitware.gpg] https://apt.kitware.com/ubuntu/ $(lsb_release -cs) main" \
+            | sudo tee /etc/apt/sources.list.d/kitware.list >/dev/null
+
           sudo -E apt-get -qq update
           sudo -E apt-get -qq install --no-install-recommends \
-            zstd build-essential clang flex bison g++ gawk \
+            cmake zstd build-essential clang flex bison g++ gawk \
             gcc-multilib g++-multilib gettext git \
             libncurses5-dev libssl-dev python3-venv \
             rsync unzip zlib1g-dev file wget
           sudo -E apt-get -qq autoremove --purge
           sudo -E apt-get -qq clean
+          cmake --version
 
       - name: Restore SDK cache
         id: cache-sdk
