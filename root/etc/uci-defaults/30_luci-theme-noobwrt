@@ -50,7 +50,7 @@ seed_toolbar toolbar_nas      'NAS'         '/cgi-bin/luci/admin/services/samba4
 seed_toolbar toolbar_wireless 'Wireless'    '/cgi-bin/luci/admin/network/wireless'          wifi.png     1 7
 seed_toolbar toolbar_firewall 'Firewall'    '/cgi-bin/luci/admin/network/firewall'          firewall.png 0 8
 seed_toolbar toolbar_log      'System Log'  '/cgi-bin/luci/admin/status/logs'               info.png     0 9
-seed_toolbar toolbar_terminal 'Terminal'    '/cgi-bin/luci/admin/services/ttyd'             terminal.png 1 10
+seed_toolbar toolbar_terminal 'Terminal'    '/cgi-bin/luci/admin/system/ttyd'             terminal.png 1 10
 seed_toolbar toolbar_vpn      'VPN'         '/cgi-bin/luci/admin/services/passwall'         vpn.png      0 11
 seed_toolbar toolbar_files    'Files'       '/cgi-bin/luci/admin/nas/tinyfilemanager'       files.png    1 12
 seed_toolbar toolbar_system   'Settings'    '/cgi-bin/luci/admin/system/noobwrt'            settings.png 1 13
