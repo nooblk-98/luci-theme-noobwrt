@@ -104,6 +104,7 @@
 - **Accent color picker** — separate colors for light and dark mode, applied everywhere
 - **Automatic Light / Dark scheduling** — switches to Dark from 6 PM to 6 AM and Light from 6 AM to 6 PM automatically; enable/disable in settings (default: enabled)
 - **Light / Dark mode** — manual toggle via toolbar sun/moon button; respects OS preference when auto-schedule is off
+- **AMOLED Black** — pure black backgrounds for the dashboard, sidebar, dialogs, toolbar, and login card; uses your dark accent color
 - **Quick-access toolbar** — slides in from the right edge; hover the `‹` tab to peek, click to pin open/closed
 - **Blur & opacity controls** — fine-tune the login page background effect
 - **Responsive** — works on desktop and mobile
@@ -119,7 +120,7 @@ Go to **System → NoobWrt Theme** in the LuCI menu.
 | Option | Description |
 |--------|-------------|
 | **Automatic Light / Dark Mode** | When enabled (default), the theme switches to Dark from **6 PM to 6 AM** and to Light from **6 AM to 6 PM** automatically. The toolbar toggle still works but the schedule takes effect on the next minute tick. Disable to use manual mode. |
-| **Default Theme Mode** | `Light` or `Dark` — applied on page load when Automatic mode is disabled. Toggle anytime via the toolbar sun/moon button. |
+| **Default Theme Mode** | `Light`, `Dark`, or `AMOLED Black` — applied on page load when Automatic mode is disabled. Toggle anytime via the toolbar sun/moon button. Selecting `AMOLED Black` also uses it for the dark period of the automatic schedule and the dark side of the toolbar toggle. |
 | **Accent Color — Light Mode** | Hex color for the light theme, e.g. `#5e72e4`. Used for progress bars, buttons, active states. |
 | **Accent Color — Dark Mode** | Hex color for the dark theme, e.g. `#7c8ff5`. |
 
