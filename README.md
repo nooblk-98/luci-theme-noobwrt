@@ -182,6 +182,16 @@ make -j1 V=s
 
 ---
 
+## Usage
+
+Open **System → NoobWrt Theme → Appearance** to choose `Light`, `Dark`, or `AMOLED Black` as the default theme. Disable **Automatic Light / Dark Mode** to keep that mode active throughout the day.
+
+With `AMOLED Black` selected, the toolbar toggles between Light and AMOLED Black, and automatic scheduling uses AMOLED Black at night.
+
+## License
+
+Licensed under the [Apache License 2.0](LICENSE).
+
 ## Credits
 
 - [luci-theme-argon](https://github.com/jerrykuku/luci-theme-argon/) — original inspiration
