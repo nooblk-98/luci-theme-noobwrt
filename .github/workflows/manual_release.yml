@@ -84,34 +84,6 @@ jobs:
           echo "pkg_version=$TAG"       >> $GITHUB_OUTPUT
           echo "This version : $TAG"
 
-      - name: Generate release notes
-        id: notes
-        run: |
-          TAG="${{ steps.version.outputs.pkg_version }}"
-          # Only consider tags that match our versioning scheme (v1.x.x)
-          # to avoid picking up old Argon fork tags (v2.x)
-          LATEST_TAG=$(gh release list --limit 10 --json tagName -q '.[].tagName' \
-            | grep -v "^${TAG}$" | head -1 || true)
-
-          if [ -n "$LATEST_TAG" ] && git rev-parse "${LATEST_TAG}" >/dev/null 2>&1; then
-            BASE="${LATEST_TAG}"
-          else
-            BASE=$(git rev-list --max-parents=0 HEAD)
-          fi
-
-          CHANGELOG=$(git log "${BASE}"..HEAD --pretty=format:"- %s (%h)" --no-merges)
-          [ -z "$CHANGELOG" ] && CHANGELOG="- No changes recorded"
-
-          {
-            echo "notes<<EOF"
-            echo "## What's Changed"
-            echo ""
-            echo "${CHANGELOG}"
-            echo ""
-            echo "**Full diff:** [\`${BASE:0:7}\` → \`${TAG}\`](https://github.com/${{ github.repository }}/compare/${BASE}...HEAD)"
-            echo "EOF"
-          } >> $GITHUB_OUTPUT
-
       - name: Create or update GitHub Release
         uses: softprops/action-gh-release@v2
         env:
@@ -119,7 +91,8 @@ jobs:
         with:
           tag_name: ${{ steps.version.outputs.pkg_version }}
           name: "${{ steps.version.outputs.pkg_name }} ${{ steps.version.outputs.pkg_version }}"
-          body: ${{ steps.notes.outputs.notes }}
+          # Release notes are maintained manually; preserve the existing body.
+          generate_release_notes: false
           draft: false
           prerelease: false
 
@@ -255,5 +228,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ needs.job_check.outputs.pkg_version }}
+          generate_release_notes: false
           files: ${{ env.OUT_PATH }}/*
           fail_on_unmatched_files: false
