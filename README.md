@@ -35,7 +35,7 @@ NoobWrt brings a consistent appearance to your router's web interface, with sepa
 
 ## Screenshots
 
-Captured on an Arcadyan AW1000 running OpenWrt 25.12.5. Available menu entries and status widgets depend on your firmware and installed packages. Select any image to view it at full size.
+The desktop screenshots were captured on an Arcadyan AW1000 running OpenWrt 25.12.5. Available menu entries and status widgets depend on your firmware and installed packages. Select any image to view it at full size.
 
 ### Light and Dark
 
@@ -69,6 +69,27 @@ Pure black main backgrounds, subtle near-black controls, and your existing dark 
     <td width="64%" valign="top" align="center">
       <a href="screenshots/toolbar-settings.png"><img src="screenshots/toolbar-settings.png" alt="Toolbar settings with enable switches, labels, URLs, icons, and ordering" width="100%"></a>
       <br><sub><b>Your shortcuts</b> · Configure links, icons, and order</sub>
+    </td>
+  </tr>
+</table>
+
+### Mobile
+
+The original mobile previews show the overview in Light and Dark mode, plus the login page.
+
+<table>
+  <tr>
+    <td width="33%" valign="top" align="center">
+      <a href="screenshots/sc_mobile.png"><img src="screenshots/sc_mobile.png" alt="Original mobile overview in Light mode" width="100%"></a>
+      <br><sub><b>Light</b> · Mobile overview</sub>
+    </td>
+    <td width="33%" valign="top" align="center">
+      <a href="screenshots/sc_mobile_dark.png"><img src="screenshots/sc_mobile_dark.png" alt="Original mobile overview in Dark mode" width="100%"></a>
+      <br><sub><b>Dark</b> · Mobile overview</sub>
+    </td>
+    <td width="33%" valign="top" align="center">
+      <a href="screenshots/sc_mobile_login.png"><img src="screenshots/sc_mobile_login.png" alt="Original NoobWrt mobile login page" width="100%"></a>
+      <br><sub><b>Login</b> · Mobile sign-in</sub>
     </td>
   </tr>
 </table>
